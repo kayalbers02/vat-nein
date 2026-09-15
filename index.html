@@ -128,7 +128,7 @@
     letter-spacing: .03em;
     color: rgba(242, 230, 204, .78);
     text-wrap: balance;
-    max-width: 22ch;
+    max-width: 26ch;
     font-variant-numeric: tabular-nums;
   }
 
@@ -145,6 +145,44 @@
   .intro.playing .meta { opacity: 0; }
   .intro.playing .mark { opacity: .08; }
   .intro.gone { opacity: 0; }
+
+  .hint.notice { color: var(--amber); }
+
+  /* ---------- Speelwijze ---------- */
+  .modes {
+    position: absolute;
+    left: 50%;
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1.5px solid rgba(242, 230, 204, .22);
+    border-radius: 999px;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+  .modes button {
+    appearance: none;
+    margin: 0;
+    border: 0;
+    padding: 11px 18px 10px;
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(242, 230, 204, .62);
+    font: 700 14px/1 var(--condensed);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .modes button[aria-pressed="true"] { background: var(--foam); color: var(--ink); }
+  .modes button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .modes.nudge button[data-mode="tap"] { animation: nudge 1s ease-in-out 3; }
+  @keyframes nudge { 50% { background: var(--amber); color: var(--ink); } }
+  .intro.playing .modes,
+  .intro.gone .modes { opacity: 0; pointer-events: none; }
 
   /* ---------- Onthulling ---------- */
   .reveal {
@@ -209,7 +247,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .stamp { animation: none; }
-    .intro, .intro > *, .pips li, .again { transition: none; }
+    .modes.nudge button[data-mode="tap"] { animation: none; }
+    .intro, .intro > *, .pips li, .again, .modes button { transition: none; }
   }
 </style>
 </head>
@@ -225,7 +264,11 @@
       <li></li><li></li><li></li><li></li><li></li>
     </ol>
     <p class="hint" id="hint" aria-live="polite">Leg allemaal een vinger op het scherm</p>
-    <p class="meta">2 tot 10 spelers · telefoon plat op tafel</p>
+    <p class="meta" id="meta">2 tot 10 spelers · vinger vasthouden</p>
+    <div class="modes" id="modes" role="group" aria-label="Speelwijze">
+      <button type="button" id="mode-hold" data-mode="hold" aria-pressed="true">Vasthouden</button>
+      <button type="button" id="mode-tap" data-mode="tap" aria-pressed="false">Tikken</button>
+    </div>
   </section>
 
   <section class="reveal" id="reveal" hidden aria-live="assertive">
@@ -242,7 +285,8 @@
   const RGB = COLORS.map(h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)));
   const INK = '#140e0a';
   const FOAM = '242,230,204';
-  const HOLD_MS = 2600;   // zo lang stilhouden voordat er gekozen wordt
+  const HOLD_MS = 2600;   // vasthouden: zo lang stilhouden voordat er gekozen wordt
+  const TAP_MS = 3500;    // tikken: zo lang geen nieuwe tik voordat er gekozen wordt
   const TAU = Math.PI * 2;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -254,6 +298,18 @@
   const pips = [...document.querySelectorAll('.pips li')];
   const reveal = document.getElementById('reveal');
   const again = document.getElementById('again');
+  const meta = document.getElementById('meta');
+  const modesEl = document.getElementById('modes');
+  const modeButtons = [...modesEl.querySelectorAll('button')];
+
+  // Hoeveel vingers dit toestel tegelijk doorgeeft (iPhone: 5).
+  const maxTouch = navigator.maxTouchPoints || 0;
+  const touchLimit = maxTouch >= 2 && maxTouch < 10 ? maxTouch : 10;
+
+  let mode = 'hold';      // hold = vinger vasthouden, tap = één keer tikken
+  try { if (localStorage.getItem('vat-nein-mode') === 'tap') mode = 'tap'; } catch (_) {}
+  let notice = null;
+  let tapSeq = 0;
 
   let W = 0, H = 0, R = 52;
   function resize() {
@@ -340,6 +396,42 @@
     reveal.hidden = true;
   }
 
+  // Tikken: een tik zet een rondje neer; een tik op een bestaand rondje haalt het weg.
+  function toggleTap(x, y, now) {
+    let hit = null;
+    let best = R * 1.15;
+    fingers.forEach(f => {
+      const d = Math.hypot(f.x - x, f.y - y);
+      if (d <= best) { best = d; hit = f; }
+    });
+    if (hit) dropFinger(hit.id, now);
+    else addFinger('tik-' + (++tapSeq), x, y, now);
+  }
+
+  // iPhone: bij de 6e vinger laat iOS alle vingers los. Leg uit wat er gebeurde.
+  function flagTooMany(now) {
+    if (notice && now - notice.at < 1000) return;
+    if (mode === 'hold' && fingers.size >= 5 && (phase === 'gather' || phase === 'shuffle')) {
+      notice = { count: fingers.size, at: now };
+    }
+  }
+
+  function setMode(next) {
+    if (next === mode) return;
+    mode = next;
+    try { localStorage.setItem('vat-nein-mode', next); } catch (_) {}
+    notice = null;
+    resetRound();
+    syncUI();
+  }
+
+  modeButtons.forEach(btn => {
+    // Eigen afhandeling: een tik op de knop mag geen vinger of rondje worden.
+    btn.addEventListener('pointerdown', e => { e.stopPropagation(); setMode(btn.dataset.mode); });
+    btn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+    btn.addEventListener('click', () => setMode(btn.dataset.mode));
+  });
+
   function startShuffle(now) {
     phase = 'shuffle';
     const n = reduced ? 1 : 12;
@@ -383,7 +475,7 @@
     const f = fingers.get(id);
     winner = { id, x: f.x, y: f.y, ci: f.ci, at: now };
     shuffle = null;
-    phase = down.size === 0 ? 'done' : 'result';
+    phase = mode === 'tap' || down.size === 0 ? 'done' : 'result';
     reveal.hidden = false;
     buzz([50, 40, 160]);
     syncUI();
@@ -403,10 +495,21 @@
       if (c) li.style.setProperty('--c', c);
     });
 
-    let text = 'Leg allemaal een vinger op het scherm';
-    if (phase === 'gather') text = n < 2 ? 'Wachten op meer vingers…' : n + ' vingers · niet loslaten';
-    else if (phase === 'shuffle') text = 'Wie wordt het…';
+    const tap = mode === 'tap';
+    let text = tap ? 'Tik allemaal één keer op je plek' : 'Leg allemaal een vinger op het scherm';
+    if (phase === 'gather') {
+      if (n < 2) text = tap ? 'Wachten op meer spelers…' : 'Wachten op meer vingers…';
+      else text = tap ? n + ' spelers · tik je rondje om eruit te gaan' : n + ' vingers · niet loslaten';
+    } else if (phase === 'shuffle') {
+      text = 'Wie wordt het…';
+    }
+    const showNotice = !!notice && phase === 'idle';
+    if (showNotice) text = 'Deze telefoon herkent maximaal ' + notice.count + ' vingers tegelijk. Kies Tikken voor meer spelers.';
     if (text !== lastHint) { hint.textContent = text; lastHint = text; }
+    hint.classList.toggle('notice', showNotice);
+    modesEl.classList.toggle('nudge', showNotice);
+    meta.textContent = tap ? '2 tot 10+ spelers · één keer tikken' : '2 tot ' + touchLimit + ' spelers · vinger vasthouden';
+    modeButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
 
     again.classList.toggle('show', phase === 'done');
   }
@@ -418,9 +521,16 @@
     down.add(e.pointerId);
     try { stage.setPointerCapture(e.pointerId); } catch (_) {}
     keepAwake();
+    const now = performance.now();
     if (phase === 'result' || phase === 'shuffle') return;   // te laat voor deze ronde
-    if (phase === 'done') resetRound();
-    addFinger(e.pointerId, e.clientX, e.clientY, performance.now());
+    if (phase === 'done') {
+      if (now - winner.at < 1400) return;                    // uitslag niet per ongeluk wegtikken
+      resetRound();
+      if (mode === 'tap') { syncUI(); return; }
+    }
+    notice = null;
+    if (mode === 'tap') toggleTap(e.clientX, e.clientY, now);
+    else addFinger(e.pointerId, e.clientX, e.clientY, now);
     syncUI();
   });
 
@@ -439,7 +549,9 @@
 
   function onUp(e) {
     if (!down.has(e.pointerId) && !fingers.has(e.pointerId)) return;
-    release(e.pointerId, performance.now());
+    const now = performance.now();
+    if (e.type === 'pointercancel') flagTooMany(now);
+    release(e.pointerId, now);
     if (phase === 'result' && down.size === 0) phase = 'done';
     syncUI();
   }
@@ -449,6 +561,7 @@
   function onTouchEnd(e) {
     if (e.touches.length) return;
     const now = performance.now();
+    if (e.type === 'touchcancel') flagTooMany(now);
     [...down].forEach(id => release(id, now));
     if (phase === 'result') phase = 'done';
     syncUI();
@@ -461,7 +574,7 @@
   document.addEventListener('gesturestart', e => e.preventDefault());
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) return;
+    if (!document.hidden || mode === 'tap') return;   // getikte rondjes blijven gewoon staan
     const now = performance.now();
     down.clear();
     [...fingers.keys()].forEach(id => dropFinger(id, now));
@@ -528,7 +641,8 @@
 
   function frame() {
     const now = performance.now();
-    if (phase === 'gather' && fingers.size >= 2 && now - lastChange >= HOLD_MS) startShuffle(now);
+    const wait = mode === 'tap' ? TAP_MS : HOLD_MS;
+    if (phase === 'gather' && fingers.size >= 2 && now - lastChange >= wait) startShuffle(now);
     if (phase === 'shuffle') stepShuffle(now);
 
     ctx.clearRect(0, 0, W, H);
@@ -543,7 +657,7 @@
       winnerRing(now);
     } else {
       const counting = phase === 'gather' && fingers.size >= 2;
-      const p = clamp((now - lastChange) / HOLD_MS);
+      const p = clamp((now - lastChange) / wait);
       fingers.forEach(f => {
         const appear = reduced ? 1 : easeOutBack(clamp((now - f.born) / 320));
         let s = appear * (reduced ? 1 : 1 + .045 * Math.sin((now - f.born) / 170));
