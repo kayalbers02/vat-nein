@@ -25,6 +25,7 @@
     --ink: #140e0a;
     --blackletter: "UnifrakturCook", "Pirata One", "Old English Text MT", Georgia, serif;
     --condensed: "Barlow Condensed", "Roboto Condensed", "Arial Narrow", sans-serif;
+    --bottom: calc(28px + env(safe-area-inset-bottom, 0px));
   }
 
   [hidden] { display: none !important; }
@@ -54,13 +55,17 @@
     cursor: crosshair;
   }
 
+  /* Lagen: teamkaartje onder de rondjes, zodat niemand zijn kleur mist; tekst erboven. */
   #board {
     position: absolute;
     inset: 0;
+    z-index: 1;
     width: 100%;
     height: 100%;
     display: block;
   }
+  .teams { z-index: 0; }
+  .intro, .reveal { z-index: 2; }
 
   /* ---------- Intro / wachten ---------- */
   .intro {
@@ -131,6 +136,7 @@
     max-width: 26ch;
     font-variant-numeric: tabular-nums;
   }
+  .hint.notice { color: var(--amber); }
 
   .meta {
     font-weight: 600;
@@ -146,17 +152,18 @@
   .intro.playing .mark { opacity: .08; }
   .intro.gone { opacity: 0; }
 
-  .hint.notice { color: var(--amber); }
-
-  /* ---------- Speelwijze ---------- */
+  /* ---------- Speelwijze + teams ---------- */
   .modes {
     position: absolute;
     left: 50%;
-    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    bottom: var(--bottom);
     transform: translateX(-50%);
     display: flex;
+    align-items: center;
     gap: 4px;
     padding: 4px;
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
     border: 1.5px solid rgba(242, 230, 204, .22);
     border-radius: 999px;
     pointer-events: auto;
@@ -166,25 +173,33 @@
     appearance: none;
     margin: 0;
     border: 0;
-    padding: 11px 18px 10px;
+    padding: 11px 14px 10px;
     border-radius: 999px;
     background: transparent;
     color: rgba(242, 230, 204, .62);
-    font: 700 14px/1 var(--condensed);
-    letter-spacing: .2em;
+    font: 700 13px/1 var(--condensed);
+    letter-spacing: .14em;
     text-transform: uppercase;
     white-space: nowrap;
+    font-variant-numeric: tabular-nums;
     cursor: pointer;
     transition: background-color .2s ease, color .2s ease;
   }
   .modes button[aria-pressed="true"] { background: var(--foam); color: var(--ink); }
+  .modes .team-btn[aria-pressed="true"] { background: var(--amber); color: var(--ink); }
   .modes button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .modes .sep {
+    align-self: stretch;
+    width: 1.5px;
+    margin: 7px 2px;
+    background: rgba(242, 230, 204, .22);
+  }
   .modes.nudge button[data-mode="tap"] { animation: nudge 1s ease-in-out 3; }
   @keyframes nudge { 50% { background: var(--amber); color: var(--ink); } }
   .intro.playing .modes,
   .intro.gone .modes { opacity: 0; pointer-events: none; }
 
-  /* ---------- Onthulling ---------- */
+  /* ---------- Onthulling: één gekozen ---------- */
   .reveal {
     position: absolute;
     inset: 0;
@@ -238,15 +253,84 @@
   }
   .again.show { opacity: .72; transition-delay: .6s; }
 
+  /* ---------- Onthulling: teams ---------- */
+  .teams {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .team-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+    padding: 16px 24px 18px;
+    border: 1.5px solid rgba(242, 230, 204, .14);
+    border-radius: 22px;
+    background: rgba(20, 14, 10, .82);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transform: translate(-50%, -50%);
+    animation: card-in .42s cubic-bezier(.2, .9, .3, 1.2) .38s both;
+  }
+  @keyframes card-in {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(.86); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  .team-card .eyebrow { margin: 0; }
+  .team-list {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 12px 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .team-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .team-list li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .team-name {
+    font-family: var(--blackletter);
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+    color: var(--t);
+  }
+  .team-count {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(242, 230, 204, .6);
+    font-variant-numeric: tabular-nums;
+  }
+  .teams .again {
+    top: auto;
+    bottom: var(--bottom);
+    transform: translateX(-50%);
+    color: var(--foam);
+  }
+
   @media (orientation: landscape) and (max-height: 520px) {
     .reveal { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
     .stamp { font-size: min(10vw, 26vh); }
     .intro { gap: 14px; }
     .mark { font-size: clamp(52px, 22vh, 110px); }
+    .team-name { font-size: 32px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stamp { animation: none; }
+    .stamp, .team-card { animation: none; }
     .modes.nudge button[data-mode="tap"] { animation: none; }
     .intro, .intro > *, .pips li, .again, .modes button { transition: none; }
   }
@@ -268,13 +352,23 @@
     <div class="modes" id="modes" role="group" aria-label="Speelwijze">
       <button type="button" id="mode-hold" data-mode="hold" aria-pressed="true">Vasthouden</button>
       <button type="button" id="mode-tap" data-mode="tap" aria-pressed="false">Tikken</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" id="teams-toggle" class="team-btn" aria-pressed="false">Teams</button>
     </div>
   </section>
 
   <section class="reveal" id="reveal" hidden aria-live="assertive">
     <div class="half flip" aria-hidden="true"><span class="stamp">Vat Nein</span></div>
     <div class="half"><span class="stamp">Vat Nein</span></div>
-    <p class="again" id="again">Tik om opnieuw te spelen</p>
+    <p class="again">Tik om opnieuw te spelen</p>
+  </section>
+
+  <section class="teams" id="teams" hidden aria-live="assertive">
+    <div class="team-card" id="team-card">
+      <p class="eyebrow">De teams</p>
+      <ul class="team-list" id="team-list"></ul>
+    </div>
+    <p class="again">Tik om opnieuw te spelen</p>
   </section>
 </main>
 
@@ -282,7 +376,11 @@
 (() => {
   // Tien vingers, tien kleuren. De laatste is schuimkraag-crème.
   const COLORS = ['#FF4B3E', '#FF9A1F', '#FFE14D', '#5EDC7A', '#22C7C7', '#4D9BFF', '#9A7BFF', '#F064D8', '#FF9EBB', '#F2E6CC'];
-  const RGB = COLORS.map(h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)));
+  const toRgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  const PLAYER = COLORS.map(hex => ({ hex, rgb: toRgb(hex) }));
+  const NEUTRAL = { hex: '#F2E6CC', rgb: [242, 230, 204] };
+  const TEAMS = [['Rood', '#FF4B3E'], ['Blauw', '#4D9BFF'], ['Geel', '#FFE14D'], ['Groen', '#5EDC7A']]
+    .map(([name, hex]) => ({ name, hex, rgb: toRgb(hex) }));
   const INK = '#140e0a';
   const FOAM = '242,230,204';
   const HOLD_MS = 2600;   // vasthouden: zo lang stilhouden voordat er gekozen wordt
@@ -297,17 +395,26 @@
   const hint = document.getElementById('hint');
   const pips = [...document.querySelectorAll('.pips li')];
   const reveal = document.getElementById('reveal');
-  const again = document.getElementById('again');
+  const teamsEl = document.getElementById('teams');
+  const teamCard = document.getElementById('team-card');
+  const teamList = document.getElementById('team-list');
+  const againEls = [...document.querySelectorAll('.again')];
   const meta = document.getElementById('meta');
   const modesEl = document.getElementById('modes');
-  const modeButtons = [...modesEl.querySelectorAll('button')];
+  const modeButtons = [...modesEl.querySelectorAll('button[data-mode]')];
+  const teamBtn = document.getElementById('teams-toggle');
 
   // Hoeveel vingers dit toestel tegelijk doorgeeft (iPhone: 5).
   const maxTouch = navigator.maxTouchPoints || 0;
   const touchLimit = maxTouch >= 2 && maxTouch < 10 ? maxTouch : 10;
 
   let mode = 'hold';      // hold = vinger vasthouden, tap = één keer tikken
-  try { if (localStorage.getItem('vat-nein-mode') === 'tap') mode = 'tap'; } catch (_) {}
+  let teamCount = 0;      // 0 = één persoon kiezen, 2–4 = teams maken
+  try {
+    if (localStorage.getItem('vat-nein-mode') === 'tap') mode = 'tap';
+    const saved = parseInt(localStorage.getItem('vat-nein-teams'), 10);
+    if (saved >= 2 && saved <= 4) teamCount = saved;
+  } catch (_) {}
   let notice = null;
   let tapSeq = 0;
 
@@ -324,17 +431,20 @@
   window.addEventListener('resize', resize);
   resize();
 
-  const fingers = new Map();   // pointerId -> { id, x, y, slot, ci, born }
+  const fingers = new Map();   // id -> { id, x, y, slot, ci, born }
   const down = new Set();      // alle pointers die nu het scherm raken
   let ghosts = [];             // losgelaten vingers die nog wegfaden
   let phase = 'idle';          // idle | gather | shuffle | result | done
   let lastChange = 0;
   let shuffle = null;
-  let winner = null;
+  let winner = null;           // uitslag bij één persoon kiezen
+  let split = null;            // uitslag bij teams
 
   const clamp = v => Math.max(0, Math.min(1, v));
   const easeOutBack = t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
   const easeInOutCubic = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const needPlayers = () => Math.max(2, teamCount);
+  const paintFor = f => teamCount ? NEUTRAL : PLAYER[f.ci];
 
   function randInt(n) {
     if (n <= 1) return 0;
@@ -345,6 +455,24 @@
       return a[0] % n;
     }
     return Math.floor(Math.random() * n);
+  }
+
+  function shuffled(list) {
+    const a = [...list];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = randInt(i + 1);
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Zo gelijk mogelijke teams; welk team een extra speler krijgt is ook toeval.
+  function assignTeams(ids) {
+    const order = shuffled(ids);
+    const teamOrder = shuffled([...Array(teamCount).keys()]);
+    const map = new Map();
+    order.forEach((id, i) => map.set(id, teamOrder[i % teamCount]));
+    return map;
   }
 
   function buzz(pattern) {
@@ -380,20 +508,22 @@
     if (!f) return;
     fingers.delete(id);
     if (phase === 'gather' || phase === 'shuffle') {
-      ghosts.push({ x: f.x, y: f.y, ci: f.ci, t0: now });
+      ghosts.push({ x: f.x, y: f.y, paint: paintFor(f), t0: now });
       lastChange = now;
       if (fingers.size === 0) { phase = 'idle'; shuffle = null; }
-      else if (phase === 'shuffle' && fingers.size < 2) { phase = 'gather'; shuffle = null; }
+      else if (phase === 'shuffle' && fingers.size < needPlayers()) { phase = 'gather'; shuffle = null; }
     }
   }
 
   function resetRound() {
     winner = null;
+    split = null;
     shuffle = null;
     ghosts = [];
     fingers.clear();
     phase = 'idle';
     reveal.hidden = true;
+    teamsEl.hidden = true;
   }
 
   // Tikken: een tik zet een rondje neer; een tik op een bestaand rondje haalt het weg.
@@ -425,12 +555,21 @@
     syncUI();
   }
 
-  modeButtons.forEach(btn => {
-    // Eigen afhandeling: een tik op de knop mag geen vinger of rondje worden.
-    btn.addEventListener('pointerdown', e => { e.stopPropagation(); setMode(btn.dataset.mode); });
+  function cycleTeams() {
+    teamCount = teamCount === 0 ? 2 : teamCount === 4 ? 0 : teamCount + 1;
+    try { localStorage.setItem('vat-nein-teams', String(teamCount)); } catch (_) {}
+    notice = null;
+    resetRound();
+    syncUI();
+  }
+
+  // Knoppen handelen hun eigen tik af: die mag geen vinger of rondje worden.
+  [...modeButtons, teamBtn].forEach(btn => {
+    btn.addEventListener('pointerdown', e => e.stopPropagation());
     btn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
-    btn.addEventListener('click', () => setMode(btn.dataset.mode));
   });
+  modeButtons.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+  teamBtn.addEventListener('click', cycleTeams);
 
   function startShuffle(now) {
     phase = 'shuffle';
@@ -441,7 +580,7 @@
       t += reduced ? 0 : 60 + 230 * Math.pow(i / (n - 1), 2.2);
       times.push(t);
     }
-    shuffle = { times, i: 0, hi: null, end: t + (reduced ? 0 : 280) };
+    shuffle = { times, i: 0, hi: null, tint: new Map(), final: null, end: t + (reduced ? 0 : 280) };
     syncUI();
   }
 
@@ -449,14 +588,22 @@
     const ids = [...fingers.keys()];
     while (shuffle.i < shuffle.times.length && now >= shuffle.times[shuffle.i]) {
       const last = shuffle.i === shuffle.times.length - 1;
-      let pick;
-      if (last) {
-        pick = ids[randInt(ids.length)];            // eerlijke, uniforme keuze
+      if (teamCount) {
+        if (last) {
+          shuffle.final = assignTeams(ids);          // eerlijke verdeling
+          shuffle.tint = shuffle.final;
+        } else {
+          ids.forEach(id => shuffle.tint.set(id, randInt(teamCount)));
+          buzz(6);
+        }
+      } else if (last) {
+        shuffle.hi = ids[randInt(ids.length)];        // eerlijke, uniforme keuze
       } else {
+        let pick;
         do { pick = ids[randInt(ids.length)]; } while (pick === shuffle.hi);
+        shuffle.hi = pick;
         buzz(6);
       }
-      shuffle.hi = pick;
       shuffle.i++;
     }
     if (shuffle.i >= shuffle.times.length && now >= shuffle.end) declare(now);
@@ -464,54 +611,111 @@
 
   function declare(now) {
     const ids = [...fingers.keys()];
-    if (ids.length < 2) {
+    if (ids.length < needPlayers()) {
       phase = ids.length ? 'gather' : 'idle';
       shuffle = null;
       lastChange = now;
       syncUI();
       return;
     }
-    const id = fingers.has(shuffle.hi) ? shuffle.hi : ids[randInt(ids.length)];
-    const f = fingers.get(id);
-    winner = { id, x: f.x, y: f.y, ci: f.ci, at: now };
+    if (teamCount) {
+      let map = shuffle.final;
+      if (!map || map.size !== ids.length || !ids.every(id => map.has(id))) map = assignTeams(ids);
+      split = {
+        at: now,
+        members: ids.map(id => {
+          const f = fingers.get(id);
+          return { id, x: f.x, y: f.y, team: map.get(id) };
+        }),
+      };
+      renderTeams();
+      teamsEl.hidden = false;
+      buzz([40, 30, 40, 30, 120]);
+    } else {
+      const id = fingers.has(shuffle.hi) ? shuffle.hi : ids[randInt(ids.length)];
+      const f = fingers.get(id);
+      winner = { id, x: f.x, y: f.y, ci: f.ci, at: now };
+      reveal.hidden = false;
+      buzz([50, 40, 160]);
+    }
     shuffle = null;
     phase = mode === 'tap' || down.size === 0 ? 'done' : 'result';
-    reveal.hidden = false;
-    buzz([50, 40, 160]);
     syncUI();
+  }
+
+  function renderTeams() {
+    teamList.textContent = '';
+    for (let t = 0; t < teamCount; t++) {
+      const count = split.members.filter(m => m.team === t).length;
+      const li = document.createElement('li');
+      li.style.setProperty('--t', TEAMS[t].hex);
+      const name = document.createElement('span');
+      name.className = 'team-name';
+      name.textContent = TEAMS[t].name;
+      const size = document.createElement('span');
+      size.className = 'team-count';
+      size.textContent = count + (count === 1 ? ' speler' : ' spelers');
+      li.append(name, size);
+      teamList.append(li);
+    }
+    // Zet het kaartje in de strook met de minste rondjes (bij gelijkspel: midden).
+    const reach = R * 1.6 + 90;
+    let bestY = H / 2;
+    let bestCrowd = Infinity;
+    [0.5, 0.35, 0.65, 0.2, 0.8].forEach(band => {
+      const y = Math.max(110, Math.min(H - 130, band * H));
+      const crowd = split.members.filter(m => Math.abs(m.y - y) < reach).length;
+      if (crowd < bestCrowd) { bestCrowd = crowd; bestY = y; }
+    });
+    teamCard.style.top = bestY + 'px';
   }
 
   let lastHint = '';
   function syncUI() {
     const n = fingers.size;
+    const tap = mode === 'tap';
+    const need = needPlayers();
     intro.classList.toggle('playing', phase === 'gather' || phase === 'shuffle');
     intro.classList.toggle('gone', phase === 'result' || phase === 'done');
 
     const lit = new Map();
-    fingers.forEach(f => { if (f.slot >= 0) lit.set(f.slot, COLORS[f.ci]); });
+    fingers.forEach(f => { if (f.slot >= 0) lit.set(f.slot, paintFor(f).hex); });
     pips.forEach((li, i) => {
       const c = lit.get(i);
       li.classList.toggle('on', !!c);
       if (c) li.style.setProperty('--c', c);
     });
 
-    const tap = mode === 'tap';
     let text = tap ? 'Tik allemaal één keer op je plek' : 'Leg allemaal een vinger op het scherm';
     if (phase === 'gather') {
-      if (n < 2) text = tap ? 'Wachten op meer spelers…' : 'Wachten op meer vingers…';
-      else text = tap ? n + ' spelers · tik je rondje om eruit te gaan' : n + ' vingers · niet loslaten';
+      if (n < need) {
+        const short = need - n;
+        if (teamCount) text = 'Nog ' + short + (short === 1 ? ' speler' : ' spelers') + ' nodig voor ' + teamCount + ' teams';
+        else text = tap ? 'Wachten op meer spelers…' : 'Wachten op meer vingers…';
+      } else {
+        text = tap ? n + ' spelers · tik je rondje om eruit te gaan' : n + ' vingers · niet loslaten';
+      }
     } else if (phase === 'shuffle') {
-      text = 'Wie wordt het…';
+      text = teamCount ? 'Teams maken…' : 'Wie wordt het…';
     }
     const showNotice = !!notice && phase === 'idle';
     if (showNotice) text = 'Deze telefoon herkent maximaal ' + notice.count + ' vingers tegelijk. Kies Tikken voor meer spelers.';
     if (text !== lastHint) { hint.textContent = text; lastHint = text; }
     hint.classList.toggle('notice', showNotice);
     modesEl.classList.toggle('nudge', showNotice);
-    meta.textContent = tap ? '2 tot 10+ spelers · één keer tikken' : '2 tot ' + touchLimit + ' spelers · vinger vasthouden';
-    modeButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
 
-    again.classList.toggle('show', phase === 'done');
+    const how = tap ? 'één keer tikken' : 'vinger vasthouden';
+    if (teamCount) meta.textContent = teamCount + ' teams · ' + (tap ? how : 'max. ' + touchLimit + ' spelers');
+    else meta.textContent = (tap ? '2 tot 10+ spelers · ' : '2 tot ' + touchLimit + ' spelers · ') + how;
+
+    modeButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
+    teamBtn.textContent = teamCount ? teamCount + ' teams' : 'Teams';
+    teamBtn.setAttribute('aria-pressed', String(teamCount > 0));
+    teamBtn.setAttribute('aria-label', teamCount
+      ? teamCount + ' teams. Tik voor ' + (teamCount === 4 ? 'geen teams' : (teamCount + 1) + ' teams')
+      : 'Teams maken. Tik voor 2 teams');
+
+    againEls.forEach(el => el.classList.toggle('show', phase === 'done'));
   }
 
   // ---------- Invoer ----------
@@ -524,7 +728,8 @@
     const now = performance.now();
     if (phase === 'result' || phase === 'shuffle') return;   // te laat voor deze ronde
     if (phase === 'done') {
-      if (now - winner.at < 1400) return;                    // uitslag niet per ongeluk wegtikken
+      const shown = winner || split;
+      if (shown && now - shown.at < 1400) return;            // uitslag niet per ongeluk wegtikken
       resetRound();
       if (mode === 'tap') { syncUI(); return; }
     }
@@ -540,6 +745,10 @@
     f.x = e.clientX;
     f.y = e.clientY;
     if (winner && winner.id === e.pointerId) { winner.x = f.x; winner.y = f.y; }
+    if (split) {
+      const m = split.members.find(member => member.id === e.pointerId);
+      if (m) { m.x = f.x; m.y = f.y; }
+    }
   });
 
   function release(id, now) {
@@ -583,9 +792,9 @@
   });
 
   // ---------- Tekenen ----------
-  function ring(x, y, ci, s, a) {
+  function ring(x, y, paint, s, a) {
     if (a <= 0 || s <= 0) return;
-    const [r, g, b] = RGB[ci];
+    const [r, g, b] = paint.rgb;
     const rad = R * s;
     ctx.globalAlpha = a;
     const glow = ctx.createRadialGradient(x, y, rad * .5, x, y, rad * 2.1);
@@ -593,10 +802,10 @@
     glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
     ctx.fillStyle = glow;
     ctx.beginPath(); ctx.arc(x, y, rad * 2.1, 0, TAU); ctx.fill();
-    ctx.strokeStyle = COLORS[ci];
+    ctx.strokeStyle = paint.hex;
     ctx.lineWidth = rad * .2;
     ctx.beginPath(); ctx.arc(x, y, rad, 0, TAU); ctx.stroke();
-    ctx.fillStyle = COLORS[ci];
+    ctx.fillStyle = paint.hex;
     ctx.beginPath(); ctx.arc(x, y, rad * .34, 0, TAU); ctx.fill();
     ctx.globalAlpha = 1;
   }
@@ -639,34 +848,68 @@
     ctx.beginPath(); ctx.arc(x, y, R * .34, 0, TAU); ctx.fill();
   }
 
+  function drawSplit(now) {
+    const age = now - split.at;
+    const k = reduced ? 1 : easeInOutCubic(clamp(age / 500));
+    // Teamgenoten met een lijn verbinden.
+    for (let t = 0; t < teamCount; t++) {
+      const group = split.members.filter(m => m.team === t);
+      if (group.length < 2) continue;
+      const cx = group.reduce((sum, m) => sum + m.x, 0) / group.length;
+      const cy = group.reduce((sum, m) => sum + m.y, 0) / group.length;
+      group.sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
+      const [r, g, b] = TEAMS[t].rgb;
+      ctx.strokeStyle = `rgba(${r},${g},${b},${.4 * k})`;
+      ctx.lineWidth = 4;
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      group.forEach((m, i) => (i ? ctx.lineTo(m.x, m.y) : ctx.moveTo(m.x, m.y)));
+      if (group.length > 2) ctx.closePath();
+      ctx.stroke();
+    }
+    split.members.forEach((m, i) => {
+      const pop = reduced ? 1 : easeOutBack(clamp(age / 380));
+      const pulse = reduced ? 1 : 1 + .05 * Math.sin(age / 190 + i);
+      ring(m.x, m.y, TEAMS[m.team], (.85 + .3 * pop) * pulse, 1);
+    });
+  }
+
   function frame() {
     const now = performance.now();
     const wait = mode === 'tap' ? TAP_MS : HOLD_MS;
-    if (phase === 'gather' && fingers.size >= 2 && now - lastChange >= wait) startShuffle(now);
+    const need = needPlayers();
+    if (phase === 'gather' && fingers.size >= need && now - lastChange >= wait) startShuffle(now);
     if (phase === 'shuffle') stepShuffle(now);
 
     ctx.clearRect(0, 0, W, H);
 
     ghosts = ghosts.filter(g => now - g.t0 < 240);
-    ghosts.forEach(g => { const k = (now - g.t0) / 240; ring(g.x, g.y, g.ci, 1 - k * .5, 1 - k); });
+    ghosts.forEach(g => { const k = (now - g.t0) / 240; ring(g.x, g.y, g.paint, 1 - k * .5, 1 - k); });
 
     if (winner) {
       const fade = reduced ? 0 : clamp(1 - (now - winner.at) / 300);
-      if (fade > 0) fingers.forEach(f => { if (f.id !== winner.id) ring(f.x, f.y, f.ci, .6 + .4 * fade, fade); });
+      if (fade > 0) fingers.forEach(f => { if (f.id !== winner.id) ring(f.x, f.y, PLAYER[f.ci], .6 + .4 * fade, fade); });
       flood(now);
       winnerRing(now);
+    } else if (split) {
+      drawSplit(now);
     } else {
-      const counting = phase === 'gather' && fingers.size >= 2;
+      const counting = phase === 'gather' && fingers.size >= need;
       const p = clamp((now - lastChange) / wait);
       fingers.forEach(f => {
         const appear = reduced ? 1 : easeOutBack(clamp((now - f.born) / 320));
         let s = appear * (reduced ? 1 : 1 + .045 * Math.sin((now - f.born) / 170));
         let a = 1;
-        if (phase === 'shuffle' && shuffle.hi != null) {
-          if (f.id === shuffle.hi) s *= 1.22;
-          else { s *= .88; a = .3; }
+        let paint = paintFor(f);
+        if (phase === 'shuffle') {
+          if (teamCount) {
+            if (shuffle.tint.has(f.id)) paint = TEAMS[shuffle.tint.get(f.id)];
+          } else if (shuffle.hi != null) {
+            if (f.id === shuffle.hi) s *= 1.22;
+            else { s *= .88; a = .3; }
+          }
         }
-        ring(f.x, f.y, f.ci, s, a);
+        ring(f.x, f.y, paint, s, a);
         if (counting) countdown(f.x, f.y, R * s * 1.45, p);
       });
     }
