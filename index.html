@@ -305,13 +305,15 @@
     line-height: 1;
     color: var(--t);
   }
-  .team-count {
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 1;
-    letter-spacing: .22em;
-    text-transform: uppercase;
-    color: rgba(242, 230, 204, .6);
+  .team-members {
+    max-width: 9em;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.3;
+    letter-spacing: .04em;
+    text-align: center;
+    text-wrap: balance;
+    color: rgba(242, 230, 204, .8);
     font-variant-numeric: tabular-nums;
   }
   .teams .again {
@@ -494,10 +496,18 @@
     return -1;
   }
 
+  // Laagste vrije spelernummer (1, 2, 3 …), zichtbaar in het rondje bij teams.
+  function freeNumber() {
+    const used = new Set([...fingers.values()].map(f => f.num));
+    let n = 1;
+    while (used.has(n)) n++;
+    return n;
+  }
+
   function addFinger(id, x, y, now) {
     const slot = freeSlot();
     const ci = slot >= 0 ? slot : fingers.size % COLORS.length;
-    fingers.set(id, { id, x, y, slot, ci, born: now });
+    fingers.set(id, { id, x, y, slot, ci, num: freeNumber(), born: now });
     lastChange = now;
     if (phase === 'idle') phase = 'gather';
     buzz(10);
@@ -508,7 +518,7 @@
     if (!f) return;
     fingers.delete(id);
     if (phase === 'gather' || phase === 'shuffle') {
-      ghosts.push({ x: f.x, y: f.y, paint: paintFor(f), t0: now });
+      ghosts.push({ x: f.x, y: f.y, paint: paintFor(f), label: teamCount ? f.num : null, t0: now });
       lastChange = now;
       if (fingers.size === 0) { phase = 'idle'; shuffle = null; }
       else if (phase === 'shuffle' && fingers.size < needPlayers()) { phase = 'gather'; shuffle = null; }
@@ -625,7 +635,7 @@
         at: now,
         members: ids.map(id => {
           const f = fingers.get(id);
-          return { id, x: f.x, y: f.y, team: map.get(id) };
+          return { id, x: f.x, y: f.y, num: f.num, team: map.get(id) };
         }),
       };
       renderTeams();
@@ -646,16 +656,17 @@
   function renderTeams() {
     teamList.textContent = '';
     for (let t = 0; t < teamCount; t++) {
-      const count = split.members.filter(m => m.team === t).length;
+      const nums = split.members.filter(m => m.team === t).map(m => m.num).sort((a, b) => a - b);
       const li = document.createElement('li');
       li.style.setProperty('--t', TEAMS[t].hex);
+      li.setAttribute('aria-label', 'Team ' + TEAMS[t].name + ': ' + (nums.length === 1 ? 'nummer ' : 'nummers ') + nums.join(', '));
       const name = document.createElement('span');
       name.className = 'team-name';
       name.textContent = TEAMS[t].name;
-      const size = document.createElement('span');
-      size.className = 'team-count';
-      size.textContent = count + (count === 1 ? ' speler' : ' spelers');
-      li.append(name, size);
+      const members = document.createElement('span');
+      members.className = 'team-members';
+      members.textContent = nums.join(' · ');
+      li.append(name, members);
       teamList.append(li);
     }
     // Zet het kaartje in de strook met de minste rondjes (bij gelijkspel: midden).
@@ -687,6 +698,7 @@
     });
 
     let text = tap ? 'Tik allemaal één keer op je plek' : 'Leg allemaal een vinger op het scherm';
+    if (tap && teamCount) text += ' en onthoud je nummer';
     if (phase === 'gather') {
       if (n < need) {
         const short = need - n;
@@ -792,7 +804,8 @@
   });
 
   // ---------- Tekenen ----------
-  function ring(x, y, paint, s, a) {
+  // label = spelernummer (alleen bij teams); zonder label een stip in het midden.
+  function ring(x, y, paint, s, a, label) {
     if (a <= 0 || s <= 0) return;
     const [r, g, b] = paint.rgb;
     const rad = R * s;
@@ -805,8 +818,18 @@
     ctx.strokeStyle = paint.hex;
     ctx.lineWidth = rad * .2;
     ctx.beginPath(); ctx.arc(x, y, rad, 0, TAU); ctx.stroke();
-    ctx.fillStyle = paint.hex;
-    ctx.beginPath(); ctx.arc(x, y, rad * .34, 0, TAU); ctx.fill();
+    if (label != null) {
+      ctx.fillStyle = 'rgba(20,14,10,.78)';
+      ctx.beginPath(); ctx.arc(x, y, rad * .9, 0, TAU); ctx.fill();
+      ctx.fillStyle = paint.hex;
+      ctx.font = `700 ${Math.max(1, Math.round(rad * (label > 9 ? .8 : .98)))}px "Barlow Condensed", "Roboto Condensed", "Arial Narrow", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(label), x, y + rad * .05);
+    } else {
+      ctx.fillStyle = paint.hex;
+      ctx.beginPath(); ctx.arc(x, y, rad * .34, 0, TAU); ctx.fill();
+    }
     ctx.globalAlpha = 1;
   }
 
@@ -870,7 +893,7 @@
     split.members.forEach((m, i) => {
       const pop = reduced ? 1 : easeOutBack(clamp(age / 380));
       const pulse = reduced ? 1 : 1 + .05 * Math.sin(age / 190 + i);
-      ring(m.x, m.y, TEAMS[m.team], (.85 + .3 * pop) * pulse, 1);
+      ring(m.x, m.y, TEAMS[m.team], (.85 + .3 * pop) * pulse, 1, m.num);
     });
   }
 
@@ -884,7 +907,7 @@
     ctx.clearRect(0, 0, W, H);
 
     ghosts = ghosts.filter(g => now - g.t0 < 240);
-    ghosts.forEach(g => { const k = (now - g.t0) / 240; ring(g.x, g.y, g.paint, 1 - k * .5, 1 - k); });
+    ghosts.forEach(g => { const k = (now - g.t0) / 240; ring(g.x, g.y, g.paint, 1 - k * .5, 1 - k, g.label); });
 
     if (winner) {
       const fade = reduced ? 0 : clamp(1 - (now - winner.at) / 300);
@@ -909,7 +932,7 @@
             else { s *= .88; a = .3; }
           }
         }
-        ring(f.x, f.y, paint, s, a);
+        ring(f.x, f.y, paint, s, a, teamCount ? f.num : null);
         if (counting) countdown(f.x, f.y, R * s * 1.45, p);
       });
     }
