@@ -212,6 +212,7 @@
     display: grid;
     place-items: center;
     padding-inline: 16px;
+    padding-block: 6vh;
     overflow: hidden;
   }
   .half.flip { transform: rotate(180deg); }
@@ -397,6 +398,7 @@
   const hint = document.getElementById('hint');
   const pips = [...document.querySelectorAll('.pips li')];
   const reveal = document.getElementById('reveal');
+  const halves = [...reveal.querySelectorAll('.half')];   // [boven (omgedraaid), onder]
   const teamsEl = document.getElementById('teams');
   const teamCard = document.getElementById('team-card');
   const teamList = document.getElementById('team-list');
@@ -645,12 +647,28 @@
       const id = fingers.has(shuffle.hi) ? shuffle.hi : ids[randInt(ids.length)];
       const f = fingers.get(id);
       winner = { id, x: f.x, y: f.y, ci: f.ci, num: f.num, at: now };
+      placeStamps();
       reveal.hidden = false;
       buzz([50, 40, 160]);
     }
     shuffle = null;
     phase = mode === 'tap' || down.size === 0 ? 'done' : 'result';
     syncUI();
+  }
+
+  // Houd "Vat Nein" weg van het rondje van de gekozen speler, zodat het nummer leesbaar blijft.
+  function placeStamps() {
+    const landscape = W > H && H <= 520;
+    halves.forEach((half, i) => {
+      half.style.alignItems = '';
+      if (landscape) return;
+      const top = i * H / 2;
+      const bottom = top + H / 2;
+      if (winner.y < top - R * 1.5 || winner.y > bottom + R * 1.5) return;
+      const toVisualTop = winner.y > (top + bottom) / 2;
+      const flipped = half.classList.contains('flip');       // 180° gedraaid: start staat onderaan
+      half.style.alignItems = toVisualTop !== flipped ? 'start' : 'end';
+    });
   }
 
   function renderTeams() {
