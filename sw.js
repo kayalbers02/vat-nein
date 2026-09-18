@@ -1,5 +1,5 @@
 // Vat Nein: werkt offline na het eerste bezoek.
-const CACHE = 'vat-nein-v6';
+const CACHE = 'vat-nein-v7';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', event => {

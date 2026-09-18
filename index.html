@@ -12,20 +12,26 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Vat Nein</title>
-<meta name="theme-color" content="#140e0a">
+<meta name="theme-color" content="#0a2e1d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=UnifrakturCook:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Libre+Caslon+Text:ital@0;1&display=swap">
 <style>
   :root {
-    --stout: #140e0a;
-    --stout-glow: #2a1d14;
-    --foam: #f2e6cc;
-    --amber: #e8a33d;
-    --ink: #140e0a;
-    --blackletter: "UnifrakturCook", "Pirata One", "Old English Text MT", Georgia, serif;
-    --condensed: "Barlow Condensed", "Roboto Condensed", "Arial Narrow", sans-serif;
+    /* Ierse pub: flessengroene gevel, vergulde letters, stout met schuimkraag */
+    --pub: #0a2e1d;
+    --pub-glow: #11502f;
+    --pub-deep: #04130c;
+    --gold: #d9b35a;
+    --gold-hi: #fbeeb8;
+    --gold-lo: #a87a22;
+    --foam: #f3e7c9;
+    --ink: #0b0705;
+    --orange: #ff9d4d;
+    --display: "Cinzel", "Trajan Pro", "Times New Roman", serif;
+    --text: "Libre Caslon Text", "Book Antiqua", Georgia, serif;
     --bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    --clover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'%3E%3Cpath transform='rotate(45)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3Cpath transform='rotate(135)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3Cpath transform='rotate(225)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3Cpath transform='rotate(315)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3C/svg%3E");
   }
 
   [hidden] { display: none !important; }
@@ -43,9 +49,9 @@
   }
 
   body {
-    background: radial-gradient(120% 80% at 50% 45%, var(--stout-glow) 0%, var(--stout) 62%, #0b0806 100%) var(--stout);
+    background: radial-gradient(120% 80% at 50% 42%, var(--pub-glow) 0%, var(--pub) 55%, var(--pub-deep) 100%) var(--pub);
     color: var(--foam);
-    font-family: var(--condensed);
+    font-family: var(--text);
   }
 
   #stage {
@@ -55,7 +61,7 @@
     cursor: crosshair;
   }
 
-  /* Lagen: teamkaartje onder de rondjes, zodat niemand zijn kleur mist; tekst erboven. */
+  /* Lagen: teamkaartje onder de klavertjes, zodat niemand zijn nummer mist; tekst erboven. */
   #board {
     position: absolute;
     inset: 0;
@@ -65,7 +71,23 @@
     display: block;
   }
   .teams { z-index: 0; }
-  .intro, .reveal { z-index: 2; }
+  .intro, .reveal, .frame { z-index: 2; }
+
+  /* Vergulde bies, zoals op een pubgevel */
+  .frame {
+    position: absolute;
+    inset: max(10px, env(safe-area-inset-top, 0px)) 10px max(10px, env(safe-area-inset-bottom, 0px)) 10px;
+    border: 1.5px solid rgba(217, 179, 90, .55);
+    border-radius: 14px;
+    pointer-events: none;
+  }
+  .frame::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(217, 179, 90, .28);
+    border-radius: 9px;
+  }
 
   /* ---------- Intro / wachten ---------- */
   .intro {
@@ -76,7 +98,7 @@
     align-items: center;
     justify-content: center;
     gap: 22px;
-    padding-inline: 20px;
+    padding-inline: 24px;
     text-align: center;
     pointer-events: none;
     transition: opacity .3s ease;
@@ -84,67 +106,79 @@
   .intro > * { margin: 0; transition: opacity .35s ease; }
 
   .eyebrow {
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 1;
-    letter-spacing: .34em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font: 600 11.5px/1 var(--display);
+    letter-spacing: .32em;
     text-transform: uppercase;
-    color: var(--amber);
+    white-space: nowrap;
+    color: var(--gold);
   }
+  .eyebrow::before,
+  .eyebrow::after {
+    content: "";
+    width: 30px;
+    height: 1px;
+    background: currentColor;
+    opacity: .6;
+  }
+  .eyebrow::after { margin-left: -.32em; }
 
   .mark {
-    font-family: var(--blackletter);
-    font-weight: 700;
-    font-size: clamp(64px, 19vw, 150px);
-    line-height: .88;
-    letter-spacing: .01em;
-    color: var(--foam);
-    text-shadow: 0 0 48px rgba(232, 163, 61, .16);
+    font: 800 clamp(44px, 14.5vw, 124px)/.95 var(--display);
+    letter-spacing: .035em;
+    margin-right: -.035em;
+    text-transform: uppercase;
     white-space: nowrap;
+    color: var(--gold);
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .45));
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .mark {
+      background: linear-gradient(180deg, var(--gold-hi) 0%, #e3bd63 46%, var(--gold-lo) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
   }
 
   .pips {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 9px;
     list-style: none;
     padding: 0;
   }
   .pips li {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    border: 2px solid rgba(242, 230, 204, .26);
-    background: transparent;
-    transition: background-color .2s ease, border-color .2s ease, transform .25s cubic-bezier(.3, 1.6, .5, 1);
+    width: 17px;
+    height: 17px;
+    background: rgba(243, 231, 201, .2);
+    -webkit-mask: var(--clover) center / contain no-repeat;
+    mask: var(--clover) center / contain no-repeat;
+    transition: background-color .2s ease, transform .25s cubic-bezier(.3, 1.6, .5, 1);
   }
   .pips li.on {
     background: var(--c);
-    border-color: var(--c);
-    transform: scale(1.2);
+    transform: scale(1.3) rotate(12deg);
   }
 
   .hint {
-    font-weight: 500;
-    font-size: 21px;
-    line-height: 1.2;
-    letter-spacing: .03em;
-    color: rgba(242, 230, 204, .78);
+    font: italic 400 19px/1.35 var(--text);
+    color: rgba(243, 231, 201, .86);
     text-wrap: balance;
-    max-width: 26ch;
+    max-width: 27ch;
     font-variant-numeric: tabular-nums;
   }
-  .hint.notice { color: var(--amber); }
+  .hint.notice { color: var(--orange); }
 
   .meta {
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 1;
-    letter-spacing: .26em;
+    font: 600 10.5px/1.2 var(--display);
+    letter-spacing: .24em;
     text-transform: uppercase;
-    color: rgba(242, 230, 204, .4);
+    color: rgba(243, 231, 201, .46);
   }
 
   .intro.playing .eyebrow,
@@ -162,10 +196,11 @@
     align-items: center;
     gap: 4px;
     padding: 4px;
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - 40px);
     box-sizing: border-box;
-    border: 1.5px solid rgba(242, 230, 204, .22);
+    border: 1.5px solid rgba(217, 179, 90, .45);
     border-radius: 999px;
+    background: rgba(4, 19, 12, .55);
     pointer-events: auto;
     touch-action: manipulation;
   }
@@ -173,12 +208,12 @@
     appearance: none;
     margin: 0;
     border: 0;
-    padding: 11px 14px 10px;
+    padding: 12px 11px 11px;
     border-radius: 999px;
     background: transparent;
-    color: rgba(242, 230, 204, .62);
-    font: 700 13px/1 var(--condensed);
-    letter-spacing: .14em;
+    color: rgba(243, 231, 201, .68);
+    font: 700 11.5px/1 var(--display);
+    letter-spacing: .09em;
     text-transform: uppercase;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
@@ -186,46 +221,61 @@
     transition: background-color .2s ease, color .2s ease;
   }
   .modes button[aria-pressed="true"] { background: var(--foam); color: var(--ink); }
-  .modes .team-btn[aria-pressed="true"] { background: var(--amber); color: var(--ink); }
-  .modes button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .modes .team-btn[aria-pressed="true"] { background: linear-gradient(180deg, #f3d98a, #d2a544); color: var(--ink); }
+  .modes button:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
   .modes .sep {
     align-self: stretch;
     width: 1.5px;
-    margin: 7px 2px;
-    background: rgba(242, 230, 204, .22);
+    margin: 7px 1px;
+    background: rgba(217, 179, 90, .35);
   }
   .modes.nudge button[data-mode="tap"] { animation: nudge 1s ease-in-out 3; }
-  @keyframes nudge { 50% { background: var(--amber); color: var(--ink); } }
+  @keyframes nudge { 50% { background: var(--orange); color: var(--ink); } }
   .intro.playing .modes,
   .intro.gone .modes { opacity: 0; pointer-events: none; }
+  @media (max-width: 350px) {
+    .modes button { padding-inline: 8px; font-size: 10.5px; letter-spacing: .06em; }
+  }
 
-  /* ---------- Onthulling: één gekozen ---------- */
+  /* ---------- Onthulling: één gekozen (tekst op de stout) ---------- */
   .reveal {
     position: absolute;
     inset: 0;
     display: grid;
     grid-template-rows: 1fr 1fr;
     pointer-events: none;
-    color: var(--ink);
+    color: var(--foam);
   }
+  /* Onderin ruimte voor de munten, bovenin voor de schuimkraag (de bovenste helft staat ondersteboven). */
   .half {
     display: grid;
     place-items: center;
     padding-inline: 16px;
-    padding-block: 6vh;
+    padding-block: 6vh 20vh;
     overflow: hidden;
   }
   .half.flip { transform: rotate(180deg); }
 
   .stamp {
-    display: block;
-    font-family: var(--blackletter);
-    font-weight: 700;
-    font-size: min(19vw, 15vh);
-    line-height: 1;
-    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .16em;
+    font-size: min(15vw, 12.5vh);
     transform: rotate(-4deg);
-    animation: stamp .46s cubic-bezier(.2, .9, .3, 1.25) .52s both;
+    animation: stamp .46s cubic-bezier(.2, .9, .3, 1.25) 1.35s both;
+  }
+  .stamp-word {
+    font: 900 1em/1 var(--display);
+    letter-spacing: .03em;
+    margin-right: -.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 .05em 0 rgba(0, 0, 0, .45);
+  }
+  .stamp-toast {
+    font: italic 400 .3em/1 var(--text);
+    color: var(--gold);
   }
 
   @keyframes stamp {
@@ -239,20 +289,19 @@
     left: 50%;
     top: 50%;
     margin: 0;
-    padding: 9px 16px 8px;
+    padding: 10px 16px 9px;
     transform: translate(-50%, -50%);
     border: 1.5px solid currentColor;
     border-radius: 999px;
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 1;
-    letter-spacing: .26em;
+    font: 700 11px/1 var(--display);
+    letter-spacing: .22em;
     text-transform: uppercase;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity .4s ease;
   }
-  .again.show { opacity: .72; transition-delay: .6s; }
+  /* Pas tonen als het glas vol is (een animatie loopt ook als het blok net zichtbaar wordt). */
+  .again.show { animation: again-in .4s ease 2.2s both; }
+  @keyframes again-in { to { opacity: .78; } }
 
   /* ---------- Onthulling: teams ---------- */
   .teams {
@@ -268,14 +317,12 @@
     flex-direction: column;
     align-items: center;
     gap: 14px;
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - 40px);
     box-sizing: border-box;
     padding: 16px 24px 18px;
-    border: 1.5px solid rgba(242, 230, 204, .14);
-    border-radius: 22px;
-    background: rgba(20, 14, 10, .82);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(217, 179, 90, .4);
+    border-radius: 16px;
+    background: rgba(4, 19, 12, .86);
     transform: translate(-50%, -50%);
     animation: card-in .42s cubic-bezier(.2, .9, .3, 1.2) .38s both;
   }
@@ -287,7 +334,7 @@
   .team-list {
     display: grid;
     grid-template-columns: repeat(2, auto);
-    gap: 12px 28px;
+    gap: 12px 26px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -296,25 +343,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
   }
   .team-list li:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .team-name {
-    font-family: var(--blackletter);
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 1;
+    font: 800 25px/1 var(--display);
+    letter-spacing: .05em;
+    text-transform: uppercase;
     color: var(--t);
   }
   .team-members {
     max-width: 9em;
-    font-weight: 700;
-    font-size: 17px;
-    line-height: 1.3;
+    font: 700 16px/1.3 var(--display);
     letter-spacing: .04em;
     text-align: center;
     text-wrap: balance;
-    color: rgba(242, 230, 204, .8);
+    color: rgba(243, 231, 201, .82);
     font-variant-numeric: tabular-nums;
   }
   .teams .again {
@@ -322,29 +366,33 @@
     bottom: var(--bottom);
     transform: translateX(-50%);
     color: var(--foam);
+    animation-delay: .8s;
   }
 
   @media (orientation: landscape) and (max-height: 520px) {
     .reveal { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
-    .stamp { font-size: min(10vw, 26vh); }
-    .intro { gap: 14px; }
-    .mark { font-size: clamp(52px, 22vh, 110px); }
-    .team-name { font-size: 32px; }
+    .half { padding-block: 18vh; }
+    .stamp { font-size: min(8vw, 22vh); }
+    .intro { gap: 12px; }
+    .mark { font-size: clamp(40px, 18vh, 96px); }
+    .team-name { font-size: 21px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .stamp, .team-card { animation: none; }
+    .again.show { animation: none; opacity: .78; }
     .modes.nudge button[data-mode="tap"] { animation: none; }
-    .intro, .intro > *, .pips li, .again, .modes button { transition: none; }
+    .intro, .intro > *, .pips li, .modes button { transition: none; }
   }
 </style>
 </head>
 <body>
 <main id="stage" aria-label="Speelveld: leg hier je vinger neer">
   <canvas id="board"></canvas>
+  <div class="frame" aria-hidden="true"></div>
 
   <section class="intro" id="intro">
-    <p class="eyebrow">De vingerkiezer</p>
+    <p class="eyebrow">Dublin · Est. 2026</p>
     <h1 class="mark">Vat Nein</h1>
     <ol class="pips" aria-hidden="true">
       <li></li><li></li><li></li><li></li><li></li>
@@ -361,8 +409,12 @@
   </section>
 
   <section class="reveal" id="reveal" hidden aria-live="assertive">
-    <div class="half flip" aria-hidden="true"><span class="stamp">Vat Nein</span></div>
-    <div class="half"><span class="stamp">Vat Nein</span></div>
+    <div class="half flip" aria-hidden="true">
+      <div class="stamp"><span class="stamp-word">Vat Nein</span><span class="stamp-toast">Sláinte!</span></div>
+    </div>
+    <div class="half">
+      <div class="stamp"><span class="stamp-word">Vat Nein</span><span class="stamp-toast">Sláinte!</span></div>
+    </div>
     <p class="again">Tik om opnieuw te spelen</p>
   </section>
 
@@ -377,19 +429,24 @@
 
 <script>
 (() => {
-  // Tien vingers, tien kleuren. De laatste is schuimkraag-crème.
-  const COLORS = ['#FF4B3E', '#FF9A1F', '#FFE14D', '#5EDC7A', '#22C7C7', '#4D9BFF', '#9A7BFF', '#F064D8', '#FF9EBB', '#F2E6CC'];
-  const toRgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
-  const PLAYER = COLORS.map(hex => ({ hex, rgb: toRgb(hex) }));
-  const NEUTRAL = { hex: '#F2E6CC', rgb: [242, 230, 204] };
-  const TEAMS = [['Rood', '#FF4B3E'], ['Blauw', '#4D9BFF'], ['Geel', '#FFE14D'], ['Groen', '#5EDC7A']]
-    .map(([name, hex]) => ({ name, hex, rgb: toRgb(hex) }));
-  const INK = '#140e0a';
-  const FOAM = '242,230,204';
+  const TAU = Math.PI * 2;
   const HOLD_MS = 2600;   // vasthouden: zo lang stilhouden voordat er gekozen wordt
   const TAP_MS = 3500;    // tikken: zo lang geen nieuwe tik voordat er gekozen wordt
-  const TAU = Math.PI * 2;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Kleuren ----------
+  const toRgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  const mix = (rgb, to, t) => rgb.map(v => Math.round(v + (to - v) * t));
+  const css = rgb => `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+  function makePaint(hex, num) {
+    const rgb = toRgb(hex);
+    return { hex, rgb, light: css(mix(rgb, 255, .45)), dark: css(mix(rgb, 0, .45)), num: num || css(mix(rgb, 255, .6)), grad: null };
+  }
+  const SHAMROCK = makePaint('#2fbf68', '#f6ecd0');   // elke speler: een groen klavertje vier
+  const GOLD = makePaint('#e9b949', '#ffe9a8');       // de gelukkige, en "nog niet ingedeeld" bij teams
+  // Ierse driekleur plus St. Patrick's blue, de oude nationale kleur.
+  const TEAMS = [['Groen', '#35c46a'], ['Oranje', '#ff8a3c'], ['Wit', '#f3e7c9'], ['Blauw', '#4aa3ff']]
+    .map(([name, hex]) => Object.assign({ name }, makePaint(hex)));
 
   const stage = document.getElementById('stage');
   const canvas = document.getElementById('board');
@@ -422,20 +479,7 @@
   let notice = null;
   let tapSeq = 0;
 
-  let W = 0, H = 0, R = 52;
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
-    W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    R = Math.max(44, Math.min(66, Math.min(W, H) * 0.14));
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  const fingers = new Map();   // id -> { id, x, y, slot, ci, born }
+  const fingers = new Map();   // id -> { id, x, y, slot, num, rot, born }
   const down = new Set();      // alle pointers die nu het scherm raken
   let ghosts = [];             // losgelaten vingers die nog wegfaden
   let phase = 'idle';          // idle | gather | shuffle | result | done
@@ -443,12 +487,26 @@
   let shuffle = null;
   let winner = null;           // uitslag bij één persoon kiezen
   let split = null;            // uitslag bij teams
+  let beer = null;             // het glas dat volloopt rond de winnaar
+
+  let W = 0, H = 0, R = 52, DPR = 1;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 3);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    R = Math.max(44, Math.min(66, Math.min(W, H) * 0.14));
+    if (winner) { beer = makeBeer(winner.at, true); placeStamps(); }
+  }
+  window.addEventListener('resize', resize);
 
   const clamp = v => Math.max(0, Math.min(1, v));
   const easeOutBack = t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
   const easeInOutCubic = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const needPlayers = () => Math.max(2, teamCount);
-  const paintFor = f => teamCount ? NEUTRAL : PLAYER[f.ci];
+  const paintFor = () => teamCount ? GOLD : SHAMROCK;
 
   function randInt(n) {
     if (n <= 1) return 0;
@@ -494,11 +552,11 @@
 
   function freeSlot() {
     const used = new Set([...fingers.values()].map(f => f.slot));
-    for (let i = 0; i < COLORS.length; i++) if (!used.has(i)) return i;
+    for (let i = 0; i < pips.length; i++) if (!used.has(i)) return i;
     return -1;
   }
 
-  // Laagste vrije spelernummer (1, 2, 3 …), zichtbaar in elk rondje.
+  // Laagste vrije spelernummer (1, 2, 3 …), zichtbaar in elk klavertje.
   function freeNumber() {
     const used = new Set([...fingers.values()].map(f => f.num));
     let n = 1;
@@ -507,9 +565,7 @@
   }
 
   function addFinger(id, x, y, now) {
-    const slot = freeSlot();
-    const ci = slot >= 0 ? slot : fingers.size % COLORS.length;
-    fingers.set(id, { id, x, y, slot, ci, num: freeNumber(), born: now });
+    fingers.set(id, { id, x, y, slot: freeSlot(), num: freeNumber(), rot: (Math.random() - .5) * .6, born: now });
     lastChange = now;
     if (phase === 'idle') phase = 'gather';
     buzz(10);
@@ -520,7 +576,7 @@
     if (!f) return;
     fingers.delete(id);
     if (phase === 'gather' || phase === 'shuffle') {
-      ghosts.push({ x: f.x, y: f.y, paint: paintFor(f), label: f.num, t0: now });
+      ghosts.push({ x: f.x, y: f.y, paint: paintFor(), label: f.num, rot: f.rot, t0: now });
       lastChange = now;
       if (fingers.size === 0) { phase = 'idle'; shuffle = null; }
       else if (phase === 'shuffle' && fingers.size < needPlayers()) { phase = 'gather'; shuffle = null; }
@@ -530,6 +586,7 @@
   function resetRound() {
     winner = null;
     split = null;
+    beer = null;
     shuffle = null;
     ghosts = [];
     fingers.clear();
@@ -538,7 +595,7 @@
     teamsEl.hidden = true;
   }
 
-  // Tikken: een tik zet een rondje neer; een tik op een bestaand rondje haalt het weg.
+  // Tikken: een tik zet een klavertje neer; een tik op een bestaand klavertje haalt het weg.
   function toggleTap(x, y, now) {
     let hit = null;
     let best = R * 1.15;
@@ -575,7 +632,7 @@
     syncUI();
   }
 
-  // Knoppen handelen hun eigen tik af: die mag geen vinger of rondje worden.
+  // Knoppen handelen hun eigen tik af: die mag geen vinger of klavertje worden.
   [...modeButtons, teamBtn].forEach(btn => {
     btn.addEventListener('pointerdown', e => e.stopPropagation());
     btn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
@@ -637,7 +694,7 @@
         at: now,
         members: ids.map(id => {
           const f = fingers.get(id);
-          return { id, x: f.x, y: f.y, num: f.num, team: map.get(id) };
+          return { id, x: f.x, y: f.y, num: f.num, rot: f.rot, team: map.get(id) };
         }),
       };
       renderTeams();
@@ -646,7 +703,8 @@
     } else {
       const id = fingers.has(shuffle.hi) ? shuffle.hi : ids[randInt(ids.length)];
       const f = fingers.get(id);
-      winner = { id, x: f.x, y: f.y, ci: f.ci, num: f.num, at: now };
+      winner = { id, x: f.x, y: f.y, num: f.num, rot: f.rot, at: now };
+      beer = makeBeer(now, reduced);
       placeStamps();
       reveal.hidden = false;
       buzz([50, 40, 160]);
@@ -656,18 +714,24 @@
     syncUI();
   }
 
-  // Houd "Vat Nein" weg van het rondje van de gekozen speler, zodat het nummer leesbaar blijft.
+  // Zet "Vat Nein" zo ver mogelijk van het klavertje van de gekozen speler, zodat het nummer leesbaar blijft.
   function placeStamps() {
     const landscape = W > H && H <= 520;
     halves.forEach((half, i) => {
       half.style.alignItems = '';
       if (landscape) return;
+      const flipped = half.classList.contains('flip');       // 180° gedraaid: start staat onderaan
       const top = i * H / 2;
       const bottom = top + H / 2;
-      if (winner.y < top - R * 1.5 || winner.y > bottom + R * 1.5) return;
-      const toVisualTop = winner.y > (top + bottom) / 2;
-      const flipped = half.classList.contains('flip');       // 180° gedraaid: start staat onderaan
-      half.style.alignItems = toVisualTop !== flipped ? 'start' : 'end';
+      if (winner.y < top - R * 1.6 || winner.y > bottom + R * 1.6) return;
+      const bandTop = top + H * (flipped ? .2 : .06);         // schuimkraag bovenin, munten onderin
+      const bandBottom = bottom - H * (flipped ? .06 : .2);
+      const hh = Math.min(W * .15, H * .125) * .75;
+      let best = [(bandTop + bandBottom) / 2, ''];
+      [[bandTop + hh, 'top'], [bandBottom - hh, 'bottom']].forEach(spot => {
+        if (Math.abs(spot[0] - winner.y) > Math.abs(best[0] - winner.y)) best = spot;
+      });
+      if (best[1]) half.style.alignItems = (best[1] === 'top') !== flipped ? 'start' : 'end';
     });
   }
 
@@ -687,7 +751,7 @@
       li.append(name, members);
       teamList.append(li);
     }
-    // Zet het kaartje in de strook met de minste rondjes (bij gelijkspel: midden).
+    // Zet het kaartje in de strook met de minste klavertjes (bij gelijkspel: midden).
     const reach = R * 1.6 + 90;
     let bestY = H / 2;
     let bestCrowd = Infinity;
@@ -707,23 +771,21 @@
     intro.classList.toggle('playing', phase === 'gather' || phase === 'shuffle');
     intro.classList.toggle('gone', phase === 'result' || phase === 'done');
 
-    const lit = new Map();
-    fingers.forEach(f => { if (f.slot >= 0) lit.set(f.slot, paintFor(f).hex); });
+    const lit = new Set();
+    fingers.forEach(f => { if (f.slot >= 0) lit.add(f.slot); });
     pips.forEach((li, i) => {
-      const c = lit.get(i);
-      li.classList.toggle('on', !!c);
-      if (c) li.style.setProperty('--c', c);
+      li.classList.toggle('on', lit.has(i));
+      li.style.setProperty('--c', paintFor().hex);
     });
 
-    let text = tap ? 'Tik allemaal één keer op je plek' : 'Leg allemaal een vinger op het scherm';
-    if (tap && teamCount) text += ' en onthoud je nummer';
+    let text = tap ? 'Tik allemaal één keer op je plek en onthoud je nummer' : 'Leg allemaal een vinger op het scherm';
     if (phase === 'gather') {
       if (n < need) {
         const short = need - n;
         if (teamCount) text = 'Nog ' + short + (short === 1 ? ' speler' : ' spelers') + ' nodig voor ' + teamCount + ' teams';
         else text = tap ? 'Wachten op meer spelers…' : 'Wachten op meer vingers…';
       } else {
-        text = tap ? n + ' spelers · tik je rondje om eruit te gaan' : n + ' vingers · niet loslaten';
+        text = tap ? n + ' spelers · tik je klavertje om eruit te gaan' : n + ' vingers · niet loslaten';
       }
     } else if (phase === 'shuffle') {
       text = teamCount ? 'Teams maken…' : 'Wie wordt het…';
@@ -759,7 +821,7 @@
     if (phase === 'result' || phase === 'shuffle') return;   // te laat voor deze ronde
     if (phase === 'done') {
       const shown = winner || split;
-      if (shown && now - shown.at < 1400) return;            // uitslag niet per ongeluk wegtikken
+      if (shown && now - shown.at < 1800) return;            // uitslag niet per ongeluk wegtikken
       resetRound();
       if (mode === 'tap') { syncUI(); return; }
     }
@@ -813,7 +875,7 @@
   document.addEventListener('gesturestart', e => e.preventDefault());
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden || mode === 'tap') return;   // getikte rondjes blijven gewoon staan
+    if (!document.hidden || mode === 'tap') return;   // getikte klavertjes blijven gewoon staan
     const now = performance.now();
     down.clear();
     [...fingers.keys()].forEach(id => dropFinger(id, now));
@@ -821,78 +883,326 @@
     syncUI();
   });
 
-  // ---------- Tekenen ----------
-  const numFont = (rad, n) =>
-    `700 ${Math.max(1, Math.round(rad * (n > 9 ? .8 : .98)))}px "Barlow Condensed", "Roboto Condensed", "Arial Narrow", sans-serif`;
+  // ---------- Klavertje vier ----------
+  // Eén hartvormig blad, punt in het midden, wijzend naar boven; lengte ≈ 1.
+  const LEAF = new Path2D();
+  LEAF.moveTo(0, 0);
+  LEAF.bezierCurveTo(-.15, -.25, -.62, -.42, -.58, -.78);
+  LEAF.bezierCurveTo(-.55, -1.08, -.12, -1.1, 0, -.8);
+  LEAF.bezierCurveTo(.12, -1.1, .55, -1.08, .58, -.78);
+  LEAF.bezierCurveTo(.62, -.42, .15, -.25, 0, 0);
+  LEAF.closePath();
 
-  // label = spelernummer; zonder label een stip in het midden.
-  function ring(x, y, paint, s, a, label) {
+  const numFont = px => `800 ${Math.max(1, Math.round(px))}px Cinzel, "Trajan Pro", Georgia, serif`;
+
+  // label = spelernummer in het hart van het klavertje.
+  function clover(x, y, paint, s, a, label, rot) {
     if (a <= 0 || s <= 0) return;
     const [r, g, b] = paint.rgb;
     const rad = R * s;
+    ctx.save();
     ctx.globalAlpha = a;
-    const glow = ctx.createRadialGradient(x, y, rad * .5, x, y, rad * 2.1);
-    glow.addColorStop(0, `rgba(${r},${g},${b},.38)`);
+    const glow = ctx.createRadialGradient(x, y, rad * .4, x, y, rad * 2.2);
+    glow.addColorStop(0, `rgba(${r},${g},${b},.32)`);
     glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
     ctx.fillStyle = glow;
-    ctx.beginPath(); ctx.arc(x, y, rad * 2.1, 0, TAU); ctx.fill();
-    ctx.strokeStyle = paint.hex;
-    ctx.lineWidth = rad * .2;
-    ctx.beginPath(); ctx.arc(x, y, rad, 0, TAU); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, rad * 2.2, 0, TAU); ctx.fill();
+
+    ctx.translate(x, y);
+    ctx.save();
+    ctx.rotate(rot || 0);
+    // steeltje, tussen de twee onderste blaadjes door
+    ctx.strokeStyle = paint.dark;
+    ctx.lineWidth = rad * .11;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(0, rad * .2);
+    ctx.quadraticCurveTo(rad * .02, rad * .85, rad * .32, rad * 1.32);
+    ctx.stroke();
+    if (!paint.grad) {
+      paint.grad = ctx.createRadialGradient(0, -.6, .04, 0, -.52, .74);
+      paint.grad.addColorStop(0, paint.light);
+      paint.grad.addColorStop(.55, paint.hex);
+      paint.grad.addColorStop(1, paint.dark);
+    }
+    const len = rad * 1.08;
+    for (let i = 0; i < 4; i++) {
+      ctx.save();
+      ctx.rotate(Math.PI / 4 + i * Math.PI / 2);
+      ctx.scale(len, len);
+      ctx.fillStyle = paint.grad;
+      ctx.fill(LEAF);
+      ctx.strokeStyle = paint.dark;
+      ctx.lineWidth = .035;
+      ctx.stroke(LEAF);
+      ctx.globalAlpha = a * .5;                 // nerf
+      ctx.strokeStyle = paint.light;
+      ctx.lineWidth = .03;
+      ctx.beginPath(); ctx.moveTo(0, -.2); ctx.lineTo(0, -.72); ctx.stroke();
+      ctx.globalAlpha = a;
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // hart met nummer, altijd rechtop
+    ctx.fillStyle = 'rgba(5,20,13,.92)';
+    ctx.beginPath(); ctx.arc(0, 0, rad * .47, 0, TAU); ctx.fill();
+    ctx.strokeStyle = paint.light;
+    ctx.lineWidth = rad * .055;
+    ctx.stroke();
     if (label != null) {
-      ctx.fillStyle = 'rgba(20,14,10,.78)';
-      ctx.beginPath(); ctx.arc(x, y, rad * .9, 0, TAU); ctx.fill();
-      ctx.fillStyle = paint.hex;
-      ctx.font = numFont(rad, label);
+      ctx.fillStyle = paint.num;
+      ctx.font = numFont(rad * (label > 9 ? .5 : .66));
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(label), x, y + rad * .05);
-    } else {
-      ctx.fillStyle = paint.hex;
-      ctx.beginPath(); ctx.arc(x, y, rad * .34, 0, TAU); ctx.fill();
+      ctx.fillText(String(label), 0, rad * .035);
     }
-    ctx.globalAlpha = 1;
+    ctx.restore();
   }
 
   function countdown(x, y, rad, p) {
     ctx.lineWidth = 3;
-    ctx.strokeStyle = `rgba(${FOAM},.18)`;
+    ctx.strokeStyle = 'rgba(233,185,73,.2)';
     ctx.beginPath(); ctx.arc(x, y, rad, 0, TAU); ctx.stroke();
-    ctx.strokeStyle = `rgba(${FOAM},.95)`;
+    ctx.strokeStyle = 'rgba(246,226,160,.95)';
     ctx.lineCap = 'round';
     ctx.beginPath(); ctx.arc(x, y, rad, -Math.PI / 2, -Math.PI / 2 + TAU * p); ctx.stroke();
     ctx.lineCap = 'butt';
   }
 
-  function flood(now) {
-    const k = reduced ? 1 : easeInOutCubic(clamp((now - winner.at - 100) / 650));
-    ctx.fillStyle = COLORS[winner.ci];
-    if (k >= 1) { ctx.fillRect(0, 0, W, H); return; }
-    const far = Math.hypot(Math.max(winner.x, W - winner.x), Math.max(winner.y, H - winner.y)) + 4;
-    ctx.beginPath(); ctx.arc(winner.x, winner.y, R + (far - R) * k, 0, TAU); ctx.fill();
+  // ---------- Het glas loopt vol: stout, schuimkraag en gouden munten ----------
+  function coinSprite(r) {
+    const pad = 1;
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = Math.ceil((2 * r + 2 * pad) * DPR);
+    const g = cv.getContext('2d');
+    g.scale(DPR, DPR);
+    g.translate(r + pad, r + pad);
+    const face = g.createRadialGradient(-r * .3, -r * .35, r * .1, 0, 0, r);
+    face.addColorStop(0, '#fff6c9');
+    face.addColorStop(.45, '#f4c752');
+    face.addColorStop(1, '#c28a1a');
+    g.fillStyle = face;
+    g.beginPath(); g.arc(0, 0, r - .5, 0, TAU); g.fill();
+    g.strokeStyle = '#8f6410';
+    g.lineWidth = Math.max(1, r * .09);
+    g.stroke();
+    g.strokeStyle = 'rgba(143,100,16,.6)';
+    g.lineWidth = Math.max(1, r * .06);
+    g.beginPath(); g.arc(0, 0, r * .72, 0, TAU); g.stroke();
+    g.fillStyle = 'rgba(143,100,16,.55)';          // klavertje in reliëf
+    for (let i = 0; i < 4; i++) {
+      const a = Math.PI / 4 + i * Math.PI / 2;
+      g.beginPath(); g.arc(Math.cos(a) * r * .24, Math.sin(a) * r * .24, r * .19, 0, TAU); g.fill();
+    }
+    g.strokeStyle = 'rgba(255,255,255,.6)';
+    g.lineWidth = Math.max(1, r * .07);
+    g.lineCap = 'round';
+    g.beginPath(); g.arc(0, 0, r * .84, Math.PI * 1.08, Math.PI * 1.5); g.stroke();
+    return cv;
   }
 
-  function winnerRing(now) {
+  function makeBeer(at, instant) {
+    const r = Math.max(13, Math.min(24, Math.min(W, H) * .045));
+    const cw = r * 1.1;
+    const cols = Math.max(1, Math.ceil(W / cw));
+    const n = Math.max(60, Math.min(140, Math.round(W * H / 3800)));
+    const coins = [];
+    for (let i = 0; i < n; i++) {
+      coins.push({
+        x: r + Math.random() * Math.max(1, W - 2 * r),
+        y: -r - Math.random() * H * .25,
+        vy: 120 + Math.random() * 260,
+        t0: 250 + (i / n) * 2300 + Math.random() * 200,   // ms na de start
+        phi: Math.random() * TAU,
+        w: (4 + Math.random() * 6) * (Math.random() < .5 ? -1 : 1),
+        tilt: (Math.random() - .5) * 1.2,
+        col: -1, tx: 0, done: false, sy: 1,
+        tw: Math.random() * TAU, glint: Math.random() < .3,
+      });
+    }
+    const bubbles = [];
+    for (let i = 0; i < 70; i++) bubbles.push({ x: Math.random(), y0: Math.random(), sp: 50 + Math.random() * 90, r: .8 + Math.random() * 1.6 });
+    const foamDots = [];
+    for (let i = 0; i < 46; i++) foamDots.push({ fx: Math.random(), fy: Math.random(), r: 1.5 + Math.random() * 4, light: Math.random() < .6 });
+    const b = { at, r, cw, cols, heap: new Float32Array(cols), coins, bubbles, foamDots, sprite: coinSprite(r) };
+    if (instant) coins.forEach(c => { aimCoin(b, c); c.x = c.tx; settleCoin(b, c); });
+    return b;
+  }
+
+  const colAt = (b, x) => Math.max(0, Math.min(b.cols - 1, Math.floor(x / b.cw)));
+
+  // Een munt rolt naar de laagste plek vlak naast zich, zodat er een hoop ontstaat en geen torens.
+  function aimCoin(b, c) {
+    const ci = colAt(b, c.x);
+    let best = ci;
+    [ci - 1, ci + 1].forEach(k => { if (k >= 0 && k < b.cols && b.heap[k] < b.heap[best] - b.r * .4) best = k; });
+    c.col = best;
+    c.tx = Math.max(b.r * .8, Math.min(W - b.r * .8, (best + .5) * b.cw + (Math.random() - .5) * b.cw * .5));
+  }
+
+  function settleCoin(b, c) {
+    c.y = H - b.heap[c.col] - b.r * .6;
+    c.done = true;
+    c.sy = .58 + Math.random() * .4;
+    c.tilt = (Math.random() - .5) * .9;
+    b.heap[c.col] += b.r * .9;
+    if (c.col > 0) b.heap[c.col - 1] += b.r * .35;
+    if (c.col < b.cols - 1) b.heap[c.col + 1] += b.r * .35;
+  }
+
+  function beerLevel(now) {
+    const age = now - beer.at;
+    const k = reduced ? 1 : easeInOutCubic(clamp((age - 80) / 1700));
+    const headH = Math.max(56, H * .115);
+    const yTop = (H + 30) - (H + 54) * k;          // bovenkant schuim; eindigt net buiten beeld
+    const foamT = 14 + (headH + 10) * k;           // dikte van de schuimkraag
+    return { age, k, yTop, foamT, bnd: yTop + foamT };
+  }
+
+  function drawBeer(lv) {
+    const t = reduced ? 0 : lv.age;
+    const slosh = 1 - lv.k;
+    const topAt = x => lv.yTop + slosh * (8 * Math.sin(x * .017 + t * .005) + 5 * Math.sin(x * .043 - t * .0034));
+    const bndAt = x => lv.bnd + 4 * Math.sin(x * .014 + t * .0011) + 2.5 * Math.sin(x * .035 - t * .0016) + slosh * 6 * Math.sin(x * .02 + t * .004);
+
+    // de stout: bijna zwart, met een robijnrode gloed onder de kraag
+    const body = new Path2D();
+    body.moveTo(0, bndAt(0));
+    for (let x = 14; x <= W + 14; x += 14) body.lineTo(x, bndAt(x));
+    body.lineTo(W + 14, H + 2);
+    body.lineTo(0, H + 2);
+    body.closePath();
+    const dark = ctx.createLinearGradient(0, lv.bnd, 0, Math.max(lv.bnd + 1, H));
+    dark.addColorStop(0, '#24100b');
+    dark.addColorStop(.25, '#120806');
+    dark.addColorStop(1, '#060303');
+    ctx.fillStyle = dark;
+    ctx.fill(body);
+
+    ctx.save();
+    ctx.clip(body);
+    // de "surge": vers getapt is het bier bruin en wolkt het omlaag; het zwart kruipt van onderaf omhoog
+    const s = reduced ? 1 : clamp((lv.age - 500) / 4500);
+    if (s < 1) {
+      const ySettle = H - (H - lv.bnd) * (s * s * (3 - 2 * s));
+      const a0 = .92 * (1 - s * .35);
+      const tan = ctx.createLinearGradient(0, lv.bnd, 0, Math.max(lv.bnd + 1, ySettle));
+      tan.addColorStop(0, `rgba(198,154,100,${a0})`);
+      tan.addColorStop(.55, `rgba(132,90,50,${a0 * .85})`);
+      tan.addColorStop(1, 'rgba(40,22,12,0)');
+      ctx.fillStyle = tan;
+      ctx.fillRect(0, lv.bnd - 12, W, Math.max(0, ySettle - lv.bnd) + 12);
+      const span = Math.max(1, ySettle - lv.bnd);
+      ctx.fillStyle = `rgba(238,210,165,${.55 * (1 - s)})`;
+      beer.bubbles.forEach(bub => {
+        const y = lv.bnd + ((bub.y0 * span + lv.age * .001 * bub.sp) % span);
+        ctx.beginPath(); ctx.arc(bub.x * W, y, bub.r, 0, TAU); ctx.fill();
+      });
+    }
+    const cream = ctx.createLinearGradient(0, lv.bnd, 0, lv.bnd + 30);
+    cream.addColorStop(0, 'rgba(233,213,168,.5)');
+    cream.addColorStop(1, 'rgba(233,213,168,0)');
+    ctx.fillStyle = cream;
+    ctx.fillRect(0, lv.bnd - 10, W, 42);
+    ctx.restore();
+
+    // de schuimkraag
+    const foam = new Path2D();
+    foam.moveTo(0, topAt(0));
+    for (let x = 14; x <= W + 14; x += 14) foam.lineTo(x, topAt(x));
+    for (let x = W + 14; x >= 0; x -= 14) foam.lineTo(x, bndAt(x));
+    foam.closePath();
+    const head = ctx.createLinearGradient(0, lv.yTop, 0, lv.bnd);
+    head.addColorStop(0, '#fdf7e6');
+    head.addColorStop(1, '#ecd9ae');
+    ctx.fillStyle = head;
+    ctx.fill(foam);
+    if (lv.foamT > 24) {
+      beer.foamDots.forEach(d => {
+        const x = d.fx * W;
+        ctx.fillStyle = d.light ? 'rgba(255,255,255,.42)' : 'rgba(190,160,110,.2)';
+        ctx.beginPath(); ctx.arc(x, topAt(x) + 8 + d.fy * (lv.foamT - 18), d.r, 0, TAU); ctx.fill();
+      });
+    }
+  }
+
+  // Haal gemiste tijd in kleine stapjes in (hapering, scherm even uit), zodat munten niet door de hoop schieten.
+  function runCoins(elapsed, lv) {
+    let left = Math.min(3, elapsed);
+    while (left > 0) {
+      const dt = Math.min(1 / 60, left);
+      stepCoins(dt, lv);
+      left -= dt;
+    }
+  }
+
+  function stepCoins(dt, lv) {
+    const b = beer;
+    b.coins.forEach(c => {
+      if (c.done || lv.age < c.t0) return;
+      const wet = c.y > lv.bnd;
+      c.vy += 1500 * dt;
+      if (wet && c.vy > 460) c.vy += (460 - c.vy) * Math.min(1, dt * 6);   // in het bier zakt een munt trager
+      c.y += c.vy * dt;
+      c.phi += c.w * dt * (wet ? .55 : 1);
+      if (c.col < 0 && c.y >= H - b.heap[colAt(b, c.x)] - b.r * 2.6) aimCoin(b, c);
+      if (c.col >= 0) {
+        c.x += (c.tx - c.x) * Math.min(1, dt * 10);
+        if (c.y >= H - b.heap[c.col] - b.r * .6) settleCoin(b, c);
+      }
+    });
+  }
+
+  function drawCoins(now, lv) {
+    const b = beer;
+    const r = b.r;
+    b.coins.forEach(c => {
+      if (!c.done && lv.age < c.t0) return;
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.rotate(c.tilt);
+      if (c.done) ctx.scale(1, c.sy);
+      else ctx.scale(Math.max(.14, Math.abs(Math.cos(c.phi))), 1);
+      ctx.drawImage(b.sprite, -r - 1, -r - 1, 2 * r + 2, 2 * r + 2);
+      ctx.restore();
+    });
+    if (reduced) return;
+    ctx.strokeStyle = '#fffbe6';
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    b.coins.forEach(c => {
+      if (!c.done || !c.glint) return;
+      const a = Math.pow(Math.max(0, Math.sin(now * .003 + c.tw)), 10);
+      if (a < .03) return;
+      const gx = c.x - r * .3, gy = c.y - r * .3 * c.sy, len = r * .55 * a;
+      ctx.globalAlpha = a;
+      ctx.beginPath();
+      ctx.moveTo(gx - len, gy); ctx.lineTo(gx + len, gy);
+      ctx.moveTo(gx, gy - len); ctx.lineTo(gx, gy + len);
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+    ctx.lineCap = 'butt';
+  }
+
+  function winnerClover(now) {
     const age = now - winner.at;
     const { x, y } = winner;
-    ctx.strokeStyle = INK;
     if (!reduced) {
+      ctx.strokeStyle = GOLD.light;
       for (let i = 0; i < 3; i++) {
         const p = (age / 1800 + i / 3) % 1;
-        ctx.globalAlpha = (1 - p) * .32;
+        ctx.globalAlpha = (1 - p) * .38;
         ctx.lineWidth = 2.5;
-        ctx.beginPath(); ctx.arc(x, y, R * (1.25 + p * 2.4), 0, TAU); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x, y, R * (1.35 + p * 2.4), 0, TAU); ctx.stroke();
       }
+      ctx.globalAlpha = 1;
     }
+    const pop = reduced ? 1 : easeOutBack(clamp(age / 420));
     const pulse = reduced ? 1 : 1 + .05 * Math.sin(age / 200);
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = R * .2;
-    ctx.beginPath(); ctx.arc(x, y, R * 1.1 * pulse, 0, TAU); ctx.stroke();
-    ctx.fillStyle = INK;
-    ctx.font = numFont(R * 1.1 * pulse, winner.num);
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(String(winner.num), x, y + R * .055 * pulse);
+    const sway = reduced ? 0 : .07 * Math.sin(age / 520);
+    clover(x, y, GOLD, (.9 + .25 * pop) * pulse, 1, winner.num, winner.rot + sway);
   }
 
   function drawSplit(now) {
@@ -906,7 +1216,7 @@
       const cy = group.reduce((sum, m) => sum + m.y, 0) / group.length;
       group.sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
       const [r, g, b] = TEAMS[t].rgb;
-      ctx.strokeStyle = `rgba(${r},${g},${b},${.4 * k})`;
+      ctx.strokeStyle = `rgba(${r},${g},${b},${.45 * k})`;
       ctx.lineWidth = 4;
       ctx.lineJoin = 'round';
       ctx.beginPath();
@@ -916,13 +1226,16 @@
     }
     split.members.forEach((m, i) => {
       const pop = reduced ? 1 : easeOutBack(clamp(age / 380));
-      const pulse = reduced ? 1 : 1 + .05 * Math.sin(age / 190 + i);
-      ring(m.x, m.y, TEAMS[m.team], (.85 + .3 * pop) * pulse, 1, m.num);
+      const pulse = reduced ? 1 : 1 + .04 * Math.sin(age / 190 + i);
+      clover(m.x, m.y, TEAMS[m.team], (.85 + .25 * pop) * pulse, 1, m.num, m.rot);
     });
   }
 
+  let lastFrame = performance.now();
   function frame() {
     const now = performance.now();
+    const elapsed = (now - lastFrame) / 1000;
+    lastFrame = now;
     const wait = mode === 'tap' ? TAP_MS : HOLD_MS;
     const need = needPlayers();
     if (phase === 'gather' && fingers.size >= need && now - lastChange >= wait) startShuffle(now);
@@ -931,33 +1244,37 @@
     ctx.clearRect(0, 0, W, H);
 
     ghosts = ghosts.filter(g => now - g.t0 < 240);
-    ghosts.forEach(g => { const k = (now - g.t0) / 240; ring(g.x, g.y, g.paint, 1 - k * .5, 1 - k, g.label); });
+    ghosts.forEach(g => { const k = (now - g.t0) / 240; clover(g.x, g.y, g.paint, 1 - k * .5, 1 - k, g.label, g.rot - k); });
 
     if (winner) {
       const fade = reduced ? 0 : clamp(1 - (now - winner.at) / 300);
-      if (fade > 0) fingers.forEach(f => { if (f.id !== winner.id) ring(f.x, f.y, PLAYER[f.ci], .6 + .4 * fade, fade, f.num); });
-      flood(now);
-      winnerRing(now);
+      if (fade > 0) fingers.forEach(f => { if (f.id !== winner.id) clover(f.x, f.y, SHAMROCK, .6 + .4 * fade, fade, f.num, f.rot); });
+      const lv = beerLevel(now);
+      drawBeer(lv);
+      runCoins(elapsed, lv);
+      drawCoins(now, lv);
+      winnerClover(now);
     } else if (split) {
       drawSplit(now);
     } else {
       const counting = phase === 'gather' && fingers.size >= need;
       const p = clamp((now - lastChange) / wait);
       fingers.forEach(f => {
-        const appear = reduced ? 1 : easeOutBack(clamp((now - f.born) / 320));
-        let s = appear * (reduced ? 1 : 1 + .045 * Math.sin((now - f.born) / 170));
+        const grow = clamp((now - f.born) / 360);
+        let s = reduced ? 1 : easeOutBack(grow) * (1 + .04 * Math.sin((now - f.born) / 170));
+        const rot = reduced ? f.rot : f.rot - (1 - easeInOutCubic(grow)) * 1.4 + .06 * Math.sin((now - f.born) / 600);
         let a = 1;
-        let paint = paintFor(f);
+        let paint = paintFor();
         if (phase === 'shuffle') {
           if (teamCount) {
             if (shuffle.tint.has(f.id)) paint = TEAMS[shuffle.tint.get(f.id)];
           } else if (shuffle.hi != null) {
-            if (f.id === shuffle.hi) s *= 1.22;
-            else { s *= .88; a = .3; }
+            if (f.id === shuffle.hi) { s *= 1.2; paint = GOLD; }
+            else { s *= .88; a = .35; }
           }
         }
-        ring(f.x, f.y, paint, s, a, f.num);
-        if (counting) countdown(f.x, f.y, R * s * 1.45, p);
+        clover(f.x, f.y, paint, s, a, f.num, rot);
+        if (counting) countdown(f.x, f.y, R * s * 1.62, p);
       });
     }
     requestAnimationFrame(frame);
@@ -973,6 +1290,10 @@
     }, 400);
   }
 
+  // Het cijferlettertype alvast laden, zodat het canvas het vanaf het eerste klavertje gebruikt.
+  try { if (document.fonts && document.fonts.load) document.fonts.load('800 32px Cinzel'); } catch (_) {}
+
+  resize();
   syncUI();
   requestAnimationFrame(frame);
 })();
