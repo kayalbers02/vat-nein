@@ -12,26 +12,46 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Vat Nein</title>
-<meta name="theme-color" content="#0a2e1d">
+<meta name="theme-color" content="#04170f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Libre+Caslon+Text:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500..800&display=swap">
 <style>
+  /* Vat Nein · Glas — smaragdgroen licht, Liquid Glass-bediening, stout die echt tapt */
+  @property --l { syntax: '<length>'; inherits: true; initial-value: 0px; }
+  @property --r { syntax: '<length>'; inherits: true; initial-value: 0px; }
+
   :root {
-    /* Ierse pub: flessengroene gevel, vergulde letters, stout met schuimkraag */
-    --pub: #0a2e1d;
-    --pub-glow: #11502f;
-    --pub-deep: #04130c;
-    --gold: #d9b35a;
-    --gold-hi: #fbeeb8;
-    --gold-lo: #a87a22;
-    --foam: #f3e7c9;
-    --ink: #0b0705;
-    --orange: #ff9d4d;
-    --display: "Cinzel", "Trajan Pro", "Times New Roman", serif;
-    --text: "Libre Caslon Text", "Book Antiqua", Georgia, serif;
-    --bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    color-scheme: dark;
+    --ground: #04170f;
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-round: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    --label: #fff;
+    --label-2: rgba(235, 245, 240, .66);
+    --label-3: rgba(235, 245, 240, .42);
+    --amber: #ffb340;
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
     --clover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26'%3E%3Cpath transform='rotate(45)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3Cpath transform='rotate(135)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3Cpath transform='rotate(225)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3Cpath transform='rotate(315)' d='M0 0C-1.65-2.75-6.8-4.6-6.4-8.6C-6-11.9-1.3-12.1 0-8.8C1.3-12.1 6-11.9 6.4-8.6C6.8-4.6 1.65-2.75 0 0Z'/%3E%3C/svg%3E");
+    --ease-press: cubic-bezier(.2, .8, .2, 1);
+    --ease-smooth: cubic-bezier(.33, .69, .12, 1);   --dur-smooth: 730ms;
+    --ease-snappy: cubic-bezier(.31, .59, .08, 1.12); --dur-snappy: 700ms;
+    --ease-bouncy: cubic-bezier(.4, 1.25, .04, 1.02); --dur-bouncy: 820ms;
+    --ease-jelly: cubic-bezier(.4, 1.25, .04, 1.02);
+  }
+  @supports (transition-timing-function: linear(0, 1)) {
+    :root {
+      --ease-smooth: linear(0, 0.005 1.2%, 0.02 2.3%, 0.046 3.7%, 0.083 5.2%, 0.164 7.8%, 0.365 13.8%, 0.46 16.8%, 0.555 20.2%, 0.638 23.5%, 0.708 26.8%, 0.766 30.2%, 0.816 33.7%, 0.86 37.5%, 0.899 42%, 0.929 46.8%, 0.953 52.3%, 0.971 58.5%, 0.983 65.3%, 0.991 73.7%, 1);
+      --ease-snappy: linear(0, 0.006 1.3%, 0.024 2.7%, 0.054 4.2%, 0.093 5.7%, 0.133 7%, 0.187 8.7%, 0.411 15%, 0.516 18.2%, 0.612 21.3%, 0.695 24.5%, 0.766 27.7%, 0.824 30.8%, 0.873 34.2%, 0.913 37.7%, 0.946 41.5%, 0.971 45.7%, 0.988 50.3%, 1 55.8%, 1.005 61.2%, 1.006 68%, 1);
+      --ease-bouncy: linear(0, 0.007 1.2%, 0.026 2.3%, 0.059 3.7%, 0.109 5.2%, 0.155 6.3%, 0.219 7.8%, 0.475 13.3%, 0.592 16%, 0.698 18.7%, 0.788 21.3%, 0.859 23.8%, 0.919 26.5%, 0.968 29.3%, 1.002 32.2%, 1.022 34.5%, 1.035 37%, 1.044 39.8%, 1.046 42.8%, 1.041 48.2%, 1.012 62.7%, 1.003 70.5%, 0.998 82.3%, 1);
+      --ease-jelly: linear(0, 0.007 1.2%, 0.029 2.5%, 0.07 4%, 0.123 5.5%, 0.179 6.8%, 0.248 8.3%, 0.532 14%, 0.65 16.5%, 0.756 19%, 0.849 21.5%, 0.925 24%, 0.985 26.5%, 1.031 29%, 1.064 31.7%, 1.079 33.5%, 1.089 35.5%, 1.094 37.5%, 1.094 39.7%, 1.081 44.7%, 1.019 58.8%, 1.006 63%, 0.998 67.2%, 0.992 72.2%, 0.991 78%, 1);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --ease-smooth: ease-out; --ease-snappy: ease-out; --ease-bouncy: ease-out; --ease-jelly: ease-out;
+      --dur-smooth: 200ms; --dur-snappy: 200ms; --dur-bouncy: 200ms;
+    }
   }
 
   [hidden] { display: none !important; }
@@ -47,46 +67,136 @@
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
   }
-
   body {
-    background: radial-gradient(120% 80% at 50% 42%, var(--pub-glow) 0%, var(--pub) 55%, var(--pub-deep) 100%) var(--pub);
-    color: var(--foam);
-    font-family: var(--text);
+    background: var(--ground);
+    color: var(--label);
+    font: 400 17px/22px var(--font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    font-synthesis: none;
   }
 
   #stage {
     position: fixed;
     inset: 0;
+    overflow: hidden;
     touch-action: none;
     cursor: crosshair;
   }
 
-  /* Lagen: teamkaartje onder de klavertjes, zodat niemand zijn nummer mist; tekst erboven. */
-  #board {
+  /* Lagen (onder → boven): licht, stout, schuim+munten, glasrand, tekst & teamlade, klavertjes, knoppen */
+  .aurora { z-index: 0; }
+  #liquid { z-index: 1; }
+  #fx { z-index: 2; }
+  .sheen { z-index: 3; }
+  .intro { z-index: 4; }
+  .reveal, .teams { z-index: 5; }
+  #board { z-index: 6; }
+  .controls { z-index: 7; }
+
+  #board, #liquid, #fx {
     position: absolute;
     inset: 0;
-    z-index: 1;
     width: 100%;
     height: 100%;
     display: block;
   }
-  .teams { z-index: 0; }
-  .intro, .reveal, .frame { z-index: 2; }
+  #liquid, #fx { pointer-events: none; }
 
-  /* Vergulde bies, zoals op een pubgevel */
-  .frame {
+  /* ---------- Levend licht door groen glas ---------- */
+  .aurora {
     position: absolute;
-    inset: max(10px, env(safe-area-inset-top, 0px)) 10px max(10px, env(safe-area-inset-bottom, 0px)) 10px;
-    border: 1.5px solid rgba(217, 179, 90, .55);
-    border-radius: 14px;
+    inset: 0;
+    overflow: hidden;
     pointer-events: none;
+    background:
+      radial-gradient(130% 75% at 50% 112%, rgba(16, 120, 70, .55) 0%, rgba(16, 120, 70, 0) 62%),
+      radial-gradient(90% 60% at 50% -8%, rgba(40, 170, 110, .26) 0%, rgba(40, 170, 110, 0) 70%),
+      linear-gradient(180deg, #03130b 0%, #052a19 48%, #04190f 100%);
   }
-  .frame::after {
+  /* De lichtvlekken worden bij het starten één keer als klein (256 px) plaatje getekend:
+     de GPU rekt dat bitmapje op, in plaats van een schermgrote laag met een verloop te rasteren. */
+  .aurora .blob {
+    position: absolute;
+    display: block;
+    will-change: transform;
+    animation: drift-a 31s ease-in-out infinite alternate;
+  }
+  .aurora i.blob { border-radius: 50%; }
+  .aurora img.blob { background: none; }
+  .aurora .b1 { width: 110vmax; height: 110vmax; left: -48vmax; top: -42vmax; background: radial-gradient(closest-side, rgba(28, 176, 104, .52), rgba(28, 176, 104, 0)); }
+  .aurora .b2 { width: 95vmax; height: 95vmax; right: -52vmax; top: 4vmax; background: radial-gradient(closest-side, rgba(14, 140, 122, .40), rgba(14, 140, 122, 0)); animation-name: drift-b; animation-duration: 37s; }
+  .aurora .b3 { width: 62vmax; height: 62vmax; left: 18vmax; top: -18vmax; background: radial-gradient(closest-side, rgba(170, 255, 205, .17), rgba(170, 255, 205, 0)); animation-name: drift-c; animation-duration: 23s; }
+  .aurora .b4 { width: 100vmax; height: 100vmax; left: -30vmax; bottom: -58vmax; background: radial-gradient(closest-side, rgba(10, 110, 58, .58), rgba(10, 110, 58, 0)); animation-name: drift-b; animation-duration: 43s; animation-direction: alternate-reverse; }
+  /* korrel + vignet in één laag */
+  .aurora::after {
     content: "";
     position: absolute;
-    inset: 5px;
-    border: 1px solid rgba(217, 179, 90, .28);
-    border-radius: 9px;
+    inset: 0;
+    z-index: 1;
+    background:
+      var(--grain, none) 0 0 / 128px 128px repeat,
+      radial-gradient(120% 90% at 50% 45%, rgba(0, 8, 4, 0) 52%, rgba(0, 8, 4, .55) 100%);
+  }
+  @keyframes drift-a { 0% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(14vmax, 10vmax, 0) scale(1.12); } 100% { transform: translate3d(5vmax, 22vmax, 0) scale(.94); } }
+  @keyframes drift-b { 0% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(-16vmax, 12vmax, 0) scale(.9); } 100% { transform: translate3d(-6vmax, -10vmax, 0) scale(1.1); } }
+  @keyframes drift-c { 0% { transform: translate3d(0, 0, 0) scale(.9); opacity: .7; } 100% { transform: translate3d(-22vmax, 16vmax, 0) scale(1.15); opacity: 1; } }
+  .poured .aurora .blob,
+  .still .aurora .blob { animation-play-state: paused; }
+
+  /* ---------- Liquid Glass ---------- */
+  .glass {
+    position: relative;
+    isolation: isolate;
+    color: var(--label);
+    background: linear-gradient(180deg, rgba(255, 255, 255, .20) 0%, rgba(255, 255, 255, .08) 100%);
+    -webkit-backdrop-filter: blur(22px) saturate(190%) brightness(1.06);
+    backdrop-filter: blur(22px) saturate(190%) brightness(1.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .45),
+      inset 0 -1px 0 rgba(255, 255, 255, .08),
+      0 16px 36px -12px rgba(0, 12, 6, .6),
+      0 2px 6px rgba(0, 12, 6, .22);
+  }
+  /* spiegelende rand: verloop-rand via masker op ::before (nooit op het geblurde element zelf) */
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(165deg, rgba(255, 255, 255, .78), rgba(255, 255, 255, .16) 26%, rgba(255, 255, 255, 0) 52%, rgba(255, 255, 255, .10) 78%, rgba(255, 255, 255, .40) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  /* oplichten onder de vinger */
+  .glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(120px circle at var(--px, 50%) var(--py, 50%), rgba(255, 255, 255, .40), rgba(255, 255, 255, 0) 70%),
+      linear-gradient(rgba(255, 255, 255, .08), rgba(255, 255, 255, .08));
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 520ms ease-out;
+  }
+  .glass.is-pressed::after { opacity: 1; transition-duration: 90ms; }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass { background: rgba(20, 70, 46, .94); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass { background: rgba(20, 70, 46, .94); }
+  }
+  @media (prefers-contrast: more) {
+    .glass { border: 1px solid rgba(255, 255, 255, .8); }
   }
 
   /* ---------- Intro / wachten ---------- */
@@ -97,156 +207,337 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 22px;
-    padding-inline: 24px;
+    gap: 18px;
+    padding: var(--safe-t) 24px calc(96px + var(--safe-b));
+    box-sizing: border-box;
     text-align: center;
     pointer-events: none;
-    transition: opacity .3s ease;
   }
-  .intro > * { margin: 0; transition: opacity .35s ease; }
+  .intro > * {
+    margin: 0;
+    transition: opacity .45s var(--ease-smooth), transform .6s var(--ease-smooth), visibility 0s;
+  }
 
   .eyebrow {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
-    font: 600 11.5px/1 var(--display);
-    letter-spacing: .32em;
+    gap: 8px;
+    padding: 6px 13px 6px 11px;
+    border: .5px solid rgba(255, 255, 255, .26);
+    border-radius: 999px;
+    font: 600 12px/16px var(--font);
+    letter-spacing: .2em;
     text-transform: uppercase;
     white-space: nowrap;
-    color: var(--gold);
+    color: var(--label-2);
+    background: rgba(255, 255, 255, .04);
   }
-  .eyebrow::before,
-  .eyebrow::after {
+  .eyebrow::before {
     content: "";
-    width: 30px;
-    height: 1px;
-    background: currentColor;
-    opacity: .6;
+    width: 11px;
+    height: 11px;
+    background: #34c759;
+    -webkit-mask: var(--clover) center / contain no-repeat;
+    mask: var(--clover) center / contain no-repeat;
   }
-  .eyebrow::after { margin-left: -.32em; }
 
   .mark {
-    font: 800 clamp(44px, 14.5vw, 124px)/.95 var(--display);
-    letter-spacing: .035em;
-    margin-right: -.035em;
+    position: relative;
+    isolation: isolate;
+    font: 800 clamp(48px, 17vw, 128px)/.9 var(--font);
+    letter-spacing: -.05em;
+    margin-right: -.05em;
     text-transform: uppercase;
     white-space: nowrap;
-    color: var(--gold);
-    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .45));
+    color: #fff;
   }
+  /* Gloed en randje als losse, stilstaande lagen (geen filter dat elk frame opnieuw moet). */
+  .mark::before,
+  .mark::after {
+    content: attr(data-text);
+    content: attr(data-text) / "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: none;
+  }
+  .mark::before {
+    color: rgba(0, 30, 15, .5);
+    -webkit-text-fill-color: rgba(0, 30, 15, .5);
+    filter: blur(12px);
+    transform: translateY(14px);
+    will-change: transform;
+  }
+  .mark::after {
+    color: rgba(0, 0, 0, .2);
+    -webkit-text-fill-color: rgba(0, 0, 0, .2);
+    transform: translateY(1px);
+  }
+  .mark-t { display: block; }
   @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .mark {
-      background: linear-gradient(180deg, var(--gold-hi) 0%, #e3bd63 46%, var(--gold-lo) 100%);
+    .mark-t {
+      background:
+        linear-gradient(105deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .95) 50%, rgba(255, 255, 255, 0) 62%) -150% 0 / 60% 100% no-repeat,
+        linear-gradient(180deg, #ffffff 0%, #f4fff8 48%, #b9e6cb 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
+      animation: sheen-sweep 9s ease-in-out 1.2s infinite;
     }
+  }
+  @keyframes sheen-sweep {
+    0% { background-position: -150% 0, 0 0; }
+    28%, 100% { background-position: 250% 0, 0 0; }
   }
 
   .pips {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 9px;
+    gap: 8px;
     list-style: none;
     padding: 0;
   }
   .pips li {
-    width: 17px;
-    height: 17px;
-    background: rgba(243, 231, 201, .2);
+    width: 14px;
+    height: 14px;
+    background: rgba(255, 255, 255, .2);
     -webkit-mask: var(--clover) center / contain no-repeat;
     mask: var(--clover) center / contain no-repeat;
-    transition: background-color .2s ease, transform .25s cubic-bezier(.3, 1.6, .5, 1);
+    transition: background-color .25s ease, transform var(--dur-bouncy) var(--ease-jelly);
   }
   .pips li.on {
     background: var(--c);
-    transform: scale(1.3) rotate(12deg);
+    transform: scale(1.35) rotate(14deg);
   }
 
   .hint {
-    font: italic 400 19px/1.35 var(--text);
-    color: rgba(243, 231, 201, .86);
+    max-width: min(31ch, calc(100vw - 48px));
+    padding: 10px 18px 11px;
+    border-radius: 22px;
+    font: 600 15px/20px var(--font);
+    letter-spacing: -.012em;
+    color: rgba(255, 255, 255, .95);
     text-wrap: balance;
-    max-width: 27ch;
     font-variant-numeric: tabular-nums;
+    transition: opacity .45s var(--ease-smooth), color .3s ease;
   }
-  .hint.notice { color: var(--orange); }
+  .hint.notice {
+    color: #ffd39a;
+    background: linear-gradient(180deg, rgba(255, 159, 10, .30), rgba(255, 120, 10, .14));
+  }
 
   .meta {
-    font: 600 10.5px/1.2 var(--display);
-    letter-spacing: .24em;
-    text-transform: uppercase;
-    color: rgba(243, 231, 201, .46);
+    font: 500 13px/18px var(--font);
+    letter-spacing: -.006em;
+    color: var(--label-3);
+    font-variant-numeric: tabular-nums;
   }
 
   .intro.playing .eyebrow,
-  .intro.playing .meta { opacity: 0; }
-  .intro.playing .mark { opacity: .08; }
-  .intro.gone { opacity: 0; }
+  .intro.playing .meta { opacity: 0; transform: translateY(-6px); }
+  .intro.playing .mark { opacity: .07; transform: scale(.97); }
+  .intro.playing .mark-t,
+  .intro.gone .mark-t { animation: none; }
+  .intro.gone > * {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .45s var(--ease-smooth), transform .6s var(--ease-smooth), visibility 0s .45s;
+  }
 
-  /* ---------- Speelwijze + teams ---------- */
-  .modes {
+  /* ---------- Bediening: modus + teams ---------- */
+  .controls {
     position: absolute;
     left: 50%;
-    bottom: var(--bottom);
+    bottom: calc(20px + var(--safe-b));
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px;
-    max-width: calc(100vw - 40px);
-    box-sizing: border-box;
-    border: 1.5px solid rgba(217, 179, 90, .45);
-    border-radius: 999px;
-    background: rgba(4, 19, 12, .55);
-    pointer-events: auto;
-    touch-action: manipulation;
+    gap: 8px;
   }
-  .modes button {
+  .controls > * {
+    transition: opacity .35s var(--ease-smooth), transform var(--dur-snappy) var(--ease-snappy);
+  }
+  .controls.away > * {
+    opacity: 0;
+    transform: translateY(16px) scale(.9);
+    pointer-events: none;
+  }
+  .controls.away > .team-btn { transition-delay: 30ms; }
+
+  .seg {
+    display: grid;
+    border-radius: 999px;
+    --dl: 560ms;
+    --dr: 560ms;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: --l var(--dl) var(--ease-snappy), --r var(--dr) var(--ease-snappy), opacity .35s var(--ease-smooth), transform var(--dur-snappy) var(--ease-snappy);
+  }
+  .seg.is-dragging { transition: opacity .35s var(--ease-smooth), transform var(--dur-snappy) var(--ease-snappy); }
+  .seg-row {
+    grid-area: 1 / 1;
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    padding: 4px;
+  }
+  .seg-row > * {
+    all: unset;
+    display: block;
+    height: 40px;
+    padding: 0 14px;
+    text-align: center;
+    font: 600 15px/40px var(--font);
+    letter-spacing: -.016em;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, .6);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .seg-row > button:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 999px; }
+  .seg-on {
+    pointer-events: none;
+    -webkit-clip-path: inset(4px var(--r) 4px var(--l) round 999px);
+    clip-path: inset(4px var(--r) 4px var(--l) round 999px);
+  }
+  .seg-on > * { color: #fff; }
+  .seg.is-pressed .seg-on > * { text-shadow: -.6px 0 rgba(255, 60, 110, .45), .6px 0 rgba(60, 170, 255, .45); }
+  .seg-thumb {
+    position: absolute;
+    z-index: 2;
+    top: 4px;
+    bottom: 4px;
+    left: var(--l);
+    right: var(--r);
+    box-sizing: border-box;
+    border-radius: 999px;
+    border: .5px solid rgba(255, 255, 255, .34);
+    background: linear-gradient(180deg, rgba(255, 255, 255, .36), rgba(255, 255, 255, .17));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), inset 0 -1px 0 rgba(255, 255, 255, .12), 0 3px 10px rgba(0, 20, 10, .3);
+    transition: scale 700ms var(--ease-jelly);
+  }
+  .seg.is-pressed .seg-thumb { scale: 1.05 1.1; transition: scale 140ms var(--ease-press); }
+  .seg-nudge {
+    position: absolute;
+    z-index: 2;
+    top: 4px;
+    bottom: 4px;
+    left: 50%;
+    right: 4px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    background: rgba(255, 159, 10, .6);
+    box-shadow: 0 0 24px rgba(255, 159, 10, .65);
+  }
+  .seg.nudge .seg-nudge { animation: nudge 1.1s ease-in-out 3; }
+  @keyframes nudge { 50% { opacity: 1; } }
+
+  .team-btn {
     appearance: none;
+    -webkit-appearance: none;
     margin: 0;
     border: 0;
-    padding: 12px 11px 11px;
+    box-sizing: border-box;
+    height: 48px;
+    padding: 0 18px 0 15px;
     border-radius: 999px;
-    background: transparent;
-    color: rgba(243, 231, 201, .68);
-    font: 700 11.5px/1 var(--display);
-    letter-spacing: .09em;
-    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    overflow: hidden;
+    font: 600 15px/1 var(--font);
+    letter-spacing: -.016em;
     white-space: nowrap;
-    font-variant-numeric: tabular-nums;
     cursor: pointer;
-    transition: background-color .2s ease, color .2s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: opacity .35s var(--ease-smooth), transform var(--dur-snappy) var(--ease-snappy), scale var(--dur-bouncy) var(--ease-bouncy), color .3s ease;
   }
-  .modes button[aria-pressed="true"] { background: var(--foam); color: var(--ink); }
-  .modes .team-btn[aria-pressed="true"] { background: linear-gradient(180deg, #f3d98a, #d2a544); color: var(--ink); }
-  .modes button:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
-  .modes .sep {
-    align-self: stretch;
-    width: 1.5px;
-    margin: 7px 1px;
-    background: rgba(217, 179, 90, .35);
+  .team-btn.is-pressed { scale: .95; transition: opacity .35s, transform .35s, scale 140ms var(--ease-press), color .3s; }
+  .team-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .team-btn[aria-pressed="true"] {
+    color: #241700;
+    background: linear-gradient(180deg, rgba(255, 220, 120, .82), rgba(236, 170, 40, .64));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .7),
+      inset 0 -1px 0 rgba(120, 70, 0, .25),
+      0 14px 30px -10px rgba(242, 185, 59, .6),
+      0 2px 6px rgba(0, 12, 6, .22);
   }
-  .modes.nudge button[data-mode="tap"] { animation: nudge 1s ease-in-out 3; }
-  @keyframes nudge { 50% { background: var(--orange); color: var(--ink); } }
-  .intro.playing .modes,
-  .intro.gone .modes { opacity: 0; pointer-events: none; }
-  @media (max-width: 350px) {
-    .modes button { padding-inline: 8px; font-size: 10.5px; letter-spacing: .06em; }
+  .tb-icon {
+    display: grid;
+    grid-template-columns: repeat(2, 7px);
+    gap: 3px;
+  }
+  .tb-icon i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .9;
+    transition: background-color .3s ease, opacity .3s ease, scale var(--dur-bouncy) var(--ease-jelly);
+  }
+  .team-btn[data-n="2"] i, .team-btn[data-n="3"] i, .team-btn[data-n="4"] i { box-shadow: 0 0 0 .5px rgba(0, 0, 0, .45); opacity: 1; }
+  .team-btn[data-n] i:nth-child(1) { --dot: #5ee08c; }
+  .team-btn[data-n] i:nth-child(2) { --dot: #ff9f0a; }
+  .team-btn[data-n] i:nth-child(3) { --dot: #f2f2f7; }
+  .team-btn[data-n] i:nth-child(4) { --dot: #0a84ff; }
+  .team-btn[data-n="2"] i:nth-child(-n+2),
+  .team-btn[data-n="3"] i:nth-child(-n+3),
+  .team-btn[data-n="4"] i { background: var(--dot); }
+  .team-btn[data-n="2"] i:nth-child(n+3),
+  .team-btn[data-n="3"] i:nth-child(4) { opacity: .28; scale: .6; }
+  .tb-label {
+    position: relative;
+    display: inline-grid;
+    font-variant-numeric: tabular-nums;
+  }
+  .tb-label .n { grid-area: 1 / 1; white-space: nowrap; }
+  .tb-label .n.out { position: absolute; left: 0; top: 0; }
+
+  @media (max-width: 400px) {
+    .seg-row > * { padding: 0 11px; font-size: 14px; }
+    .team-btn { padding: 0 15px 0 13px; font-size: 14px; gap: 8px; }
+  }
+  @media (max-width: 340px) {
+    .tb-icon { display: none; }
   }
 
-  /* ---------- Onthulling: één gekozen (tekst op de stout) ---------- */
+  /* ---------- Glazen rand om het hele scherm tijdens het tappen ---------- */
+  /* twee heel zachte spiegelingen in het glas, pas onder de schuimkraag, boven en onder weggevaagd */
+  .sheen {
+    position: absolute;
+    inset: 15vh 0 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .8s ease;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .045), rgba(255, 255, 255, 0)) 11% 0 / 6px 100% no-repeat,
+      linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .03), rgba(255, 255, 255, 0)) 89% 0 / 3px 100% no-repeat,
+      linear-gradient(90deg, rgba(0, 0, 0, .2) 0, rgba(0, 0, 0, 0) 5px),
+      linear-gradient(270deg, rgba(0, 0, 0, .28) 0, rgba(0, 0, 0, 0) 7px);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 20%, #000 75%, transparent);
+    mask-image: linear-gradient(180deg, transparent, #000 20%, #000 75%, transparent);
+  }
+  .pouring .sheen { opacity: 1; transition-delay: .9s; }
+
+  /* ---------- Onthulling: één gekozen ---------- */
   .reveal {
     position: absolute;
     inset: 0;
     display: grid;
     grid-template-rows: 1fr 1fr;
     pointer-events: none;
-    color: var(--foam);
+    color: #fff;
   }
-  /* Onderin ruimte voor de munten, bovenin voor de schuimkraag (de bovenste helft staat ondersteboven). */
+  /* Bovenin ruimte voor de schuimkraag, onderin voor de munten (de bovenste helft staat ondersteboven). */
   .half {
     display: grid;
     place-items: center;
@@ -262,150 +553,204 @@
     align-items: center;
     gap: .16em;
     font-size: min(15vw, 12.5vh);
-    transform: rotate(-4deg);
-    animation: stamp .46s cubic-bezier(.2, .9, .3, 1.25) 1.35s both;
+    opacity: 0;
   }
+  /* pas als het opklaarfront halverwege is (JS zet .show), niet midden in de surge */
+  .reveal.show .stamp {
+    opacity: 1;
+    animation: stamp-pop 900ms var(--ease-bouncy) both, stamp-fade 380ms ease-out both;
+  }
+  @keyframes stamp-pop { from { transform: scale(1.38); filter: blur(16px); } to { transform: none; filter: blur(0); } }
+  @keyframes stamp-fade { from { opacity: 0; } to { opacity: 1; } }
   .stamp-word {
-    font: 900 1em/1 var(--display);
-    letter-spacing: .03em;
-    margin-right: -.03em;
+    font: 800 1em/.92 var(--font);
+    letter-spacing: -.045em;
+    margin-right: -.045em;
     text-transform: uppercase;
     white-space: nowrap;
-    text-shadow: 0 .05em 0 rgba(0, 0, 0, .45);
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .35), 0 6px 26px rgba(12, 5, 2, .6);
   }
   .stamp-toast {
-    font: italic 400 .3em/1 var(--text);
-    color: var(--gold);
-  }
-
-  @keyframes stamp {
-    0%   { opacity: 0; transform: scale(1.9) rotate(-10deg); }
-    55%  { opacity: 1; transform: scale(.93) rotate(-3deg); }
-    100% { opacity: 1; transform: scale(1) rotate(-4deg); }
+    font: 600 .26em/1 var(--font);
+    letter-spacing: -.01em;
+    color: #ffd77a;
+    padding: .36em .95em .4em;
+    border-radius: 999px;
+    border: .5px solid rgba(255, 215, 122, .5);
+    background: rgba(12, 7, 5, .42);
+    box-shadow: inset 0 1px 0 rgba(255, 240, 200, .22), 0 6px 18px rgba(0, 0, 0, .3);
   }
 
   .again {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px 11px 15px;
+    border-radius: 999px;
+    font: 600 15px/20px var(--font);
+    letter-spacing: -.016em;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    scale: .86;
+  }
+  .again svg { width: 16px; height: 16px; flex: none; }
+  .again.show { animation: glass-in var(--dur-bouncy) var(--ease-bouncy) 2.4s both; }
+  @keyframes glass-in { from { opacity: 0; scale: .86; } to { opacity: 1; scale: 1; } }
+  .reveal .again {
     position: absolute;
     left: 50%;
     top: 50%;
-    margin: 0;
-    padding: 10px 16px 9px;
-    transform: translate(-50%, -50%);
-    border: 1.5px solid currentColor;
-    border-radius: 999px;
-    font: 700 11px/1 var(--display);
-    letter-spacing: .22em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    opacity: 0;
+    translate: -50% -50%;
+    background: linear-gradient(180deg, rgba(60, 40, 30, .40), rgba(12, 7, 5, .34));
   }
-  /* Pas tonen als het glas vol is (een animatie loopt ook als het blok net zichtbaar wordt). */
-  .again.show { animation: again-in .4s ease 2.2s both; }
-  @keyframes again-in { to { opacity: .78; } }
+  /* pas tonen als het bier gezakt is (JS zet .ready) */
+  .reveal .again.show { animation: none; }
+  .reveal.ready .again.show { animation: glass-in var(--dur-bouncy) var(--ease-bouncy) both; }
 
-  /* ---------- Onthulling: teams ---------- */
+  /* ---------- Onthulling: teams (lade onderin, klavertjes erboven) ---------- */
   .teams {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
-  .team-card {
+  .team-wrap {
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + var(--safe-b));
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
-    max-width: calc(100vw - 40px);
+    gap: 10px;
+  }
+  .team-wrap.at-top {
+    bottom: auto;
+    top: calc(12px + var(--safe-t));
+  }
+  /* de pil staat los van de lade; JS kiest de plek waar geen klavertjes liggen */
+  .team-again {
+    position: absolute;
+    left: 50%;
+    top: auto;
+    bottom: calc(12px + var(--safe-b));
+    translate: -50% 0;
+  }
+  .teams .again.show { animation-delay: .8s; }
+  .tray {
     box-sizing: border-box;
-    padding: 16px 24px 18px;
-    border: 1.5px solid rgba(217, 179, 90, .4);
-    border-radius: 16px;
-    background: rgba(4, 19, 12, .86);
-    transform: translate(-50%, -50%);
-    animation: card-in .42s cubic-bezier(.2, .9, .3, 1.2) .38s both;
+    width: 100%;
+    max-width: 560px;
+    padding: 6px;
+    border-radius: 28px;
+    transform-origin: 50% 100%;
+    animation: glass-in var(--dur-bouncy) var(--ease-bouncy) .3s both;
   }
-  @keyframes card-in {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(.86); }
-    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  }
-  .team-card .eyebrow { margin: 0; }
+  .at-top .tray { transform-origin: 50% 0; }
   .team-list {
+    position: relative;
+    z-index: 3;
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: 12px 26px;
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    gap: 6px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
   .team-list li {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 6px;
+    gap: 4px;
+    padding: 9px 12px 10px;
+    border-radius: 22px;
+    border: .5px solid rgba(var(--c), .62);
+    background: linear-gradient(180deg, rgba(var(--c), .30), rgba(var(--c), .14));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16);
+    animation: chip-in var(--dur-bouncy) var(--ease-bouncy) both;
+    animation-delay: calc(.4s + var(--i, 0) * 40ms);
   }
-  .team-list li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  @keyframes chip-in { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
   .team-name {
-    font: 800 25px/1 var(--display);
-    letter-spacing: .05em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font: 600 12px/16px var(--font);
+    letter-spacing: .06em;
     text-transform: uppercase;
-    color: var(--t);
+    color: rgb(var(--cl));
+  }
+  .team-name::before {
+    content: "";
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgb(var(--c));
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, .38), 0 0 10px rgba(var(--c), .9);
   }
   .team-members {
-    max-width: 9em;
-    font: 700 16px/1.3 var(--display);
-    letter-spacing: .04em;
-    text-align: center;
-    text-wrap: balance;
-    color: rgba(243, 231, 201, .82);
+    font: 700 20px/24px var(--font-round);
+    letter-spacing: .01em;
+    color: #fff;
     font-variant-numeric: tabular-nums;
+    text-wrap: balance;
   }
-  .teams .again {
-    top: auto;
-    bottom: var(--bottom);
-    transform: translateX(-50%);
-    color: var(--foam);
-    animation-delay: .8s;
+  .team-list[style*="--cols: 3"] .team-members { font-size: 18px; line-height: 22px; }
+  /* Wit: geen witte cijfers op wit glas */
+  .team-list li[data-team="2"] {
+    border-color: rgba(255, 255, 255, .7);
+    background: rgba(255, 255, 255, .10);
   }
+  .team-list li[data-team="2"] .team-name::before { box-shadow: 0 0 0 1px rgba(0, 0, 0, .6), 0 0 8px rgba(255, 255, 255, .55); }
+
+  /* Compacte lade (één rij) als klavertjes anders de lade zouden raken */
+  .team-wrap.compact .tray { padding: 5px; border-radius: 24px; }
+  .team-wrap.compact .team-list { grid-template-columns: repeat(var(--tcount, 2), minmax(0, 1fr)); gap: 5px; }
+  .team-wrap.compact .team-list li { padding: 7px 10px 8px; gap: 2px; border-radius: 19px; }
+  .team-wrap.compact .team-name { gap: 5px; font-size: 11px; line-height: 13px; letter-spacing: .04em; }
+  .team-wrap.compact .team-name::before { width: 8px; height: 8px; }
+  .team-wrap.compact .team-members { font-size: 17px; line-height: 20px; }
 
   @media (orientation: landscape) and (max-height: 520px) {
     .reveal { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
     .half { padding-block: 18vh; }
     .stamp { font-size: min(8vw, 22vh); }
-    .intro { gap: 12px; }
-    .mark { font-size: clamp(40px, 18vh, 96px); }
-    .team-name { font-size: 21px; }
+    .intro { gap: 10px; padding-bottom: calc(76px + var(--safe-b)); }
+    .mark { font-size: clamp(40px, 17vh, 96px); }
+    .team-list { grid-template-columns: repeat(var(--tcount, 2), minmax(0, 1fr)); }
+    .team-members { font-size: 17px; line-height: 21px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stamp, .team-card { animation: none; }
-    .again.show { animation: none; opacity: .78; }
-    .modes.nudge button[data-mode="tap"] { animation: none; }
-    .intro, .intro > *, .pips li, .modes button { transition: none; }
+    .aurora .blob, .mark-t { animation: none !important; }
+    .stamp, .reveal.show .stamp, .tray, .team-list li { animation: none; }
+    .again.show { animation: none; opacity: 1; scale: 1; }
+    .seg.nudge .seg-nudge { animation: none; opacity: .8; }
+    .intro > *, .pips li, .controls > * { transition-duration: .15s; }
+    #liquid, #fx { animation: fade-in .4s ease both; }
   }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
 <main id="stage"aria-label="Speelveld: leg hier je vinger neer">
-  <canvas id="board"></canvas>
-  <div class="frame" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i></div>
+  <canvas id="liquid" hidden aria-hidden="true"></canvas>
+  <canvas id="fx" hidden aria-hidden="true"></canvas>
+  <div class="sheen" aria-hidden="true"></div>
 
   <section class="intro" id="intro">
-    <p class="eyebrow">Dublin · Est. 2026</p>
-    <h1 class="mark">Vat Nein</h1>
+    <p class="eyebrow">Dublin · 2026</p>
+    <h1 class="mark" data-text="Vat Nein"><span class="mark-t">Vat Nein</span></h1>
     <ol class="pips" aria-hidden="true">
       <li></li><li></li><li></li><li></li><li></li>
       <li></li><li></li><li></li><li></li><li></li>
     </ol>
-    <p class="hint" id="hint" aria-live="polite">Leg allemaal een vinger op het scherm</p>
+    <p class="hint glass" id="hint" aria-live="polite">Leg allemaal een vinger op het scherm</p>
     <p class="meta" id="meta">2 tot 10 spelers · vinger vasthouden</p>
-    <div class="modes" id="modes" role="group" aria-label="Speelwijze">
-      <button type="button" id="mode-hold" data-mode="hold" aria-pressed="true">Vasthouden</button>
-      <button type="button" id="mode-tap" data-mode="tap" aria-pressed="false">Tikken</button>
-      <span class="sep" aria-hidden="true"></span>
-      <button type="button" id="teams-toggle" class="team-btn" aria-pressed="false">Teams</button>
-    </div>
   </section>
 
   <section class="reveal" id="reveal" hidden aria-live="assertive">
@@ -415,16 +760,35 @@
     <div class="half">
       <div class="stamp"><span class="stamp-word">Vat Nein</span><span class="stamp-toast">Sláinte!</span></div>
     </div>
-    <p class="again">Tik om opnieuw te spelen</p>
+    <p class="again glass"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.2 6.4A5.4 5.4 0 1 0 13 10"/><path d="M13.6 2.6v3.9H9.7"/></svg>Tik om opnieuw te spelen</p>
   </section>
 
   <section class="teams" id="teams" hidden aria-live="assertive">
-    <div class="team-card" id="team-card">
-      <p class="eyebrow">De teams</p>
-      <ul class="team-list" id="team-list"></ul>
+    <div class="team-wrap" id="team-wrap">
+      <div class="tray glass" id="team-card" aria-label="De teams">
+        <ul class="team-list" id="team-list"></ul>
+      </div>
     </div>
-    <p class="again">Tik om opnieuw te spelen</p>
+    <p class="again glass team-again" id="team-again"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.2 6.4A5.4 5.4 0 1 0 13 10"/><path d="M13.6 2.6v3.9H9.7"/></svg>Tik om opnieuw te spelen</p>
   </section>
+
+  <canvas id="board"></canvas>
+
+  <div class="controls" id="modes" role="group" aria-label="Speelwijze">
+    <div class="seg glass" id="seg" role="radiogroup" aria-label="Modus">
+      <span class="seg-thumb" aria-hidden="true"></span>
+      <span class="seg-nudge" aria-hidden="true"></span>
+      <div class="seg-row">
+        <button type="button" role="radio" id="mode-hold" data-mode="hold" aria-checked="true">Vasthouden</button>
+        <button type="button" role="radio" id="mode-tap" data-mode="tap" aria-checked="false">Tikken</button>
+      </div>
+      <div class="seg-row seg-on" aria-hidden="true"><span>Vasthouden</span><span>Tikken</span></div>
+    </div>
+    <button type="button" id="teams-toggle" class="team-btn glass" aria-pressed="false">
+      <span class="tb-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="tb-label" id="tb-label"></span>
+    </button>
+  </div>
 </main>
 
 <script>
@@ -438,32 +802,59 @@
   const toRgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
   const mix = (rgb, to, t) => rgb.map(v => Math.round(v + (to - v) * t));
   const css = rgb => `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-  function makePaint(hex, num) {
+  function makePaint(hex) {
     const rgb = toRgb(hex);
-    return { hex, rgb, light: css(mix(rgb, 255, .45)), dark: css(mix(rgb, 0, .45)), num: num || css(mix(rgb, 255, .6)), grad: null };
+    return {
+      hex, rgb,
+      light: css(mix(rgb, 255, .55)),
+      dark: css(mix(rgb, 0, .42)),
+      deep: css(mix(rgb, 0, .66)),
+      soft: mix(rgb, 255, .35).join(','),
+      grad: null,
+    };
   }
-  const SHAMROCK = makePaint('#2fbf68', '#f6ecd0');   // elke speler: een groen klavertje vier
-  const GOLD = makePaint('#e9b949', '#ffe9a8');       // de gelukkige, en "nog niet ingedeeld" bij teams
-  // Ierse driekleur plus St. Patrick's blue, de oude nationale kleur.
-  const TEAMS = [['Groen', '#35c46a'], ['Oranje', '#ff8a3c'], ['Wit', '#f3e7c9'], ['Blauw', '#4aa3ff']]
+  const SHAMROCK = makePaint('#1fc46a');   // elke speler: een glanzend smaragdgroen klavertje vier
+  const GOLD = makePaint('#f2b93b');       // de gelukkige, en "nog niet ingedeeld" bij teams
+  // Ierse driekleur plus St. Patrick's blue, in Apple-systeemkleuren.
+  // Groen is mint, zodat het team niet wegvalt tegen de smaragdgroene achtergrond.
+  const TEAMS = [['Groen', '#5ee08c'], ['Oranje', '#ff9f0a'], ['Wit', '#f2f2f7'], ['Blauw', '#0a84ff']]
     .map(([name, hex]) => Object.assign({ name }, makePaint(hex)));
+  TEAMS.forEach(t => { t.bead = 'rgba(255,255,255,.92)'; t.halo = 11; t.haloC = 'rgba(0,10,5,.5)'; });
+  TEAMS[0].halo = 12;
+  TEAMS[0].haloC = 'rgba(0,10,5,.6)';
+  TEAMS[2].bead = 'rgba(6,40,22,.75)';
+  TEAMS[2].soft = '255,255,255';
+  TEAMS.forEach(t => {
+    t.rim = `rgba(${t.soft},.55)`;
+    t.fill = `rgba(${t.rgb.join(',')},.18)`;
+  });
 
   const stage = document.getElementById('stage');
   const canvas = document.getElementById('board');
   const ctx = canvas.getContext('2d');
+  const liqCv = document.getElementById('liquid');
+  const fxCv = document.getElementById('fx');
+  const lctx = liqCv.getContext('2d');
+  const fctx = fxCv.getContext('2d');
   const intro = document.getElementById('intro');
   const hint = document.getElementById('hint');
   const pips = [...document.querySelectorAll('.pips li')];
   const reveal = document.getElementById('reveal');
   const halves = [...reveal.querySelectorAll('.half')];   // [boven (omgedraaid), onder]
   const teamsEl = document.getElementById('teams');
-  const teamCard = document.getElementById('team-card');
+  const teamWrap = document.getElementById('team-wrap');
   const teamList = document.getElementById('team-list');
+  const teamCard = document.getElementById('team-card');
+  const teamAgain = document.getElementById('team-again');
+  const stampEls = halves.map(h => h.querySelector('.stamp'));
+  const revealAgain = reveal.querySelector('.again');
   const againEls = [...document.querySelectorAll('.again')];
   const meta = document.getElementById('meta');
   const modesEl = document.getElementById('modes');
+  const segEl = document.getElementById('seg');
   const modeButtons = [...modesEl.querySelectorAll('button[data-mode]')];
   const teamBtn = document.getElementById('teams-toggle');
+  const tbLabel = document.getElementById('tb-label');
 
   // Hoeveel vingers dit toestel tegelijk doorgeeft (iPhone: 5).
   const maxTouch = navigator.maxTouchPoints || 0;
@@ -487,26 +878,71 @@
   let shuffle = null;
   let winner = null;           // uitslag bij één persoon kiezen
   let split = null;            // uitslag bij teams
-  let beer = null;             // het glas dat volloopt rond de winnaar
+  let pour = null;             // de stout die het scherm vult rond de winnaar
 
-  let W = 0, H = 0, R = 52, DPR = 1;
+  let W = 0, H = 0, R = 52, DPR = 1, LS = 1, FX = 1, safeTop = 0, safeBottom = 0;
+  // FX: resolutie van schuim, munten en effecten. Boven 2x zie je op tafelafstand geen verschil, wel in de framerate.
+  const HS = 1;                // resolutie van de teamgebieden (CSS-pixels, zodat de rand scherp blijft)
+  const hullCv = document.createElement('canvas');
+  const hctx = hullCv.getContext('2d');
+  const hullTmp = document.createElement('canvas');
+  const htx = hullTmp.getContext('2d');
+  const pileCv = document.createElement('canvas');
+  const pileCtx = pileCv.getContext('2d');
+  let pileY0 = 0;
+
+  const safeProbe = document.createElement('div');
+  safeProbe.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';
+  document.body.appendChild(safeProbe);
+  const safeProbeB = document.createElement('div');
+  safeProbeB.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:env(safe-area-inset-bottom,0px);visibility:hidden;pointer-events:none';
+  document.body.appendChild(safeProbeB);
+
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 3);
+    LS = Math.min(1.25, DPR);
+    FX = Math.min(2, DPR);
     W = window.innerWidth;
     H = window.innerHeight;
     canvas.width = Math.round(W * DPR);
     canvas.height = Math.round(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     R = Math.max(44, Math.min(66, Math.min(W, H) * 0.14));
-    if (winner) { beer = makeBeer(winner.at, true); placeStamps(); }
+    safeTop = safeProbe.offsetHeight || 0;
+    safeBottom = safeProbeB.offsetHeight || 0;
+    [hullCv, hullTmp].forEach(c => {
+      c.width = Math.max(1, Math.round(W * HS));
+      c.height = Math.max(1, Math.round(H * HS));
+    });
+    if (split) { split.key = -1; placeTeams(); }
+    // Na het tappen alleen bouwen wat het stilstaande glas laat zien; de rest komt op de achtergrond.
+    if (winner) { ensureTex(true, true); pour = makePour(winner.at, true); placeStamps(); }
+    else ensureTex(false);
+    if (seg) seg.place(true);
   }
-  window.addEventListener('resize', resize);
+  // Pas na het draaien opnieuw opbouwen (niet bij elke tussenstap van de draai-animatie).
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 120);
+  });
 
   const clamp = v => Math.max(0, Math.min(1, v));
+  const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
   const easeOutBack = t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
   const easeInOutCubic = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+  const easeOutQuad = t => 1 - (1 - t) * (1 - t);
   const needPlayers = () => Math.max(2, teamCount);
   const paintFor = () => teamCount ? GOLD : SHAMROCK;
+
+  // Apple-veer (SwiftUI Spring(duration, bounce)), gesloten vorm.
+  function springAt(t, from, to, duration, bounce) {
+    const w0 = TAU / duration, z = Math.min(1, 1 - bounce), x0 = from - to;
+    if (z >= 1) { const e = Math.exp(-w0 * t); return to + e * (x0 + w0 * x0 * t); }
+    const wd = w0 * Math.sqrt(1 - z * z), e = Math.exp(-z * w0 * t);
+    return to + e * (x0 * Math.cos(wd * t) + (z * w0 * x0 / wd) * Math.sin(wd * t));
+  }
 
   function randInt(n) {
     if (n <= 1) return 0;
@@ -586,13 +1022,16 @@
   function resetRound() {
     winner = null;
     split = null;
-    beer = null;
+    pour = null;
     shuffle = null;
     ghosts = [];
     fingers.clear();
     phase = 'idle';
     reveal.hidden = true;
+    reveal.classList.remove('show', 'ready');
     teamsEl.hidden = true;
+    stage.classList.remove('pouring', 'poured');
+    sizePourCanvases(false);
   }
 
   // Tikken: een tik zet een klavertje neer; een tik op een bestaand klavertje haalt het weg.
@@ -632,13 +1071,140 @@
     syncUI();
   }
 
+  // ---------- Glazen knoppen: indrukken, oplichten, veren ----------
+  const SPRING = (() => {
+    try {
+      if (CSS.supports('transition-timing-function', 'linear(0, 1)')) {
+        return 'linear(0, 0.006 1.3%, 0.024 2.7%, 0.054 4.2%, 0.093 5.7%, 0.133 7%, 0.187 8.7%, 0.411 15%, 0.516 18.2%, 0.612 21.3%, 0.695 24.5%, 0.766 27.7%, 0.824 30.8%, 0.873 34.2%, 0.913 37.7%, 0.946 41.5%, 0.971 45.7%, 0.988 50.3%, 1 55.8%, 1.005 61.2%, 1.006 68%, 1)';
+      }
+    } catch (_) {}
+    return 'cubic-bezier(.31,.59,.08,1.12)';
+  })();
+  function anim(el, frames, opts) {
+    try { return el.animate(frames, opts); } catch (_) {
+      try { return el.animate(frames, Object.assign({}, opts, { easing: 'ease-out' })); } catch (__) { return null; }
+    }
+  }
+
+  function pressable(el) {
+    el.addEventListener('pointerdown', e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--px', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--py', (e.clientY - r.top) + 'px');
+      el.classList.add('is-pressed');
+    });
+    const up = () => el.classList.remove('is-pressed');
+    ['pointerup', 'pointercancel', 'pointerleave', 'lostpointercapture'].forEach(t => el.addEventListener(t, up));
+  }
+
+  // Gesegmenteerde knop met glazen duim die met twee randen verspringt (voorste rand eerst).
+  function initSeg(el, onChange) {
+    const btns = [...el.querySelectorAll('.seg-row:not(.seg-on) > button')];
+    let idx = Math.max(0, btns.findIndex(b => b.getAttribute('aria-checked') === 'true'));
+    let start = null;
+    function place(i, instant) {
+      const b = btns[i];
+      const l = b.offsetLeft, r = el.clientWidth - l - b.offsetWidth;
+      if (!el.clientWidth) return;
+      const cur = parseFloat(getComputedStyle(el).getPropertyValue('--l')) || 0;
+      const right = l > cur;
+      el.style.setProperty('--dl', right ? '640ms' : '440ms');
+      el.style.setProperty('--dr', right ? '440ms' : '640ms');
+      if (instant) el.classList.add('is-dragging');
+      el.style.setProperty('--l', l + 'px');
+      el.style.setProperty('--r', r + 'px');
+      if (instant) { void el.offsetWidth; el.classList.remove('is-dragging'); }
+    }
+    function commit(i) {
+      place(i);
+      if (i !== idx) { idx = i; onChange(i); }
+    }
+    let lastEnd = -1e9;
+    el.addEventListener('pointerdown', e => {
+      e.stopPropagation();
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      try { el.setPointerCapture(e.pointerId); } catch (_) {}
+      el.classList.add('is-pressed');
+      start = { x: e.clientX, moved: false };
+    });
+    el.addEventListener('pointermove', e => {
+      if (!start) return;
+      if (Math.abs(e.clientX - start.x) > 6) start.moved = true;
+      if (!start.moved) return;
+      el.classList.add('is-dragging');
+      const w = btns[idx].offsetWidth, rect = el.getBoundingClientRect();
+      let c = e.clientX - rect.left;
+      const mn = 4 + w / 2, mx = el.clientWidth - 4 - w / 2;
+      if (c < mn) c = mn - (mn - c) * .3;
+      if (c > mx) c = mx + (c - mx) * .3;    // elastisch aan de uiteinden
+      el.style.setProperty('--l', (c - w / 2) + 'px');
+      el.style.setProperty('--r', (el.clientWidth - c - w / 2) + 'px');
+    });
+    const end = e => {
+      if (!start) return;
+      el.classList.remove('is-pressed', 'is-dragging');
+      const x = e.clientX - el.getBoundingClientRect().left;
+      let i = btns.reduce((best, b, j) =>
+        Math.abs(b.offsetLeft + b.offsetWidth / 2 - x) < Math.abs(btns[best].offsetLeft + btns[best].offsetWidth / 2 - x) ? j : best, idx);
+      if (e.type === 'pointercancel') i = idx;
+      start = null;
+      lastEnd = performance.now();
+      commit(i);
+    };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    btns.forEach((b, j) => b.addEventListener('click', e => { if (e.detail === 0) commit(j); }));   // toetsenbord
+    return {
+      select(i) { idx = i; place(i); },
+      place(instant) { place(idx, instant); },
+      recent() { return performance.now() - lastEnd < 800; },   // tik/sleep is net al door de duim afgehandeld
+    };
+  }
+  const seg = initSeg(segEl, i => setMode(modeButtons[i].dataset.mode));
+
+  // Label van de teamknop rolt als een iOS-cijfer (oud omhoog weg, nieuw van onder erin).
+  function morphLabel(text, up) {
+    const prev = tbLabel.dataset.v;
+    if (prev === text) return;
+    tbLabel.dataset.v = text;
+    const make = s => Object.assign(document.createElement('span'), { className: 'n', textContent: s });
+    if (prev == null || reduced) { tbLabel.replaceChildren(make(text)); return; }
+    tbLabel.querySelectorAll('.n.out').forEach(n => n.remove());
+    const w0 = teamBtn.getBoundingClientRect().width;
+    const old = tbLabel.querySelector('.n');
+    const neu = make(text);
+    if (old) old.classList.add('out');
+    tbLabel.append(neu);
+    const w1 = teamBtn.getBoundingClientRect().width;
+    const y = up ? .6 : -.6;
+    if (old) {
+      const a = anim(old, [
+        { transform: 'none', opacity: 1, filter: 'blur(0)' },
+        { transform: `translateY(${-y}em) scale(.84)`, opacity: 0, filter: 'blur(3px)' },
+      ], { duration: 260, easing: 'cubic-bezier(.3,0,.6,1)', fill: 'forwards' });
+      if (a) { a.onfinish = () => old.remove(); setTimeout(() => old.remove(), 400); } else old.remove();
+    }
+    anim(neu, [
+      { transform: `translateY(${y}em) scale(.84)`, opacity: 0, filter: 'blur(3px)' },
+      { transform: 'none', opacity: 1, filter: 'blur(0)' },
+    ], { duration: 600, easing: SPRING });
+    if (Math.abs(w1 - w0) > .5) anim(teamBtn, [{ width: w0 + 'px' }, { width: w1 + 'px' }], { duration: 600, easing: SPRING });
+  }
+
   // Knoppen handelen hun eigen tik af: die mag geen vinger of klavertje worden.
-  [...modeButtons, teamBtn].forEach(btn => {
+  // De modusknoppen zitten in #seg: hun pointerdown moet doorbubbelen naar #seg (indrukken, gloed, slepen);
+  // #seg zelf houdt hem tegen voordat hij bij het speelveld komt.
+  [segEl, teamBtn].forEach(btn => {
     btn.addEventListener('pointerdown', e => e.stopPropagation());
     btn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
   });
-  modeButtons.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+  // Vangnet voor klikken zonder pointer-reeks (bv. hulptechnologie); toetsenbord gaat via initSeg.
+  modeButtons.forEach(btn => btn.addEventListener('click', e => {
+    if (e.detail !== 0 && !seg.recent()) setMode(btn.dataset.mode);
+  }));
   teamBtn.addEventListener('click', cycleTeams);
+  pressable(teamBtn);
+  pressable(segEl);
 
   function startShuffle(now) {
     phase = 'shuffle';
@@ -699,14 +1265,17 @@
       };
       renderTeams();
       teamsEl.hidden = false;
+      placeTeams();
       buzz([40, 30, 40, 30, 120]);
     } else {
       const id = fingers.has(shuffle.hi) ? shuffle.hi : ids[randInt(ids.length)];
       const f = fingers.get(id);
       winner = { id, x: f.x, y: f.y, num: f.num, rot: f.rot, at: now };
-      beer = makeBeer(now, reduced);
-      placeStamps();
+      ensureTex(true);
+      pour = makePour(now, reduced);
+      stage.classList.add('pouring');
       reveal.hidden = false;
+      placeStamps();
       buzz([50, 40, 160]);
     }
     shuffle = null;
@@ -715,32 +1284,82 @@
   }
 
   // Zet "Vat Nein" zo ver mogelijk van het klavertje van de gekozen speler, zodat het nummer leesbaar blijft.
+  // Werkt met echte rechthoeken: het klavertje (met ring) als blok, de tekst zoals hij werkelijk staat.
+  // Volgorde: midden → verticaal opzij → horizontaal opzij → kleiner (tot 0,65×) → die helft weglaten.
+  const overlapArea = (a, b) => {
+    const w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    return w > 0 && h > 0 ? w * h : 0;
+  };
   function placeStamps() {
-    const landscape = W > H && H <= 520;
+    if (!winner || reveal.hidden) return;
+    const cr = R * 1.7;
+    const box = { x0: winner.x - cr, y0: winner.y - cr, x1: winner.x + cr, y1: winner.y + cr };
+    const placed = [];
     halves.forEach((half, i) => {
+      const st = stampEls[i];
       half.style.alignItems = '';
-      if (landscape) return;
-      const flipped = half.classList.contains('flip');       // 180° gedraaid: start staat onderaan
-      const top = i * H / 2;
-      const bottom = top + H / 2;
-      if (winner.y < top - R * 1.6 || winner.y > bottom + R * 1.6) return;
-      const bandTop = top + H * (flipped ? .2 : .06);         // schuimkraag bovenin, munten onderin
-      const bandBottom = bottom - H * (flipped ? .06 : .2);
-      const hh = Math.min(W * .15, H * .125) * .75;
-      let best = [(bandTop + bandBottom) / 2, ''];
-      [[bandTop + hh, 'top'], [bandBottom - hh, 'bottom']].forEach(spot => {
-        if (Math.abs(spot[0] - winner.y) > Math.abs(best[0] - winner.y)) best = spot;
-      });
-      if (best[1]) half.style.alignItems = (best[1] === 'top') !== flipped ? 'start' : 'end';
+      half.style.justifyItems = '';
+      st.style.fontSize = '';
+      st.style.visibility = '';
+      const flipped = half.classList.contains('flip');       // 180° gedraaid: padding en uitlijning omgekeerd
+      const cs = getComputedStyle(half);
+      const pt = parseFloat(cs.paddingTop) || 0, pb = parseFloat(cs.paddingBottom) || 0;
+      const pl = parseFloat(cs.paddingLeft) || 0, pr = parseFloat(cs.paddingRight) || 0;
+      const hx = half.offsetLeft, hy = half.offsetTop, hw = half.offsetWidth, hh = half.offsetHeight;
+      const cx0 = hx + (flipped ? pr : pl), cx1 = hx + hw - (flipped ? pl : pr);
+      const cy0 = hy + (flipped ? pb : pt), cy1 = hy + hh - (flipped ? pt : pb);
+      const sw0 = st.offsetWidth, sh0 = st.offsetHeight;
+      const base = parseFloat(getComputedStyle(st).fontSize) || 0;
+      const farV = winner.y < (cy0 + cy1) / 2 ? 'b' : 't', nearV = farV === 'b' ? 't' : 'b';
+      const farH = winner.x < (cx0 + cx1) / 2 ? 'r' : 'l', nearH = farH === 'r' ? 'l' : 'r';
+      let pick = null;
+      for (const s of [1, .85, .75, .65]) {
+        const sw = sw0 * s, sh = sh0 * s;
+        for (const h of ['c', farH, nearH]) {
+          for (const v of ['c', farV, nearV]) {
+            const x0 = h === 'c' ? (cx0 + cx1 - sw) / 2 : h === 'l' ? cx0 : cx1 - sw;
+            const y0 = v === 'c' ? (cy0 + cy1 - sh) / 2 : v === 't' ? cy0 : cy1 - sh;
+            const r = { x0, y0, x1: x0 + sw, y1: y0 + sh };
+            if (!overlapArea(r, box)) { pick = { s, h, v, r }; break; }
+          }
+          if (pick) break;
+        }
+        if (pick) break;
+      }
+      if (!pick) { st.style.visibility = 'hidden'; return; }   // nergens plek: alleen de andere helft
+      placed.push(pick.r);
+      if (pick.v !== 'c') half.style.alignItems = (pick.v === 't') !== flipped ? 'start' : 'end';
+      if (pick.h !== 'c') half.style.justifyItems = (pick.h === 'l') !== flipped ? 'start' : 'end';
+      if (pick.s < 1 && base) st.style.fontSize = (base * pick.s).toFixed(2) + 'px';
     });
+    // "Tik om opnieuw": in het midden, boven de munten, of links/rechts; nooit onder het klavertje of de tekst.
+    const pw = revealAgain.offsetWidth, ph = revealAgain.offsetHeight;
+    let pick = null, far = null;
+    [[W / 2, H / 2], [W / 2, H * .79], [W * .25, H / 2], [W * .75, H / 2]].forEach(([sx, sy]) => {
+      const x = Math.max(16 + pw / 2, Math.min(W - 16 - pw / 2, sx));
+      const r = { x0: x - pw / 2, y0: sy - ph / 2, x1: x + pw / 2, y1: sy + ph / 2 };
+      const dx = Math.max(r.x0 - winner.x, 0, winner.x - r.x1), dy = Math.max(r.y0 - winner.y, 0, winner.y - r.y1);
+      const d = Math.hypot(dx, dy);
+      if (!pick && !overlapArea(r, box) && !placed.some(q => overlapArea(r, q))) pick = { x, y: sy };
+      if (!far || d > far.d) far = { d, x, y: sy };
+    });
+    const at = pick || far;
+    revealAgain.style.left = at.x + 'px';
+    revealAgain.style.top = at.y + 'px';
   }
 
+  // Teamlade: kleurstip + teamnaam + nummers, onderin (of bovenin als daar minder klavertjes liggen).
   function renderTeams() {
     teamList.textContent = '';
+    teamList.style.setProperty('--cols', teamCount === 3 ? 3 : 2);
+    teamList.style.setProperty('--tcount', teamCount);
     for (let t = 0; t < teamCount; t++) {
       const nums = split.members.filter(m => m.team === t).map(m => m.num).sort((a, b) => a - b);
       const li = document.createElement('li');
-      li.style.setProperty('--t', TEAMS[t].hex);
+      li.style.setProperty('--c', TEAMS[t].rgb.join(','));
+      li.style.setProperty('--cl', TEAMS[t].soft);
+      li.style.setProperty('--i', t);
+      li.dataset.team = t;
       li.setAttribute('aria-label', 'Team ' + TEAMS[t].name + ': ' + (nums.length === 1 ? 'nummer ' : 'nummers ') + nums.join(', '));
       const name = document.createElement('span');
       name.className = 'team-name';
@@ -751,16 +1370,57 @@
       li.append(name, members);
       teamList.append(li);
     }
-    // Zet het kaartje in de strook met de minste klavertjes (bij gelijkspel: midden).
-    const reach = R * 1.6 + 90;
-    let bestY = H / 2;
-    let bestCrowd = Infinity;
-    [0.5, 0.35, 0.65, 0.2, 0.8].forEach(band => {
-      const y = Math.max(110, Math.min(H - 130, band * H));
-      const crowd = split.members.filter(m => Math.abs(m.y - y) < reach).length;
-      if (crowd < bestCrowd) { bestCrowd = crowd; bestY = y; }
-    });
-    teamCard.style.top = bestY + 'px';
+  }
+
+  // Lade en "Tik om opnieuw" daar zetten waar ze geen klavertje raken. Gemeten aan de echte lade (layout, zonder
+  // animatie-transform); per optie: hoeveel klavertje-ring (r = 1,6R) erop valt. Liefst onderin, normaal formaat,
+  // pil boven de lade; anders bovenin, anders compact (één rij), anders de pil aan de andere schermrand.
+  function placeTeams() {
+    if (!split || teamsEl.hidden) return;
+    const rr = R * 1.6;
+    const hits = (x0, y0, x1, y1) => {
+      let s = 0;
+      for (const m of split.members) {
+        const dx = Math.max(x0 - m.x, 0, m.x - x1), dy = Math.max(y0 - m.y, 0, m.y - y1);
+        const d = Math.hypot(dx, dy);
+        if (d < rr) s += rr - d;
+      }
+      return s;
+    };
+    const pw = teamAgain.offsetWidth, ph = teamAgain.offsetHeight;
+    const px0 = (W - pw) / 2;
+    let best = null;
+    for (const compact of [false, true]) {
+      teamWrap.classList.toggle('compact', compact);
+      const th = teamCard.offsetHeight, tw = teamCard.offsetWidth;
+      const tx = teamWrap.offsetLeft + teamCard.offsetLeft;
+      for (const top of [false, true]) {
+        const ty0 = top ? 12 + safeTop : H - 12 - safeBottom - th;
+        const sTray = hits(tx, ty0, tx + tw, ty0 + th);
+        for (const same of [true, false]) {
+          const pTop = same ? top : !top;
+          const off = 12 + (same ? th + 10 : 0);
+          const py0 = pTop ? off + safeTop : H - off - safeBottom - ph;
+          const cost = Math.round(sTray + hits(px0, py0, px0 + pw, py0 + ph)) * 100
+            + (compact ? 4 : 0) + (same ? 0 : 2) + (top ? 1 : 0);
+          if (!best || cost < best.cost) best = { cost, compact, top, py0 };
+        }
+      }
+      if (best.cost < 100) break;     // past al zonder overlap
+    }
+    teamWrap.classList.toggle('compact', best.compact);
+    teamWrap.classList.toggle('at-top', best.top);
+    teamAgain.style.top = best.py0 + 'px';
+    teamAgain.style.bottom = 'auto';
+  }
+
+  // Lade/tekst opnieuw plaatsen als een vinger nog over het scherm schuift (hooguit ~7× per seconde).
+  let layoutDirty = false, lastLayout = 0;
+  function relayout(now) {
+    if (!layoutDirty || now - lastLayout < 150) return;
+    layoutDirty = false;
+    lastLayout = now;
+    if (winner) placeStamps(); else if (split) placeTeams();
   }
 
   let lastHint = '';
@@ -769,7 +1429,10 @@
     const tap = mode === 'tap';
     const need = needPlayers();
     intro.classList.toggle('playing', phase === 'gather' || phase === 'shuffle');
-    intro.classList.toggle('gone', phase === 'result' || phase === 'done');
+    const shown = phase === 'result' || phase === 'done';
+    intro.classList.toggle('gone', shown);
+    stage.classList.toggle('still', shown);           // achtergrondlicht pauzeren tijdens de uitslag
+    modesEl.classList.toggle('away', phase !== 'idle');
 
     const lit = new Set();
     fingers.forEach(f => { if (f.slot >= 0) lit.add(f.slot); });
@@ -792,16 +1455,20 @@
     }
     const showNotice = !!notice && phase === 'idle';
     if (showNotice) text = 'Deze telefoon herkent maximaal ' + notice.count + ' vingers tegelijk. Kies Tikken voor meer spelers.';
-    if (text !== lastHint) { hint.textContent = text; lastHint = text; }
+    // Tijdens de uitslag vervaagt de hint: dan de tekst laten staan (niet terugspringen naar de begintekst).
+    if (!shown && text !== lastHint) { hint.textContent = text; lastHint = text; }
     hint.classList.toggle('notice', showNotice);
-    modesEl.classList.toggle('nudge', showNotice);
+    segEl.classList.toggle('nudge', showNotice);
 
     const how = tap ? 'één keer tikken' : 'vinger vasthouden';
     if (teamCount) meta.textContent = teamCount + ' teams · ' + (tap ? how : 'max. ' + touchLimit + ' spelers');
     else meta.textContent = (tap ? '2 tot 10+ spelers · ' : '2 tot ' + touchLimit + ' spelers · ') + how;
 
-    modeButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
-    teamBtn.textContent = teamCount ? teamCount + ' teams' : 'Teams';
+    modeButtons.forEach(btn => btn.setAttribute('aria-checked', String(btn.dataset.mode === mode)));
+    seg.select(mode === 'tap' ? 1 : 0);
+    const prevTeams = parseInt(teamBtn.dataset.n || '0', 10);
+    morphLabel(teamCount ? teamCount + ' teams' : 'Teams', teamCount > prevTeams);
+    teamBtn.dataset.n = String(teamCount);
     teamBtn.setAttribute('aria-pressed', String(teamCount > 0));
     teamBtn.setAttribute('aria-label', teamCount
       ? teamCount + ' teams. Tik voor ' + (teamCount === 4 ? 'geen teams' : (teamCount + 1) + ' teams')
@@ -836,10 +1503,10 @@
     if (!f) return;
     f.x = e.clientX;
     f.y = e.clientY;
-    if (winner && winner.id === e.pointerId) { winner.x = f.x; winner.y = f.y; }
+    if (winner && winner.id === e.pointerId) { winner.x = f.x; winner.y = f.y; layoutDirty = true; }
     if (split) {
       const m = split.members.find(member => member.id === e.pointerId);
-      if (m) { m.x = f.x; m.y = f.y; }
+      if (m) { m.x = f.x; m.y = f.y; layoutDirty = true; }
     }
   });
 
@@ -892,37 +1559,1283 @@
   LEAF.bezierCurveTo(.12, -1.1, .55, -1.08, .58, -.78);
   LEAF.bezierCurveTo(.62, -.42, .15, -.25, 0, 0);
   LEAF.closePath();
+  // glanslichtjes op de twee lobben
+  const LEAF_HI = new Path2D();
+  LEAF_HI.ellipse(-.31, -.85, .15, .07, -.5, 0, TAU);
+  LEAF_HI.ellipse(.31, -.85, .15, .07, .5, 0, TAU);
 
-  const numFont = px => `800 ${Math.max(1, Math.round(px))}px Cinzel, "Trajan Pro", Georgia, serif`;
+  // ---------- Texturen (één keer, per schermformaat) ----------
+  const tex = { noise: null, light: null, dark: null, peak: null, band: null, core: null, coreH: 640, ruby: null, foam: null,
+    coins: null, coinCell: 0, coinR: 18, coinT: 3.6, rest: [], sparkle: null, dot: null, bub: null, coinShadow: null, cloverShadow: null };
+  function makeCanvas(w, h) {
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w));
+    c.height = Math.max(1, Math.round(h));
+    return c;
+  }
+  const fade5 = t => t * t * t * (t * (t * 6 - 15) + 10);
 
-  // label = spelernummer in het hart van het klavertje.
-  function clover(x, y, paint, s, a, label, rot) {
+  // Waarderuis (fBm) op een periodiek rooster, zodat de tegel naadloos herhaalt.
+  function fbmGrid(w, h, cx, cy, oct) {
+    const out = new Float32Array(w * h);
+    let amp = 1;
+    for (let o = 0; o < oct; o++) {
+      const px = cx << o, py = cy << o;
+      const lat = new Float32Array(px * py);
+      for (let i = 0; i < lat.length; i++) lat[i] = Math.random();
+      const sx = px / w, sy = py / h;
+      for (let y = 0; y < h; y++) {
+        const fy = y * sy, j0 = fy | 0, ty = fade5(fy - j0);
+        const r0 = (j0 % py) * px, r1 = ((j0 + 1) % py) * px;
+        for (let x = 0; x < w; x++) {
+          const fx = x * sx, i0 = fx | 0, tx = fade5(fx - i0);
+          const a0 = i0 % px, a1 = (i0 + 1) % px;
+          const top = lat[r0 + a0] + (lat[r0 + a1] - lat[r0 + a0]) * tx;
+          const bot = lat[r1 + a0] + (lat[r1 + a1] - lat[r1 + a0]) * tx;
+          out[y * w + x] += amp * (top + (bot - top) * ty);
+        }
+      }
+      amp *= .5;
+    }
+    let mn = Infinity, mx = -Infinity;
+    for (let i = 0; i < out.length; i++) { if (out[i] < mn) mn = out[i]; if (out[i] > mx) mx = out[i]; }
+    const k = 1 / Math.max(1e-6, mx - mn);
+    for (let i = 0; i < out.length; i++) out[i] = (out[i] - mn) * k;
+    return out;
+  }
+
+  function alphaCanvas(w, h, rgb, alphaAt) {
+    const c = makeCanvas(w, h), g = c.getContext('2d'), img = g.createImageData(w, h), d = img.data;
+    for (let i = 0, p = 0; i < w * h; i++, p += 4) {
+      d[p] = rgb[0]; d[p + 1] = rgb[1]; d[p + 2] = rgb[2]; d[p + 3] = alphaAt(i) * 255;
+    }
+    g.putImageData(img, 0, 0);
+    return c;
+  }
+
+  function buildNoise() {
+    if (tex.noise) return;
+    const n = fbmGrid(256, 256, 4, 4, 4);
+    tex.noise = n;
+    const cloud = v => Math.pow(clamp((v - .35) * 1.8), 1.2);
+    tex.light = alphaCanvas(256, 256, [142, 108, 82], i => cloud(n[i]));
+    tex.dark = alphaCanvas(256, 256, [58, 37, 25], i => Math.pow(clamp((.55 - n[i]) * 2.2), 1.2));
+    tex.peak = alphaCanvas(256, 256, [176, 139, 108], i => Math.pow(cloud(n[i]), 3));
+    // bubbelkorrel: miljoenen stikstofbelletjes als losse 1px-spikkels (~12% dekking)
+    const gc = makeCanvas(256, 256), gg = gc.getContext('2d'), gi = gg.createImageData(256, 256), gd = gi.data;
+    for (let p = 0; p < gd.length; p += 4) {
+      if (Math.random() < .12) { gd[p] = 214; gd[p + 1] = 190; gd[p + 2] = 160; gd[p + 3] = 89; }
+    }
+    gg.putImageData(gi, 0, 0);
+    tex.grain = gc;
+  }
+
+  // Oud canvasgeheugen meteen vrijgeven (WebKit ruimt canvassen anders pas bij de GC op).
+  const freeCanvas = c => { if (c) { c.width = 0; c.height = 0; } };
+
+  // Cascade langs het glas: alleen bij de wanden, opgebroken in slierten (geen golfkarton over de hele breedte).
+  function buildBand() {
+    const bw = Math.max(16, Math.round(W * LS)), bh = 512;
+    const warp = fbmGrid(bw, bh, Math.max(3, Math.round(bw / 60)), 4, 3);
+    const det = fbmGrid(bw, bh, Math.max(3, Math.round(bw / 45)), 12, 2);
+    const spk = fbmGrid(bw, bh, 24, 36, 2);
+    const c = makeCanvas(bw, bh), g = c.getContext('2d'), img = g.createImageData(bw, bh), d = img.data;
+    for (let y = 0; y < bh; y++) {
+      for (let x = 0; x < bw; x++) {
+        const i = y * bw + x;
+        const w = smooth(.6, .95, Math.abs(2 * x / (bw - 1) - 1));
+        if (w <= 0) continue;
+        const v = .5 + .5 * Math.sin(TAU * 8 * y / bh + 9 * warp[i]);
+        const band = smooth(.55, .9, v) * (.35 + .65 * det[i]) * smooth(.5, .62, spk[i]);
+        const p = i * 4;
+        d[p] = 138; d[p + 1] = 106; d[p + 2] = 82; d[p + 3] = 255 * band * w;
+      }
+    }
+    g.putImageData(img, 0, 0);
+    freeCanvas(tex.band);
+    tex.band = c;
+  }
+
+  // Opwaartse stroom in het midden.
+  function buildCore() {
+    const cw = Math.max(16, Math.round(W * LS)), ch = Math.round(tex.coreH * LS);
+    const c = makeCanvas(cw, ch), g = c.getContext('2d');
+    for (let x = 0; x < cw; x += ch) g.drawImage(tex.light, x, 0, ch, ch);
+    g.globalCompositeOperation = 'destination-in';
+    const m = g.createLinearGradient(0, 0, cw, 0);
+    m.addColorStop(0, 'rgba(0,0,0,0)');
+    m.addColorStop(.3, 'rgba(0,0,0,0)');
+    m.addColorStop(.5, '#000');
+    m.addColorStop(.7, 'rgba(0,0,0,0)');
+    m.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = m;
+    g.fillRect(0, 0, cw, ch);
+    freeCanvas(tex.core);
+    tex.core = c;
+    // zachte kolkwolk voor de inslag van de straal (radiaal uitlopend, geen harde rand)
+    const b = makeCanvas(256, 256), bg = b.getContext('2d');
+    bg.drawImage(tex.peak, 0, 0, 256, 256);
+    bg.globalAlpha = .8;
+    bg.drawImage(tex.light, -64, -64, 384, 384);
+    bg.globalAlpha = 1;
+    bg.globalCompositeOperation = 'destination-in';
+    const rm = bg.createRadialGradient(128, 128, 0, 128, 128, 128);
+    rm.addColorStop(0, '#000');
+    rm.addColorStop(.45, 'rgba(0,0,0,.75)');
+    rm.addColorStop(1, 'rgba(0,0,0,0)');
+    bg.fillStyle = rm;
+    bg.fillRect(0, 0, 256, 256);
+    freeCanvas(tex.churn);
+    tex.churn = b;
+  }
+
+  // Robijnrood licht waar de stout dun is: langs het glas en onderin.
+  function buildRuby() {
+    const c = makeCanvas(W * LS, H * LS), g = c.getContext('2d');
+    g.scale(c.width / W, c.height / H);
+    const edge = (x0, dir) => {
+      const gr = g.createLinearGradient(x0, 0, x0 + dir * 90, 0);
+      gr.addColorStop(0, 'rgba(138,36,20,.55)');
+      gr.addColorStop(10 / 90, 'rgba(92,20,16,.40)');
+      gr.addColorStop(34 / 90, 'rgba(54,8,10,.18)');
+      gr.addColorStop(1, 'rgba(54,8,10,0)');
+      g.fillStyle = gr;
+      g.fillRect(dir > 0 ? x0 : x0 - 90, 0, 90, H);
+    };
+    edge(0, 1);
+    edge(W, -1);
+    const rr = .75 * W + .25 * H;
+    const rg = g.createRadialGradient(W / 2, 1.15 * H, 0, W / 2, 1.15 * H, rr);
+    rg.addColorStop(0, 'rgba(92,20,16,.45)');
+    rg.addColorStop(.6, 'rgba(54,8,10,.16)');
+    rg.addColorStop(1, 'rgba(54,8,10,0)');
+    g.fillStyle = rg;
+    g.fillRect(0, 0, W, H);
+    [[.06, .93, 46], [.94, .9, 56], [.16, .99, 34], [.86, .99, 40]].forEach(([fx, fy, r], i) => {
+      const a = g.createRadialGradient(fx * W, fy * H, 0, fx * W, fy * H, r);
+      a.addColorStop(0, `rgba(180,71,31,${.16 + i * .025})`);
+      a.addColorStop(1, 'rgba(180,71,31,0)');
+      g.fillStyle = a;
+      g.fillRect(fx * W - r, fy * H - r, 2 * r, 2 * r);
+    });
+    g.globalCompositeOperation = 'destination-in';
+    const vm = g.createLinearGradient(0, H * .14, 0, H * .4);
+    vm.addColorStop(0, 'rgba(0,0,0,.35)');
+    vm.addColorStop(1, '#000');
+    g.fillStyle = vm;
+    g.fillRect(0, 0, W, H);
+    freeCanvas(tex.ruby);
+    tex.ruby = c;
+  }
+
+  const headH = () => Math.round(.13 * H);
+  const headTopY = () => Math.round(4 + safeTop * .3);
+
+  function gauss() {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * v);
+  }
+
+  // Schuimkraag: room met duizenden microbelletjes (log-normaal verdeeld), horizontaal naadloos.
+  function buildFoam() {
+    // hoog genoeg voor de kraag plus het stuk tot in de bovenrand (achter de statusbalk)
+    const fw = 512, fh = Math.ceil((headH() + headTopY() + 70) * FX);
+    const c = makeCanvas(fw, fh), g = c.getContext('2d');
+    g.fillStyle = '#ede2cc';
+    g.fillRect(0, 0, fw, fh);
+    const ts = 300;
+    g.globalAlpha = .08;
+    for (let y = 0; y < fh; y += ts) for (let x = 0; x < fw; x += ts) g.drawImage(tex.light, x, y, ts, ts);
+    g.globalAlpha = .05;
+    for (let y = -80; y < fh; y += 180) for (let x = -60; x < fw; x += 180) g.drawImage(tex.dark, x, y, 180, 180);
+    g.globalAlpha = 1;
+    const count = Math.min(13000, Math.round(.38 * (fw / FX) * (fh / FX)));
+    const ring = new Path2D(), hi = new Path2D(), big = new Path2D();
+    const add = (path, x, y, r) => { path.moveTo(x + r, y); path.arc(x, y, r, 0, TAU); };
+    for (let i = 0; i < count; i++) {
+      const large = Math.random() < .05;
+      const r = large ? (1.3 + .7 * Math.random()) * FX : Math.max(.6, Math.min(6, .55 * FX * Math.exp(.45 * gauss())));
+      const y = Math.random() * fh;
+      const x = Math.random() * fw;
+      const xs = [x];
+      if (x < r + 1) xs.push(x + fw);
+      if (x > fw - r - 1) xs.push(x - fw);
+      xs.forEach(px => {
+        add(ring, px, y, r);
+        add(hi, px - .3 * r, y - .35 * r, Math.max(.3, .35 * r));
+        if (large) add(big, px, y, r * .7);
+      });
+    }
+    g.fillStyle = 'rgba(150,120,80,.12)';
+    g.fill(big);
+    g.strokeStyle = 'rgba(201,181,148,.30)';
+    g.lineWidth = Math.max(.5, .25 * FX);
+    g.stroke(ring);
+    g.fillStyle = 'rgba(255,255,255,.55)';
+    g.fill(hi);
+    const top = g.createLinearGradient(0, 0, 0, 22 * FX);
+    top.addColorStop(0, 'rgba(255,253,246,.32)');
+    top.addColorStop(1, 'rgba(255,253,246,0)');
+    g.fillStyle = top;
+    g.fillRect(0, 0, fw, 22 * FX);
+    freeCanvas(tex.foam);
+    tex.foam = c;
+  }
+
+  // Eén gouden munt onder hoek phi (normaal t.o.v. de kijker): gezicht, rand met kartels, gebakken glans.
+  function coinFrame(g, r, T, phi) {
+    const cs = Math.cos(phi), sn = Math.sin(phi);
+    const k = Math.max(.035, Math.abs(cs)), ry = r * k, d = T * Math.abs(sn);
+    g.save();
+    g.translate(0, -d / 2);
+    if (d > .15) {
+      const side = g.createLinearGradient(-r, 0, r, 0);
+      side.addColorStop(0, '#5e3f0b');
+      side.addColorStop(.325, '#e8c25a');
+      side.addColorStop(.65, '#c8952b');
+      side.addColorStop(1, '#5e3f0b');
+      g.beginPath();
+      g.moveTo(-r, 0);
+      g.lineTo(-r, d);
+      g.ellipse(0, d, r, ry, 0, Math.PI, 0, true);
+      g.lineTo(r, 0);
+      g.closePath();
+      g.fillStyle = side;
+      g.fill();
+      g.save();
+      g.clip();
+      g.lineWidth = .45;
+      for (let i = 0; i < 28; i++) {
+        const th = -Math.PI / 2 + (i + .5) * Math.PI / 28, x = r * Math.sin(th);
+        g.strokeStyle = i % 2 ? 'rgba(110,74,14,.4)' : 'rgba(168,118,28,.4)';
+        g.beginPath();
+        g.moveTo(x, 0);
+        g.lineTo(x, d + ry * Math.sqrt(Math.max(0, 1 - (x / r) * (x / r))));
+        g.stroke();
+      }
+      g.restore();
+    }
+    g.save();
+    g.scale(1, k);
+    const sh = .45 * r * sn;
+    const stops = [[0, '#fff1b8'], [.18, '#f2c94c'], [.45, '#c8952b'], [.62, '#8c6114'], [.8, '#d9a93a'], [1, '#f5d46e']];
+    const fg = g.createLinearGradient(-r + sh, -r + sh, r + sh, r + sh);
+    stops.forEach(s => fg.addColorStop(s[0], s[1]));
+    g.fillStyle = fg;
+    g.beginPath();
+    g.arc(0, 0, r, 0, TAU);
+    g.fill();
+    g.lineWidth = .7;
+    g.strokeStyle = 'rgba(94,63,11,.85)';
+    g.stroke();
+    const rg = g.createLinearGradient(r + sh, r + sh, -r + sh, -r + sh);
+    stops.forEach(s => rg.addColorStop(s[0], s[1]));
+    g.lineWidth = .1 * r;
+    g.strokeStyle = rg;
+    g.beginPath();
+    g.arc(0, 0, .86 * r, 0, TAU);
+    g.stroke();
+    g.lineWidth = .04 * r;
+    g.strokeStyle = 'rgba(94,63,11,.35)';
+    g.beginPath();
+    g.arc(0, 0, .79 * r, 0, TAU);
+    g.stroke();
+    const e = .36 * r;
+    const emb = (dx, dy, col, a) => {
+      g.save();
+      g.globalAlpha = a;
+      g.fillStyle = col;
+      g.translate(dx, dy);
+      for (let i = 0; i < 4; i++) {
+        g.save();
+        g.rotate(Math.PI / 4 + i * Math.PI / 2);
+        g.scale(e, e);
+        g.fill(LEAF);
+        g.restore();
+      }
+      g.restore();
+    };
+    emb(.9, .9, '#5e3f0b', .45);
+    emb(-.7, -.7, '#fff3c4', .55);
+    emb(0, 0, '#c8952b', 1);
+    g.restore();
+    g.restore();
+  }
+
+  const REST_DEG = [64, 68, 72, 76, 80, 44, 52, 60];   // liggend (0–4) en schuin tegen de hoop (5–7)
+  function buildCoins() {
+    const r = Math.max(14, Math.min(23, Math.min(W, H) * .05));
+    const T = r * .2;
+    const cell = Math.ceil((r + T + 3) * 2 * FX);
+    const c = makeCanvas(cell * 24, cell * 3), g = c.getContext('2d');
+    for (let f = 0; f < 24; f++) {
+      for (let row = 0; row < 2; row++) {
+        g.setTransform(FX, 0, 0, FX, (f + .5) * cell, (row + .5) * cell);
+        coinFrame(g, r, T, f / 24 * TAU);
+      }
+    }
+    REST_DEG.forEach((deg, f) => {
+      g.setTransform(FX, 0, 0, FX, (f + .5) * cell, 2.5 * cell);
+      coinFrame(g, r, T, deg * Math.PI / 180);
+    });
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalCompositeOperation = 'source-atop';
+    g.fillStyle = 'rgba(52,18,9,.45)';           // ondergedompeld: donkerder, roder
+    g.fillRect(0, cell, c.width, cell);
+    g.fillStyle = 'rgba(52,18,9,.2)';            // op de bodem: een tikje
+    g.fillRect(0, cell * 2, c.width, cell);
+    g.globalCompositeOperation = 'source-over';
+    freeCanvas(tex.coins);
+    tex.coins = c;
+    tex.coinCell = cell;
+    tex.coinR = r;
+    tex.coinT = T;
+  }
+
+  function buildSprites() {
+    const s = makeCanvas(48, 48), g = s.getContext('2d');
+    const lin = horiz => {
+      const gr = horiz ? g.createLinearGradient(0, 24, 48, 24) : g.createLinearGradient(24, 0, 24, 48);
+      gr.addColorStop(0, 'rgba(255,247,214,0)');
+      gr.addColorStop(.5, 'rgba(255,255,255,1)');
+      gr.addColorStop(1, 'rgba(255,247,214,0)');
+      g.fillStyle = gr;
+      if (horiz) g.fillRect(0, 22.6, 48, 2.8); else g.fillRect(22.6, 0, 2.8, 48);
+    };
+    lin(true);
+    lin(false);
+    const core = g.createRadialGradient(24, 24, 0, 24, 24, 11);
+    core.addColorStop(0, 'rgba(255,255,255,1)');
+    core.addColorStop(.35, 'rgba(255,247,214,.8)');
+    core.addColorStop(1, 'rgba(255,247,214,0)');
+    g.fillStyle = core;
+    g.fillRect(0, 0, 48, 48);
+    tex.sparkle = s;
+
+    const d = makeCanvas(16, 16), dg = d.getContext('2d');
+    const dr = dg.createRadialGradient(6.5, 6, 0, 8, 8, 8);
+    dr.addColorStop(0, '#fffdf6');
+    dr.addColorStop(.55, '#efe4cf');
+    dr.addColorStop(.85, 'rgba(201,181,148,.9)');
+    dr.addColorStop(1, 'rgba(201,181,148,0)');
+    dg.fillStyle = dr;
+    dg.fillRect(0, 0, 16, 16);
+    tex.dot = d;
+
+    const b = makeCanvas(12, 12), bg = b.getContext('2d');
+    bg.strokeStyle = 'rgba(214,190,150,.75)';
+    bg.lineWidth = 1.4;
+    bg.beginPath(); bg.arc(6, 6, 4.2, 0, TAU); bg.stroke();
+    bg.fillStyle = 'rgba(255,250,235,.9)';
+    bg.fillRect(4, 3.2, 1.6, 1.6);
+    tex.bub = b;
+
+    const cs = makeCanvas(64, 24), cg = cs.getContext('2d');
+    cg.scale(1, 24 / 64);
+    const sg = cg.createRadialGradient(32, 32, 0, 32, 32, 32);
+    sg.addColorStop(0, 'rgba(0,0,0,.55)');
+    sg.addColorStop(1, 'rgba(0,0,0,0)');
+    cg.fillStyle = sg;
+    cg.fillRect(0, 0, 64, 64);
+    tex.coinShadow = cs;
+  }
+
+  function buildMarkerSprites() {
+    const c = makeCanvas(64, 64), g = c.getContext('2d');
+    const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(0,14,7,.42)');
+    gr.addColorStop(.55, 'rgba(0,14,7,.18)');
+    gr.addColorStop(1, 'rgba(0,14,7,0)');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, 64, 64);
+    tex.cloverShadow = c;
+    // fijne korrel tegen banding in het achtergrondlicht
+    try {
+      const n = makeCanvas(128, 128), ng = n.getContext('2d'), img = ng.createImageData(128, 128), d = img.data;
+      for (let p = 0; p < d.length; p += 4) {
+        const v = Math.random() < .5 ? 0 : 255;
+        d[p] = d[p + 1] = d[p + 2] = v;
+        d[p + 3] = (6 + Math.random() * 10) * .6;       // dekking van de korrel zit al in het plaatje
+      }
+      ng.putImageData(img, 0, 0);
+      document.querySelector('.aurora').style.setProperty('--grain', `url(${n.toDataURL()})`);
+    } catch (_) {}
+    // Lichtvlekken als kleine bitmaps; de CSS-verlopen op de <i> blijven als terugval.
+    try {
+      const blobs = [[28, 176, 104, .52], [14, 140, 122, .40], [170, 255, 205, .17], [10, 110, 58, .58]];
+      document.querySelectorAll('.aurora i.blob').forEach((el, i) => {
+        const [r, gr, b, a] = blobs[i] || blobs[0];
+        const c = makeCanvas(256, 256), g = c.getContext('2d');
+        const rg = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+        rg.addColorStop(0, `rgba(${r},${gr},${b},${a})`);
+        rg.addColorStop(1, `rgba(${r},${gr},${b},0)`);
+        g.fillStyle = rg;
+        g.fillRect(0, 0, 256, 256);
+        const img = new Image();
+        img.alt = '';
+        img.className = el.className;
+        img.src = c.toDataURL();
+        el.replaceWith(img);
+      });
+    } catch (_) {}
+  }
+
+  // Volgorde telt: de eerste vier zijn genoeg voor een stilstaand, getapt glas (na draaien).
+  const TEX_STEPS = [buildNoise, buildRuby, buildFoam, buildCoins, buildBand, buildCore];
+  const TEX_STATIC = 4;
+  let texKey = '', texStep = 0, texTimer = 0;
+  function ensureTex(sync, staticOnly) {
+    const key = W + 'x' + H + '@' + DPR;
+    if (key !== texKey) { texKey = key; texStep = 0; }
+    clearTimeout(texTimer);
+    if (sync) {
+      const upto = staticOnly ? TEX_STATIC : TEX_STEPS.length;
+      while (texStep < upto) TEX_STEPS[texStep++]();
+      if (texStep >= TEX_STEPS.length) return;
+    }
+    const run = () => {
+      if (texStep >= TEX_STEPS.length) return;
+      TEX_STEPS[texStep++]();
+      texTimer = setTimeout(run, 24);
+    };
+    texTimer = setTimeout(run, sync ? 80 : 250);
+  }
+
+  // ---------- De stout: surge, cascade, opklaren van onderaf, schuimkraag, munten ----------
+  // De echte ~2 minuten zijn samengeperst tot ~6 s; de bewegingen in het bier zelf houden (bijna) echte snelheid.
+  const K = 1.1;                         // tijdschaal
+  const T_FILL = .9 * K;
+  const T_STREAM = .75 * K;
+  const T_END = 5.4 * K;                 // daarna staat het bier stil (alleen nog munten)
+  const T_COINS = 3.2 * K;
+  const COIN_SPAN = 3.4;
+  const G = 2400;                        // zwaartekracht, px/s²
+  const NP = 420;                        // korrels en belletjes in de surge
+  const PX = new Float32Array(NP), PY = new Float32Array(NP), PJ = new Float32Array(NP);
+  const PT = new Uint8Array(NP), PB = new Uint8Array(NP);
+  const NS = 24, SX = new Float32Array(NS + 1), SY = new Float32Array(NS + 1);
+  const NH = 32, HX = new Float32Array(NH + 1), HT = new Float32Array(NH + 1), HB = new Float32Array(NH + 1);
+  const head = { minTop: 0, maxBot: 0, meanBot: 0 };
+  const NQ = 60, QX = new Float32Array(NQ), QY = new Float32Array(NQ), QV = new Float32Array(NQ);   // late belletjes in het heldere bier
+  const FEATHER = [48, 36, 24, 12, 6];
+  // surge-basiskleur: eerst romig (#7a5c45), dan naar cacao (#5b412f)
+  const SURGE = Array.from({ length: 17 }, (_, i) => css([[122, 91], [92, 65], [69, 47]].map(([a, b]) => Math.round(a + (b - a) * i / 16))));
+
+  function sizePourCanvases(on) {
+    if (on) {
+      liqCv.width = Math.round(W * LS);
+      liqCv.height = Math.round(H * LS);
+      fxCv.width = Math.round(W * FX);
+      fxCv.height = Math.round(H * FX);
+      // De hoop is nooit hoger dan 19% van het scherm (+ één munt): de pile-laag hoeft alleen dat stuk te beslaan.
+      pileY0 = Math.max(0, Math.floor(H * .81 - 2.4 * (tex.coinR + tex.coinT + 3) - 8));
+      pileCv.width = Math.round(W * FX);
+      pileCv.height = Math.max(1, Math.round((H - pileY0) * FX));
+      lctx.setTransform(liqCv.width / W, 0, 0, liqCv.height / H, 0, 0);
+      fctx.setTransform(FX, 0, 0, FX, 0, 0);
+    } else {
+      [liqCv, fxCv, pileCv].forEach(c => { c.width = 1; c.height = 1; });
+    }
+    liqCv.hidden = fxCv.hidden = !on;
+  }
+
+  function makePour(at, instant) {
+    sizePourCanvases(true);
+    stage.classList.toggle('poured', !!instant);
+    const r = tex.coinR;
+    const n = Math.max(45, Math.min(80, Math.round(W * H / 5000)));
+    const coins = [];
+    for (let i = 0; i < n; i++) {
+      coins.push({
+        t0: T_COINS + (i / n) * COIN_SPAN + Math.random() * .2,
+        x: W * (.08 + .84 * Math.random()),
+        y: -r * 1.6 - Math.random() * 24,
+        vy: Math.random() * 200,
+        phi: Math.random() * TAU,
+        w: (6 + 4 * Math.random()) * (Math.random() < .5 ? -1 : 1),
+        rot: (Math.random() - .5) * .8,
+        wr: (Math.random() - .5) * 6,
+        wob: Math.random() * TAU,
+        st: 0, bounced: false, wetY: 0, trail: 0, spark: -1,
+      });
+    }
+    for (let i = 0; i < NP; i++) {
+      const k = Math.random();
+      PT[i] = k < .85 ? 0 : k < .97 ? 1 : 2;
+      PB[i] = Math.random() < .5 ? 0 : 1;
+      PJ[i] = (Math.random() - .5) * 16;
+      PX[i] = Math.random() * W;
+      PY[i] = -1;
+    }
+    for (let i = 0; i < NQ; i++) {
+      QX[i] = Math.random() * W;
+      QY[i] = -1;
+      QV[i] = 25 + 35 * Math.random();
+    }
+    pileCtx.setTransform(1, 0, 0, 1, 0, 0);
+    pileCtx.clearRect(0, 0, pileCv.width, pileCv.height);
+    // het heldere bier: niet plat zwart, maar diepte van net onder de kraag naar de bodem
+    const hb0 = headTopY() + headH();
+    const body = lctx.createLinearGradient(0, hb0, 0, H);
+    body.addColorStop(0, '#1a0f0a');
+    body.addColorStop(.35, '#0b0605');
+    body.addColorStop(1, '#050302');
+    const p = {
+      at, instant: !!instant, coins, heights: new Float32Array(Math.ceil(W / 3) + 2),
+      drops: [], dents: [], trails: [], sparks: [], tops: [], shim: [], nextShimmer: 0,
+      acc: 0, o1: 0, o2: 0, o3: 0, o4: 0, ob: 0, ob2: 0, oc: 0, og1: 0, og2: 0,
+      liquidDone: false, fxStatic: false, poured: !!instant, shown: false, ready: false, body,
+      q: { n: 0, sum: 0, done: false, low: false },
+    };
+    if (instant) coins.forEach(c => { c.st = 3; restCoin(p, c); });
+    return p;
+  }
+
+  // Tijdlijn
+  const levelAt = t => t >= T_FILL ? headTopY() : H - (H - headTopY()) * easeOutCubic(t / T_FILL);
+  const sloshA = t => 10 * Math.exp(-3 * t / K);
+  const headThick = t => t < T_FILL ? 16 + 14 * (t / T_FILL)
+    : 30 + (headH() - 30) * easeOutQuad(clamp((t - T_FILL) / (4.4 * K - T_FILL)));
+  const domeAt = t => t < 4.6 * K ? 0 : springAt(t - 4.6 * K, 0, 10, .4, .2);
+  const cloudI = t => t < 1.6 * K ? 1 : 1 - .5 * smooth(1.6 * K, 4.4 * K, t);
+  const churnAt = t => 1.6 - 1.2 * smooth(.6 * K, 3 * K, t);
+  const bandV = t => t < 1.6 * K ? 150 + 110 * clamp(t / (1.6 * K)) : 260 - 150 * clamp((t - 1.6 * K) / (2.6 * K));
+  const tanTint = t => .55 * (1 - smooth(1 * K, 4.2 * K, t));
+  const rubyA = t => easeOutCubic(clamp((t - 3.4 * K) / (1.6 * K)));
+  function cascadeI(t) {
+    if (t < K) return 0;
+    if (t < 1.6 * K) return (t - K) / (.6 * K);
+    if (t < 3 * K) return 1 - .4 * (t - 1.6 * K) / (1.4 * K);
+    return .6 * (1 - smooth(3.9 * K, 4.4 * K, t));
+  }
+  function headTopAt(x, t) {
+    let y = levelAt(t) + sloshA(t) * Math.sin(TAU * 1.2 * x / W + 9 * t);
+    if (t >= T_FILL) {
+      const u = 2 * x / W - 1;
+      y -= domeAt(t) * (1 - u * u);
+      const e = Math.min(x, W - x);
+      if (e < 6) y -= 3 * smooth(T_FILL, T_FILL + .6, t) * (1 - e / 6);   // schuim klimt tegen het glas
+    }
+    return y;
+  }
+  const headBotAt = (x, t) => levelAt(t) + headThick(t) + 3 * Math.sin(TAU * 1.5 * x / W + .8 * t)
+    + sloshA(t) * .6 * Math.sin(TAU * 1.2 * x / W + 9 * t - .4);
+  function frontAt(t) {
+    if (t < 1.6 * K) return H + 80;
+    const hb = levelAt(t) + headThick(t);
+    return H + 60 - (H + 60 - hb) * easeInOutCubic(clamp((t - 1.6 * K) / (2.8 * K)));
+  }
+
+  // Tegels zelf leggen met drawImage (geen patronen, geen allocaties per frame).
+  function tile(g, img, size, offX, offY, y0, y1, a, x0 = 0, x1 = W) {
+    if (a <= .005 || !img) return;
+    g.globalAlpha = a;
+    const sx = x0 + ((((offX - x0) % size) + size) % size) - size;
+    const sy = y0 + ((((offY - y0) % size) + size) % size) - size;
+    for (let y = sy; y < y1; y += size) for (let x = sx; x < x1; x += size) g.drawImage(img, x, y, size, size);
+  }
+  function tileV(g, img, w, h, off, y0, y1, a) {
+    if (a <= .005 || !img) return;
+    g.globalAlpha = a;
+    for (let y = y0 + ((((off - y0) % h) + h) % h) - h; y < y1; y += h) g.drawImage(img, 0, y, w, h);
+  }
+
+  // De straal uit de tap: wordt dunner naarmate hij valt, rond (robijnrode randen, donkere kern, één glanslijn).
+  const streamX = t => W / 2 + 3 * Math.sin(t * 11);
+  const streamW = y => 14 - 7 * clamp((y + 20) / (H + 20));
+  function drawStream(g, t, lev) {
+    if (t >= T_STREAM + .3) return;
+    const topY = t < T_STREAM ? -20 : -20 + .5 * G * (t - T_STREAM) * (t - T_STREAM);
+    const botY = lev + 6;
+    if (topY >= botY) return;
+    const cx = streamX(t), wT = streamW(topY), wB = streamW(botY);
+    const lT = cx - wT / 2, lB = cx - wB / 2;
+    const strip = (f0, f1) => {
+      g.beginPath();
+      g.moveTo(lT + f0 * wT, topY);
+      g.lineTo(lT + f1 * wT, topY);
+      g.lineTo(lB + f1 * wB, botY);
+      g.lineTo(lB + f0 * wB, botY);
+      g.closePath();
+    };
+    g.save();
+    g.globalAlpha = .35;                           // zachte robijnrode zoom
+    g.strokeStyle = 'rgb(110,28,16)';
+    g.lineWidth = 1;
+    g.beginPath();
+    g.moveTo(lT - .5, topY); g.lineTo(lB - .5, botY);
+    g.moveTo(lT + wT + .5, topY); g.lineTo(lB + wB + .5, botY);
+    g.stroke();
+    g.globalAlpha = 1;
+    g.fillStyle = '#120806';
+    strip(0, 1);
+    g.fill();
+    g.save();
+    g.clip();
+    tile(g, tex.light, 128, cx, 900 * t, topY, botY, .3);   // stroming in de straal
+    g.restore();
+    g.globalAlpha = 1;
+    g.fillStyle = 'rgba(110,28,16,.85)';
+    strip(0, .15); g.fill();
+    strip(.85, 1); g.fill();
+    g.fillStyle = 'rgba(110,28,16,.35)';
+    strip(.15, .24); g.fill();
+    strip(.76, .85); g.fill();
+    g.fillStyle = 'rgba(255,240,220,.5)';
+    strip(.25, .39); g.fill();
+    g.restore();
+  }
+
+  function drawParticles(g, p, t, dt, hb, yf, vB, a) {
+    if (yf - hb < 8) return;
+    const live = Math.round((p.q.low ? 220 : NP) * a);
+    for (let i = 0; i < live; i++) {
+      let x = PX[i], y = PY[i];
+      if (y < hb || y > yf) {
+        x = Math.random() * W;
+        y = hb + Math.random() * (yf - hb);
+      } else if (PT[i] === 2) {
+        y -= (40 + 2 * (i % 11)) * dt;
+      } else {
+        const e = smooth(.55, .95, Math.abs(2 * x / W - 1));
+        y += (1.1 * vB * e - 55 * (1 - e)) * dt;            // langs het glas omlaag, in het midden omhoog
+        x += (12 * Math.sin(y / 90 + 1.3 * t) + PJ[i]) * dt;
+        if (x < 0) x += W; else if (x > W) x -= W;
+      }
+      PX[i] = x;
+      PY[i] = y;
+    }
+    const fa = Math.min(1, a * 1.4);
+    g.fillStyle = '#b39274';
+    g.globalAlpha = .28 * fa;
+    for (let i = 0; i < live; i++) if (PT[i] === 0 && PB[i] === 0) g.fillRect(PX[i], PY[i], .8, .8);
+    g.globalAlpha = .46 * fa;
+    for (let i = 0; i < live; i++) if (PT[i] === 0 && PB[i] === 1) g.fillRect(PX[i], PY[i], .8, .8);
+    g.fillStyle = '#cdb08f';
+    g.globalAlpha = .5 * fa;
+    for (let i = 0; i < live; i++) if (PT[i] === 1) g.fillRect(PX[i], PY[i], 1.6, 1.6);
+    if (tex.bub) {
+      g.globalAlpha = .8 * fa;
+      for (let i = 0; i < live; i++) if (PT[i] === 2) g.drawImage(tex.bub, PX[i] - 2.2, PY[i] - 2.2, 4.4, 4.4);
+    }
+  }
+
+  function frontPath(g, front, t, lift) {
+    const arch = .03 * H;
+    g.beginPath();
+    for (let i = 0; i <= NS; i++) {
+      const x = i * W / NS, u = 2 * x / W - 1;
+      const y = front - lift - arch * (1 - u * u) + 7 * Math.sin(TAU * 2.3 * x / W + 1.7 * t) + 4 * Math.sin(TAU * 5.1 * x / W - 2.9 * t);
+      if (i) g.lineTo(x, y); else g.moveTo(x, y);
+    }
+  }
+
+  function drawLiquid(p, t, dt) {
+    const g = lctx;
+    g.globalAlpha = 1;
+    g.clearRect(0, 0, W, H);
+    const lev = levelAt(t);
+    for (let i = 0; i <= NS; i++) { SX[i] = i * W / NS; SY[i] = headTopAt(SX[i], t) + 2; }
+    drawStream(g, t, lev);
+    const top = Math.max(0, lev - sloshA(t) - 14);
+    const hb = lev + headThick(t);
+    const front = frontAt(t);
+    const yLow = Math.min(H, front + 40);
+
+    g.save();
+    g.beginPath();
+    g.moveTo(SX[0], SY[0]);
+    for (let i = 1; i <= NS; i++) g.lineTo(SX[i], SY[i]);
+    g.lineTo(W, H + 2);
+    g.lineTo(0, H + 2);
+    g.closePath();
+    g.clip();
+    g.fillStyle = p.body;
+    g.fillRect(0, top, W, H - top);
+
+    const Ic = cloudI(t), ch = churnAt(t), Icas = cascadeI(t), vB = bandV(t);
+    p.o1 -= 70 * ch * dt; p.o2 += 35 * ch * dt; p.o3 += 20 * dt; p.o4 -= 90 * dt;
+    p.ob += vB * dt; p.ob2 += .75 * vB * dt; p.oc -= 45 * dt;
+    p.og1 += 1.1 * vB * dt; p.og2 -= 55 * dt;
+    if (yLow > top) {
+      // de surge: eerst romig latte, dan cacao; kolkend (dezelfde ruis op verschillende schalen, tegengesteld)
+      g.globalAlpha = .8 * Ic;
+      g.fillStyle = SURGE[Math.round(16 * clamp((t - 1.2 * K) / (.8 * K)))];
+      g.fillRect(0, top, W, yLow - top);
+      // de wolken bollen op en draaien een fractie (geen behang dat verschuift)
+      const mx = W / 2, my = (top + yLow) / 2, m = .06 * Math.max(W, H);
+      for (let i = 0; i < 2; i++) {
+        g.save();
+        g.translate(mx, my);
+        g.rotate((i ? -.04 : .04) * Math.sin(i ? .9 * t + 1 : t));
+        const sc = 1 + .03 * Math.sin(1.3 * t + i * 2);
+        g.scale(sc, sc);
+        g.translate(-mx, -my);
+        if (i) tile(g, tex.light, 410, -8 * Math.sin(1.1 * t + 1), p.o2, top - m, yLow + m, .5 * Ic, -m, W + m);
+        else tile(g, tex.light, 768, 12 * Math.sin(.7 * t), p.o1, top - m, yLow + m, .75 * Ic, -m, W + m);
+        g.restore();
+      }
+      tile(g, tex.dark, 563, p.o3, p.o3 * .3, top, yLow, .35 * Ic);
+      if (!p.q.low) {
+        const surge = smooth(.3 * K, .5 * K, t) * (1 - smooth(1.4 * K, 1.8 * K, t));
+        tile(g, tex.peak, 666, 0, p.o4, top, yLow, .25 * surge);
+      }
+      // bubbelkorrel: langs het glas omlaag, in het midden omhoog
+      const ga = .5 * Ic;
+      if (ga > .01 && tex.grain) {
+        g.save();
+        g.beginPath();
+        g.rect(0, top, W * .18, yLow - top);
+        g.rect(W * .82, top, W * .18, yLow - top);
+        g.clip();
+        tile(g, tex.grain, 256, 0, p.og1, top, yLow, ga);
+        g.restore();
+        g.save();
+        g.beginPath();
+        g.rect(W * .18, top, W * .64, yLow - top);
+        g.clip();
+        tile(g, tex.grain, 256, 97, p.og2, top, yLow, ga);
+        g.restore();
+      }
+      // de cascade: slierten die langs het glas omlaag rollen (oplichten, niet overschilderen)
+      if (Icas > .01 && tex.band) {
+        const bh = 512 / LS;
+        g.save();
+        g.globalCompositeOperation = 'screen';
+        tileV(g, tex.band, W, bh, p.ob, top, yLow, .55 * Icas);
+        if (!p.q.low) {
+          g.translate(W, 0);
+          g.scale(-1, 1);
+          tileV(g, tex.band, W, bh * .6, p.ob2, top, yLow, .25 * Icas);
+        }
+        g.restore();
+      }
+      tileV(g, tex.core, W, tex.coreH, p.oc, top, yLow, .18 * Ic);
+      drawParticles(g, p, t, dt, hb, Math.min(front, H), vB, Ic);
+    }
+    // inslag van de straal
+    const ik = 1 - smooth(T_STREAM - .1, T_STREAM + .25, t);
+    if (ik > 0 && tex.churn) {
+      const cy = lev + 70;
+      for (let i = 0; i < 2; i++) {
+        g.save();
+        g.translate(W / 2 + (i ? -14 : 10), cy + (i ? 20 : 0));
+        g.rotate(t * (i ? -2.6 : 3.4) + i);
+        g.globalAlpha = (i ? .55 : .8) * ik;
+        g.drawImage(tex.churn, -130, -130, 260, 260);
+        g.restore();
+      }
+    }
+    // overal stijgen de belletjes eruit: het bier wordt donkerder
+    const fp = clamp((t - 1.6 * K) / (2.8 * K));
+    if (fp > 0) {
+      g.globalAlpha = .32 * fp;
+      g.fillStyle = '#0a0605';
+      g.fillRect(0, top, W, Math.min(front, H) - top);
+    }
+    // het opklaarfront van onderaf: midden voorop, randen blijven achter; zachte, vervloeiende overgang
+    if (front < H + 40) {
+      g.fillStyle = p.body;
+      g.globalAlpha = .16;
+      for (let i = 0; i < FEATHER.length; i++) {
+        frontPath(g, front, t, FEATHER[i]);
+        g.lineTo(W, H + 2);
+        g.lineTo(0, H + 2);
+        g.closePath();
+        g.fill();
+      }
+      g.globalAlpha = 1;
+      frontPath(g, front, t, 0);
+      g.lineTo(W, H + 2);
+      g.lineTo(0, H + 2);
+      g.closePath();
+      g.fill();
+      if (front < H) {
+        // in het heldere bier blijft het nog even leven: cascade langs het glas, een paar late belletjes
+        const wa = .12 * smooth(1.6 * K, 2.1 * K, t) * (1 - smooth(4.4 * K, T_END - .05, t));
+        if (wa > .005 && tex.band) {
+          g.save();
+          g.beginPath();
+          g.rect(0, front, W * .1, H - front);
+          g.rect(W * .9, front, W * .1, H - front);
+          g.clip();
+          g.globalCompositeOperation = 'screen';
+          tileV(g, tex.band, W, 512 / LS, p.ob, front, H, wa);
+          g.restore();
+        }
+        const qa = .12 * (1 - smooth(T_END - .6, T_END, t));
+        if (qa > .005) {
+          g.globalAlpha = qa;
+          g.fillStyle = '#c9a888';
+          for (let i = 0; i < NQ; i++) {
+            let y = QY[i] - QV[i] * dt;
+            if (y < front || y > H) { y = front + Math.random() * (H - front); QX[i] = Math.random() * W; }
+            QY[i] = y;
+            g.fillRect(QX[i], y, 1.3, 1.3);
+          }
+        }
+      }
+    }
+    const wk = (t - 4.2 * K) / (.5 * K);
+    if (wk > 0 && wk < 1) {
+      g.globalAlpha = .35 * (1 - wk);
+      g.fillStyle = '#8a6a52';
+      g.fillRect(0, hb - 2, W, 12);
+    }
+    const ra = rubyA(t);
+    if (ra > 0 && tex.ruby) {
+      g.globalAlpha = ra;
+      g.drawImage(tex.ruby, 0, 0, W, H);
+    }
+    g.globalAlpha = 1;
+    g.restore();
+  }
+
+  function computeHead(t) {
+    let mnT = Infinity, mxB = -Infinity, sB = 0;
+    for (let i = 0; i <= NH; i++) {
+      const x = i * W / NH;
+      HX[i] = x;
+      HT[i] = headTopAt(x, t);
+      HB[i] = headBotAt(x, t);
+      if (HT[i] < mnT) mnT = HT[i];
+      if (HB[i] > mxB) mxB = HB[i];
+      sB += HB[i];
+    }
+    head.minTop = mnT;
+    head.maxBot = mxB;
+    head.meanBot = sB / (NH + 1);
+  }
+
+  function curve(g, Y, dy, from) {
+    if (from) g.moveTo(HX[0], Y[0] + dy); else g.lineTo(HX[0], Y[0] + dy);
+    for (let i = 1; i <= NH; i++) g.lineTo(HX[i], Y[i] + dy);
+  }
+  function curveBack(g, Y, dy) {
+    for (let i = NH; i >= 0; i--) g.lineTo(HX[i], Y[i] + dy);
+  }
+
+  // De schuimkraag: dicht, romig, fijne belletjes; eerst zandkleurig, dan roomwit; licht bolletje op het eind.
+  function drawHead(g, t) {
+    // Zodra het glas vol is loopt het schuim door tot boven de schermrand (ook achter statusbalk en Dynamic Island):
+    // geen groene streep meer bovenin. De kromme HT blijft het oppervlak (meniscus, waar munten inslaan).
+    const ext = smooth(T_FILL * .8, T_FILL + .25, t);
+    const yA = head.minTop - ext * (head.minTop + 20) - 6, hgt = head.maxBot - yA + 6;
+    g.save();
+    g.beginPath();
+    if (ext > 0) {
+      g.moveTo(HX[0], HT[0] - ext * (HT[0] + 20));
+      for (let i = 1; i <= NH; i++) g.lineTo(HX[i], HT[i] - ext * (HT[i] + 20));
+    } else curve(g, HT, 0, true);
+    curveBack(g, HB, 0);
+    g.closePath();
+    g.clip();
+    g.globalAlpha = 1;
+    g.fillStyle = '#ede2cc';
+    g.fillRect(0, yA, W, hgt);
+    if (tex.foam) {
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      const dy = Math.floor(yA * FX);
+      for (let x = 0; x < fxCv.width; x += tex.foam.width) g.drawImage(tex.foam, x, dy);
+      g.setTransform(FX, 0, 0, FX, 0, 0);
+    }
+    if (ext > 0) {
+      // het bovenvlak van de kraag (achter de meniscus): iets lichter, van boven belicht
+      g.globalAlpha = .18 * ext;
+      g.fillStyle = '#fffcf4';
+      g.beginPath();
+      g.moveTo(0, yA);
+      g.lineTo(W, yA);
+      curveBack(g, HT, 0);
+      g.closePath();
+      g.fill();
+      g.globalAlpha = 1;
+    }
+    const tt = tanTint(t);
+    if (tt > .01) {
+      g.globalAlpha = tt;
+      g.fillStyle = '#b8936e';
+      g.fillRect(0, yA, W, hgt);
+      g.globalAlpha = 1;
+    }
+    const wb = g.createLinearGradient(0, head.meanBot - 26, 0, head.meanBot + 3);
+    wb.addColorStop(0, 'rgba(214,196,166,0)');
+    wb.addColorStop(1, 'rgba(196,172,136,.92)');
+    g.fillStyle = wb;
+    g.fillRect(0, head.meanBot - 26, W, 36);
+    // schaduwlintje onder de lip, langs het glas
+    g.fillStyle = 'rgba(179,156,126,.35)';
+    g.fillRect(0, yA, 3, hgt);
+    g.fillRect(W - 3, yA, 3, hgt);
+    g.restore();
+
+    // overgang schuim → bier
+    const thick = 16 + 14 * (tt / .55);
+    g.beginPath();
+    curve(g, HB, -1, true);
+    curveBack(g, HB, thick);
+    g.closePath();
+    const ig = g.createLinearGradient(0, head.meanBot - 1, 0, head.meanBot + thick);
+    ig.addColorStop(0, 'rgba(164,133,102,.95)');
+    ig.addColorStop(.35, 'rgba(94,67,50,.7)');
+    ig.addColorStop(1, 'rgba(40,24,16,0)');
+    g.fillStyle = ig;
+    g.fill();
+    g.lineJoin = 'round';
+    g.beginPath();
+    curve(g, HB, 0, true);
+    g.strokeStyle = 'rgba(255,255,255,.22)';
+    g.lineWidth = 1;
+    g.stroke();
+    // meniscus bovenop
+    const hl = t < 4.6 * K ? .4 : .4 + .35 * smooth(4.6 * K, 5.2 * K, t);
+    g.beginPath();
+    curve(g, HT, .6, true);
+    g.strokeStyle = `rgba(255,253,247,${hl})`;
+    g.lineWidth = 1.5;
+    g.stroke();
+  }
+
+  const frameOf = phi => ((Math.round(phi / TAU * 24) % 24) + 24) % 24;
+
+  function drawCoin(g, c, a, wet) {
+    const f = frameOf(c.phi), cell = tex.coinCell, cs = cell / FX;
+    const co = Math.cos(c.rot) * FX, si = Math.sin(c.rot) * FX;
+    g.setTransform(co, si, -si, co, c.x * FX, c.y * FX);
+    if (wet > 0) {
+      g.globalAlpha = a;
+      g.drawImage(tex.coins, f * cell, cell, cell, cell, -cs / 2, -cs / 2, cs, cs);
+    }
+    if (wet < 1) {
+      g.globalAlpha = a * (1 - wet);
+      g.drawImage(tex.coins, f * cell, 0, cell, cell, -cs / 2, -cs / 2, cs, cs);
+    }
+    g.globalAlpha = 1;
+    g.setTransform(FX, 0, 0, FX, 0, 0);
+  }
+
+  function footprint(p, x, half) {
+    const b0 = Math.max(0, Math.floor((x - half) / 3)), b1 = Math.min(p.heights.length - 1, Math.ceil((x + half) / 3));
+    const mid = Math.floor(x / 3);
+    let mx = 0, hl = 0, nl = 0, hr = 0, nr = 0;
+    for (let b = b0; b <= b1; b++) {
+      const h = p.heights[b];
+      if (h > mx) mx = h;
+      if (b <= mid) { hl += h; nl++; } else { hr += h; nr++; }
+    }
+    return [nl ? hl / nl : 0, nr ? hr / nr : 0, mx, b0, b1];
+  }
+
+  // Munt komt tot rust op de hoop: liggend of schuin, helling volgt de hoop, wordt in de stapel 'gestempeld'.
+  function restCoin(p, c) {
+    const r = tex.coinR, T = tex.coinT, half = .9 * r;
+    const ri = Math.random() < .7 ? randFast(5) : 5 + randFast(3);
+    const phi = REST_DEG[ri] * Math.PI / 180;
+    let x = Math.max(r, Math.min(W - r, c.x));
+    let fp = footprint(p, x, half);
+    let slope = (fp[0] - fp[1]) / (1.8 * r);
+    if (Math.abs(slope) > .35) {
+      x = Math.max(r, Math.min(W - r, x + Math.sign(slope) * .5 * r));   // glijdt een stukje naar beneden
+      fp = footprint(p, x, half);
+      slope = (fp[0] - fp[1]) / (1.8 * r);
+    }
+    const ang = Math.max(-.35, Math.min(.35, Math.atan(slope)));
+    const ry = r * Math.cos(phi), d = T * Math.sin(phi);
+    const base = fp[2];
+    const cy = H - base - ry - d / 2 + 1.5;
+    // stempelen: schaduw, dan de munt
+    const g = pileCtx, cell = tex.coinCell, cs = cell / FX;
+    g.setTransform(FX, 0, 0, FX, 0, -pileY0 * FX);
+    g.globalAlpha = .6;
+    g.drawImage(tex.coinShadow, x - 1.15 * r, cy + ry + d / 2 - .3 * r, 2.3 * r, .7 * r);
+    g.globalAlpha = 1;
+    const co = Math.cos(ang) * FX, si = Math.sin(ang) * FX;
+    g.setTransform(co, si, -si, co, x * FX, (cy - pileY0) * FX);
+    g.drawImage(tex.coins, ri * cell, cell * 2, cell, cell, -cs / 2, -cs / 2, cs, cs);
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    const add = (2 * ry + d) * .5;
+    const cap = H * .19;
+    for (let b = fp[3]; b <= fp[4]; b++) {
+      const dx = (b * 3 + 1.5 - x) / half;
+      const prof = Math.sqrt(Math.max(0, 1 - dx * dx));
+      p.heights[b] = Math.min(cap, Math.max(p.heights[b], base + add * (.3 + .7 * prof)));
+    }
+    p.tops.push({ x: x - .3 * r, y: cy - ry * .6 });
+    if (p.tops.length > 60) p.tops.shift();
+    c.st = 4;
+  }
+  const randFast = n => Math.floor(Math.random() * n);   // alleen voor decor, niet voor de uitslag
+
+  function splash(p, x, y, t) {
+    for (let i = 0; i < 8 && p.drops.length < 120; i++) {
+      const a = -Math.PI / 2 + (Math.random() * 2 - 1) * 55 * Math.PI / 180;
+      const s = 220 + 260 * Math.random();
+      p.drops.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 1.5 + 2 * Math.random(), t0: t });
+    }
+    if (p.dents.length < 30) p.dents.push({ x, y, t0: t });
+  }
+
+  function stepCoins(p, t, h) {
+    const r = tex.coinR, T = tex.coinT;
+    for (let i = 0; i < p.coins.length; i++) {
+      const c = p.coins[i];
+      if (c.st === 0) { if (t >= c.t0) c.st = 1; else continue; }
+      if (c.st >= 4) continue;
+      if (c.st === 1) {                                   // lucht
+        c.vy += G * h;
+        c.y += c.vy * h;
+        c.phi += c.w * h;
+        c.rot += c.wr * h;
+        const top = headTopAt(c.x, t);
+        if (c.y + r * .3 >= top) { c.st = 2; c.vy *= .35; splash(p, c.x, top, t); }
+      } else if (c.st === 2) {                            // door het schuim
+        c.vy = c.vy * Math.exp(-7 * h) + G * h;
+        c.y += c.vy * h;
+        c.phi += c.w * .5 * h;
+        c.rot += c.wr * .3 * h;
+        if (c.y >= headBotAt(c.x, t)) { c.st = 3; c.wetY = c.y; }
+      } else {                                            // zakt door de stout, dwarrelt als een blaadje
+        c.vy += (420 - c.vy) * (1 - Math.exp(-4 * h));
+        c.y += c.vy * h;
+        c.w += ((c.w < 0 ? -2 : 2) - c.w) * (1 - Math.exp(-2 * h));
+        c.phi += c.w * h;
+        c.rot *= Math.exp(-1.5 * h);
+        c.wob += 7 * h;
+        c.x = Math.max(r, Math.min(W - r, c.x + 70 * Math.cos(c.wob) * h));
+        c.trail += h;
+        if (c.trail > .05) {
+          c.trail = 0;
+          if (p.trails.length < 90) p.trails.push({ x: c.x + (Math.random() - .5) * r, y: c.y - r * .3, t0: t });
+        }
+        if (Math.cos(c.phi - .5) > .97 && t - c.spark > .3 && p.sparks.length < 40) {
+          c.spark = t;
+          p.sparks.push({ x: c.x - .45 * r, y: c.y - .3 * r * Math.abs(Math.cos(c.phi)), t0: t, s: .6 + .4 * Math.random() });
+        }
+        const fp = footprint(p, c.x, .9 * r);
+        const ground = H - fp[2];
+        const bottom = c.y + r * Math.abs(Math.cos(c.phi)) * .9 + T * .5;
+        if (bottom >= ground) {
+          if (!c.bounced) { c.bounced = true; c.vy = -.25 * c.vy; c.y -= bottom - ground; }
+          else restCoin(p, c);
+        }
+      }
+    }
+  }
+
+  function stepPour(p, t, dt) {
+    p.acc += dt;
+    const h = 1 / 120;
+    let n = 0;
+    while (p.acc >= h && n < 30) { stepCoins(p, t, h); p.acc -= h; n++; }
+    if (n >= 30) p.acc = 0;
+    for (let i = 0; i < p.drops.length; i++) {
+      const d = p.drops[i];
+      d.vy += G * dt;
+      d.x += d.vx * dt;
+      d.y += d.vy * dt;
+    }
+    p.drops = p.drops.filter(d => t - d.t0 < .45);
+    p.dents = p.dents.filter(d => t - d.t0 < .7);
+    p.trails = p.trails.filter(d => t - d.t0 < .6);
+    p.sparks = p.sparks.filter(d => t - d.t0 < .25);
+  }
+
+  function drawFx(p, t) {
+    const g = fctx, th = Math.min(t, T_END), r = tex.coinR;
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalAlpha = 1;
+    g.globalCompositeOperation = 'source-over';
+    g.clearRect(0, 0, fxCv.width, fxCv.height);
+    if (p.tops.length) g.drawImage(pileCv, 0, Math.round(pileY0 * FX));   // lege hoop niet elk frame kopiëren
+    g.setTransform(FX, 0, 0, FX, 0, 0);
+    computeHead(th);
+    // munten in het bier (onder de kraag)
+    for (let i = 0; i < p.coins.length; i++) {
+      const c = p.coins[i];
+      if (c.st === 3) drawCoin(g, c, 1, clamp((c.y - c.wetY) / 60));
+    }
+    if (p.trails.length && tex.dot) {
+      for (let i = 0; i < p.trails.length; i++) {
+        const d = p.trails[i], k = (t - d.t0) / .6;
+        g.globalAlpha = .55 * (1 - k);
+        g.drawImage(tex.dot, d.x - 1.2, d.y - 60 * (t - d.t0) - 1.2, 2.4, 2.4);
+      }
+      g.globalAlpha = 1;
+    }
+    drawHead(g, th);
+    // waar de straal de kraag in gaat: een donker kuiltje en een roomkringetje
+    const sa = 1 - smooth(T_STREAM, T_STREAM + .2, t);
+    if (sa > 0 && !p.instant) {
+      const sx = streamX(t), sy = headTopAt(sx, th), sw = streamW(sy);
+      g.globalAlpha = .55 * sa;
+      g.fillStyle = 'rgb(58,36,24)';
+      g.beginPath();
+      g.ellipse(sx, sy + 2.5, sw * .95, 3.2, 0, 0, TAU);
+      g.fill();
+      const ph = (t * 7) % 1;
+      g.globalAlpha = .6 * sa * (1 - ph);
+      g.strokeStyle = '#fffaf0';
+      g.lineWidth = 1.4;
+      g.beginPath();
+      g.ellipse(sx, sy + 2, sw * .9 + 2 + 10 * ph, 2.6 + 2.2 * ph, 0, 0, TAU);
+      g.stroke();
+      g.globalAlpha = 1;
+    }
+    // deukjes en rimpels in het schuim waar een munt erin plonst
+    for (let i = 0; i < p.dents.length; i++) {
+      const d = p.dents[i], k = (t - d.t0) / .7;
+      g.globalAlpha = .35 * (1 - k);
+      g.fillStyle = 'rgb(110,85,62)';
+      g.beginPath();
+      g.ellipse(d.x, d.y + 3, 1.6 * r * (1 - .5 * k) / 2 + .1, .5 * r * (1 - k) / 2 + .1, 0, 0, TAU);
+      g.fill();
+      const k4 = (t - d.t0) / .4;
+      if (k4 < 1) {
+        g.globalAlpha = .4 * (1 - k4);
+        g.strokeStyle = 'rgba(255,252,242,1)';
+        g.lineWidth = 1.2;
+        g.beginPath();
+        g.ellipse(d.x, d.y + 3, 3 * r * k4 + .1, r * k4 * .7 + .1, 0, 0, TAU);
+        g.stroke();
+      }
+    }
+    g.globalAlpha = 1;
+    // munten in de lucht en in het schuim (zakken zichtbaar weg in de room)
+    for (let i = 0; i < p.coins.length; i++) {
+      const c = p.coins[i];
+      if (c.st === 1) drawCoin(g, c, 1, 0);
+      else if (c.st === 2) {
+        const tp = headTopAt(c.x, th), bt = headBotAt(c.x, th);
+        drawCoin(g, c, 1 - .7 * clamp((c.y - tp) / Math.max(1, bt - tp)), 0);
+      }
+    }
+    if (tex.dot) {
+      for (let i = 0; i < p.drops.length; i++) {
+        const d = p.drops[i], k = (t - d.t0) / .45;
+        g.globalAlpha = 1 - k;
+        g.drawImage(tex.dot, d.x - d.r, d.y - d.r, 2 * d.r, 2 * d.r);
+      }
+    }
+    if (p.sparks.length && tex.sparkle) {
+      g.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < p.sparks.length; i++) {
+        const s = p.sparks[i], k = (t - s.t0) / .25;
+        const sz = 22 * s.s * Math.sin(Math.PI * k);
+        g.globalAlpha = .9 * (1 - k * k);
+        g.drawImage(tex.sparkle, s.x - sz / 2, s.y - sz / 2, sz, sz);
+      }
+      g.globalCompositeOperation = 'source-over';
+    }
+    g.globalAlpha = 1;
+  }
+
+  function pourSettled(p) {
+    if (p.drops.length || p.dents.length || p.trails.length || p.sparks.length) return false;
+    for (let i = 0; i < p.coins.length; i++) if (p.coins[i].st < 4) return false;
+    return true;
+  }
+
+  function renderPour(now, elapsed) {
+    const p = pour;
+    const t = p.instant ? 99 : (now - p.at) / 1000;
+    const dt = Math.min(.05, Math.max(0, elapsed));
+    if (!p.instant && !p.q.done) {          // te traag? dan lichtere versie
+      p.q.n++;
+      if (p.q.n > 10) p.q.sum += elapsed;
+      if (p.q.n >= 40) { p.q.done = true; if (p.q.sum / 30 > .018) p.q.low = true; }
+    }
+    if (!p.poured && t > 1.4 * K) { p.poured = true; stage.classList.add('poured'); }
+    if (!p.shown && t >= 3.3 * K) { p.shown = true; reveal.classList.add('show'); }    // front halverwege: tekst
+    if (!p.ready && t >= 4.8 * K) { p.ready = true; reveal.classList.add('ready'); }   // bier staat: "opnieuw"
+    if (!p.liquidDone) {
+      drawLiquid(p, Math.min(t, T_END), dt);
+      if (t >= T_END) p.liquidDone = true;   // daarna blijft het laatste beeld gewoon staan
+    }
+    if (!p.instant) stepPour(p, t, dt);
+    if (!p.fxStatic) {
+      drawFx(p, t);
+      if (t >= T_END && pourSettled(p)) p.fxStatic = true;
+    }
+  }
+
+  // Na het tappen: af en toe een fonkeling op de muntenhoop.
+  function drawShimmer(now) {
+    const p = pour;
+    if (!p || reduced || !p.tops.length || !tex.sparkle) return;
+    if (!p.instant && (now - p.at) / 1000 < T_END) return;
+    if (now >= p.nextShimmer) {
+      p.nextShimmer = now + 280 + Math.random() * 380;
+      const tp = p.tops[randFast(p.tops.length)];
+      p.shim.push({ x: tp.x, y: tp.y, t0: now });
+    }
+    p.shim = p.shim.filter(s => now - s.t0 < 350);
+    if (!p.shim.length) return;
+    ctx.globalCompositeOperation = 'lighter';
+    p.shim.forEach(s => {
+      const k = (now - s.t0) / 350;
+      const sz = 20 * easeOutBack(Math.min(1, k * 2)) * (1 - k * .5);
+      ctx.globalAlpha = .9 * (1 - k * k);
+      ctx.drawImage(tex.sparkle, s.x - sz / 2, s.y - sz / 2, sz, sz);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+  }
+
+  // ---------- Markers: glanzend klavertje met glazen nummerschijfje ----------
+  const fontCache = new Map();
+  const numFont = px => {
+    const k = Math.max(1, Math.round(px));
+    let f = fontCache.get(k);
+    if (!f) {
+      f = `700 ${k}px ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, Inter, system-ui, sans-serif`;
+      fontCache.set(k, f);
+    }
+    return f;
+  };
+  const discRim = ctx.createLinearGradient(0, -1, 0, 1);
+  discRim.addColorStop(0, 'rgba(255,255,255,.9)');
+  discRim.addColorStop(.45, 'rgba(255,255,255,.16)');
+  discRim.addColorStop(.8, 'rgba(255,255,255,.06)');
+  discRim.addColorStop(1, 'rgba(255,255,255,.4)');
+
+  // label = spelernummer in het hart van het klavertje; ring = teamring (0..1)
+  function clover(x, y, paint, s, a, label, rot, ring) {
     if (a <= 0 || s <= 0) return;
-    const [r, g, b] = paint.rgb;
     const rad = R * s;
     ctx.save();
     ctx.globalAlpha = a;
-    const glow = ctx.createRadialGradient(x, y, rad * .4, x, y, rad * 2.2);
-    glow.addColorStop(0, `rgba(${r},${g},${b},.32)`);
-    glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
-    ctx.fillStyle = glow;
-    ctx.beginPath(); ctx.arc(x, y, rad * 2.2, 0, TAU); ctx.fill();
-
+    if (tex.cloverShadow) ctx.drawImage(tex.cloverShadow, x - rad * 1.55, y - rad * 1.55 + rad * .22, rad * 3.1, rad * 3.1);
+    if (ring) {
+      const rr = rad * 1.36;
+      ctx.globalAlpha = a * ring;
+      ctx.lineWidth = 8.5;
+      ctx.strokeStyle = 'rgba(0,10,5,.45)';
+      ctx.beginPath(); ctx.arc(x, y, rr, 0, TAU); ctx.stroke();
+      ctx.lineWidth = 4.5;
+      ctx.strokeStyle = paint.hex;
+      ctx.stroke();
+      ctx.lineWidth = 1.1;
+      ctx.strokeStyle = 'rgba(255,255,255,.6)';
+      ctx.beginPath(); ctx.arc(x, y, rr - .9, Math.PI * 1.05, Math.PI * 1.75); ctx.stroke();
+      ctx.globalAlpha = a;
+    }
     ctx.translate(x, y);
     ctx.save();
     ctx.rotate(rot || 0);
-    // steeltje, tussen de twee onderste blaadjes door
+    // steeltje
     ctx.strokeStyle = paint.dark;
-    ctx.lineWidth = rad * .11;
+    ctx.lineWidth = rad * .1;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(0, rad * .2);
-    ctx.quadraticCurveTo(rad * .02, rad * .85, rad * .32, rad * 1.32);
+    ctx.quadraticCurveTo(rad * .02, rad * .85, rad * .3, rad * 1.3);
     ctx.stroke();
     if (!paint.grad) {
-      paint.grad = ctx.createRadialGradient(0, -.6, .04, 0, -.52, .74);
+      paint.grad = ctx.createRadialGradient(-.12, -.8, .02, 0, -.5, .82);
       paint.grad.addColorStop(0, paint.light);
-      paint.grad.addColorStop(.55, paint.hex);
+      paint.grad.addColorStop(.5, paint.hex);
       paint.grad.addColorStop(1, paint.dark);
     }
     const len = rad * 1.08;
@@ -932,257 +2845,53 @@
       ctx.scale(len, len);
       ctx.fillStyle = paint.grad;
       ctx.fill(LEAF);
-      ctx.strokeStyle = paint.dark;
-      ctx.lineWidth = .035;
+      ctx.strokeStyle = paint.deep;
+      ctx.lineWidth = .028;
       ctx.stroke(LEAF);
-      ctx.globalAlpha = a * .5;                 // nerf
+      ctx.fillStyle = 'rgba(255,255,255,.45)';
+      ctx.fill(LEAF_HI);
+      ctx.globalAlpha = a * .45;                 // nerf
       ctx.strokeStyle = paint.light;
-      ctx.lineWidth = .03;
-      ctx.beginPath(); ctx.moveTo(0, -.2); ctx.lineTo(0, -.72); ctx.stroke();
+      ctx.lineWidth = .025;
+      ctx.beginPath(); ctx.moveTo(0, -.24); ctx.lineTo(0, -.7); ctx.stroke();
       ctx.globalAlpha = a;
       ctx.restore();
     }
     ctx.restore();
 
-    // hart met nummer, altijd rechtop
-    ctx.fillStyle = 'rgba(5,20,13,.92)';
-    ctx.beginPath(); ctx.arc(0, 0, rad * .47, 0, TAU); ctx.fill();
-    ctx.strokeStyle = paint.light;
-    ctx.lineWidth = rad * .055;
-    ctx.stroke();
+    // glazen schijfje met het nummer, altijd rechtop
+    const dr = rad * .47;
+    ctx.save();
+    ctx.scale(dr, dr);
+    ctx.fillStyle = 'rgba(3,20,11,.76)';
+    ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.12)';
+    ctx.beginPath(); ctx.ellipse(0, -.43, .72, .42, 0, 0, TAU); ctx.fill();
+    ctx.lineWidth = .085;
+    ctx.strokeStyle = discRim;
+    ctx.beginPath(); ctx.arc(0, 0, .955, 0, TAU); ctx.stroke();
+    ctx.restore();
     if (label != null) {
-      ctx.fillStyle = paint.num;
-      ctx.font = numFont(rad * (label > 9 ? .5 : .66));
+      ctx.fillStyle = '#fff';
+      ctx.font = numFont(rad * (label > 9 ? .48 : .6));
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(label), 0, rad * .035);
+      ctx.fillText(String(label), 0, rad * .03);
     }
     ctx.restore();
   }
 
+  // Aftelring in Apple-stijl: donkere halo, glazen spoor, witte voortgang.
   function countdown(x, y, rad, p) {
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(233,185,73,.2)';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 7.5;
+    ctx.strokeStyle = 'rgba(0,14,8,.35)';
     ctx.beginPath(); ctx.arc(x, y, rad, 0, TAU); ctx.stroke();
-    ctx.strokeStyle = 'rgba(246,226,160,.95)';
-    ctx.lineCap = 'round';
+    ctx.lineWidth = 3.5;
+    ctx.strokeStyle = 'rgba(255,255,255,.2)';
+    ctx.stroke();
+    ctx.strokeStyle = '#fff';
     ctx.beginPath(); ctx.arc(x, y, rad, -Math.PI / 2, -Math.PI / 2 + TAU * p); ctx.stroke();
-    ctx.lineCap = 'butt';
-  }
-
-  // ---------- Het glas loopt vol: stout, schuimkraag en gouden munten ----------
-  function coinSprite(r) {
-    const pad = 1;
-    const cv = document.createElement('canvas');
-    cv.width = cv.height = Math.ceil((2 * r + 2 * pad) * DPR);
-    const g = cv.getContext('2d');
-    g.scale(DPR, DPR);
-    g.translate(r + pad, r + pad);
-    const face = g.createRadialGradient(-r * .3, -r * .35, r * .1, 0, 0, r);
-    face.addColorStop(0, '#fff6c9');
-    face.addColorStop(.45, '#f4c752');
-    face.addColorStop(1, '#c28a1a');
-    g.fillStyle = face;
-    g.beginPath(); g.arc(0, 0, r - .5, 0, TAU); g.fill();
-    g.strokeStyle = '#8f6410';
-    g.lineWidth = Math.max(1, r * .09);
-    g.stroke();
-    g.strokeStyle = 'rgba(143,100,16,.6)';
-    g.lineWidth = Math.max(1, r * .06);
-    g.beginPath(); g.arc(0, 0, r * .72, 0, TAU); g.stroke();
-    g.fillStyle = 'rgba(143,100,16,.55)';          // klavertje in reliëf
-    for (let i = 0; i < 4; i++) {
-      const a = Math.PI / 4 + i * Math.PI / 2;
-      g.beginPath(); g.arc(Math.cos(a) * r * .24, Math.sin(a) * r * .24, r * .19, 0, TAU); g.fill();
-    }
-    g.strokeStyle = 'rgba(255,255,255,.6)';
-    g.lineWidth = Math.max(1, r * .07);
-    g.lineCap = 'round';
-    g.beginPath(); g.arc(0, 0, r * .84, Math.PI * 1.08, Math.PI * 1.5); g.stroke();
-    return cv;
-  }
-
-  function makeBeer(at, instant) {
-    const r = Math.max(13, Math.min(24, Math.min(W, H) * .045));
-    const cw = r * 1.1;
-    const cols = Math.max(1, Math.ceil(W / cw));
-    const n = Math.max(60, Math.min(140, Math.round(W * H / 3800)));
-    const coins = [];
-    for (let i = 0; i < n; i++) {
-      coins.push({
-        x: r + Math.random() * Math.max(1, W - 2 * r),
-        y: -r - Math.random() * H * .25,
-        vy: 120 + Math.random() * 260,
-        t0: 250 + (i / n) * 2300 + Math.random() * 200,   // ms na de start
-        phi: Math.random() * TAU,
-        w: (4 + Math.random() * 6) * (Math.random() < .5 ? -1 : 1),
-        tilt: (Math.random() - .5) * 1.2,
-        col: -1, tx: 0, done: false, sy: 1,
-        tw: Math.random() * TAU, glint: Math.random() < .3,
-      });
-    }
-    const bubbles = [];
-    for (let i = 0; i < 70; i++) bubbles.push({ x: Math.random(), y0: Math.random(), sp: 50 + Math.random() * 90, r: .8 + Math.random() * 1.6 });
-    const foamDots = [];
-    for (let i = 0; i < 46; i++) foamDots.push({ fx: Math.random(), fy: Math.random(), r: 1.5 + Math.random() * 4, light: Math.random() < .6 });
-    const b = { at, r, cw, cols, heap: new Float32Array(cols), coins, bubbles, foamDots, sprite: coinSprite(r) };
-    if (instant) coins.forEach(c => { aimCoin(b, c); c.x = c.tx; settleCoin(b, c); });
-    return b;
-  }
-
-  const colAt = (b, x) => Math.max(0, Math.min(b.cols - 1, Math.floor(x / b.cw)));
-
-  // Een munt rolt naar de laagste plek vlak naast zich, zodat er een hoop ontstaat en geen torens.
-  function aimCoin(b, c) {
-    const ci = colAt(b, c.x);
-    let best = ci;
-    [ci - 1, ci + 1].forEach(k => { if (k >= 0 && k < b.cols && b.heap[k] < b.heap[best] - b.r * .4) best = k; });
-    c.col = best;
-    c.tx = Math.max(b.r * .8, Math.min(W - b.r * .8, (best + .5) * b.cw + (Math.random() - .5) * b.cw * .5));
-  }
-
-  function settleCoin(b, c) {
-    c.y = H - b.heap[c.col] - b.r * .6;
-    c.done = true;
-    c.sy = .58 + Math.random() * .4;
-    c.tilt = (Math.random() - .5) * .9;
-    b.heap[c.col] += b.r * .9;
-    if (c.col > 0) b.heap[c.col - 1] += b.r * .35;
-    if (c.col < b.cols - 1) b.heap[c.col + 1] += b.r * .35;
-  }
-
-  function beerLevel(now) {
-    const age = now - beer.at;
-    const k = reduced ? 1 : easeInOutCubic(clamp((age - 80) / 1700));
-    const headH = Math.max(56, H * .115);
-    const yTop = (H + 30) - (H + 54) * k;          // bovenkant schuim; eindigt net buiten beeld
-    const foamT = 14 + (headH + 10) * k;           // dikte van de schuimkraag
-    return { age, k, yTop, foamT, bnd: yTop + foamT };
-  }
-
-  function drawBeer(lv) {
-    const t = reduced ? 0 : lv.age;
-    const slosh = 1 - lv.k;
-    const topAt = x => lv.yTop + slosh * (8 * Math.sin(x * .017 + t * .005) + 5 * Math.sin(x * .043 - t * .0034));
-    const bndAt = x => lv.bnd + 4 * Math.sin(x * .014 + t * .0011) + 2.5 * Math.sin(x * .035 - t * .0016) + slosh * 6 * Math.sin(x * .02 + t * .004);
-
-    // de stout: bijna zwart, met een robijnrode gloed onder de kraag
-    const body = new Path2D();
-    body.moveTo(0, bndAt(0));
-    for (let x = 14; x <= W + 14; x += 14) body.lineTo(x, bndAt(x));
-    body.lineTo(W + 14, H + 2);
-    body.lineTo(0, H + 2);
-    body.closePath();
-    const dark = ctx.createLinearGradient(0, lv.bnd, 0, Math.max(lv.bnd + 1, H));
-    dark.addColorStop(0, '#24100b');
-    dark.addColorStop(.25, '#120806');
-    dark.addColorStop(1, '#060303');
-    ctx.fillStyle = dark;
-    ctx.fill(body);
-
-    ctx.save();
-    ctx.clip(body);
-    // de "surge": vers getapt is het bier bruin en wolkt het omlaag; het zwart kruipt van onderaf omhoog
-    const s = reduced ? 1 : clamp((lv.age - 500) / 4500);
-    if (s < 1) {
-      const ySettle = H - (H - lv.bnd) * (s * s * (3 - 2 * s));
-      const a0 = .92 * (1 - s * .35);
-      const tan = ctx.createLinearGradient(0, lv.bnd, 0, Math.max(lv.bnd + 1, ySettle));
-      tan.addColorStop(0, `rgba(198,154,100,${a0})`);
-      tan.addColorStop(.55, `rgba(132,90,50,${a0 * .85})`);
-      tan.addColorStop(1, 'rgba(40,22,12,0)');
-      ctx.fillStyle = tan;
-      ctx.fillRect(0, lv.bnd - 12, W, Math.max(0, ySettle - lv.bnd) + 12);
-      const span = Math.max(1, ySettle - lv.bnd);
-      ctx.fillStyle = `rgba(238,210,165,${.55 * (1 - s)})`;
-      beer.bubbles.forEach(bub => {
-        const y = lv.bnd + ((bub.y0 * span + lv.age * .001 * bub.sp) % span);
-        ctx.beginPath(); ctx.arc(bub.x * W, y, bub.r, 0, TAU); ctx.fill();
-      });
-    }
-    const cream = ctx.createLinearGradient(0, lv.bnd, 0, lv.bnd + 30);
-    cream.addColorStop(0, 'rgba(233,213,168,.5)');
-    cream.addColorStop(1, 'rgba(233,213,168,0)');
-    ctx.fillStyle = cream;
-    ctx.fillRect(0, lv.bnd - 10, W, 42);
-    ctx.restore();
-
-    // de schuimkraag
-    const foam = new Path2D();
-    foam.moveTo(0, topAt(0));
-    for (let x = 14; x <= W + 14; x += 14) foam.lineTo(x, topAt(x));
-    for (let x = W + 14; x >= 0; x -= 14) foam.lineTo(x, bndAt(x));
-    foam.closePath();
-    const head = ctx.createLinearGradient(0, lv.yTop, 0, lv.bnd);
-    head.addColorStop(0, '#fdf7e6');
-    head.addColorStop(1, '#ecd9ae');
-    ctx.fillStyle = head;
-    ctx.fill(foam);
-    if (lv.foamT > 24) {
-      beer.foamDots.forEach(d => {
-        const x = d.fx * W;
-        ctx.fillStyle = d.light ? 'rgba(255,255,255,.42)' : 'rgba(190,160,110,.2)';
-        ctx.beginPath(); ctx.arc(x, topAt(x) + 8 + d.fy * (lv.foamT - 18), d.r, 0, TAU); ctx.fill();
-      });
-    }
-  }
-
-  // Haal gemiste tijd in kleine stapjes in (hapering, scherm even uit), zodat munten niet door de hoop schieten.
-  function runCoins(elapsed, lv) {
-    let left = Math.min(3, elapsed);
-    while (left > 0) {
-      const dt = Math.min(1 / 60, left);
-      stepCoins(dt, lv);
-      left -= dt;
-    }
-  }
-
-  function stepCoins(dt, lv) {
-    const b = beer;
-    b.coins.forEach(c => {
-      if (c.done || lv.age < c.t0) return;
-      const wet = c.y > lv.bnd;
-      c.vy += 1500 * dt;
-      if (wet && c.vy > 460) c.vy += (460 - c.vy) * Math.min(1, dt * 6);   // in het bier zakt een munt trager
-      c.y += c.vy * dt;
-      c.phi += c.w * dt * (wet ? .55 : 1);
-      if (c.col < 0 && c.y >= H - b.heap[colAt(b, c.x)] - b.r * 2.6) aimCoin(b, c);
-      if (c.col >= 0) {
-        c.x += (c.tx - c.x) * Math.min(1, dt * 10);
-        if (c.y >= H - b.heap[c.col] - b.r * .6) settleCoin(b, c);
-      }
-    });
-  }
-
-  function drawCoins(now, lv) {
-    const b = beer;
-    const r = b.r;
-    b.coins.forEach(c => {
-      if (!c.done && lv.age < c.t0) return;
-      ctx.save();
-      ctx.translate(c.x, c.y);
-      ctx.rotate(c.tilt);
-      if (c.done) ctx.scale(1, c.sy);
-      else ctx.scale(Math.max(.14, Math.abs(Math.cos(c.phi))), 1);
-      ctx.drawImage(b.sprite, -r - 1, -r - 1, 2 * r + 2, 2 * r + 2);
-      ctx.restore();
-    });
-    if (reduced) return;
-    ctx.strokeStyle = '#fffbe6';
-    ctx.lineWidth = 1.5;
-    ctx.lineCap = 'round';
-    b.coins.forEach(c => {
-      if (!c.done || !c.glint) return;
-      const a = Math.pow(Math.max(0, Math.sin(now * .003 + c.tw)), 10);
-      if (a < .03) return;
-      const gx = c.x - r * .3, gy = c.y - r * .3 * c.sy, len = r * .55 * a;
-      ctx.globalAlpha = a;
-      ctx.beginPath();
-      ctx.moveTo(gx - len, gy); ctx.lineTo(gx + len, gy);
-      ctx.moveTo(gx, gy - len); ctx.lineTo(gx, gy + len);
-      ctx.stroke();
-    });
-    ctx.globalAlpha = 1;
     ctx.lineCap = 'butt';
   }
 
@@ -1190,48 +2899,190 @@
     const age = now - winner.at;
     const { x, y } = winner;
     if (!reduced) {
-      ctx.strokeStyle = GOLD.light;
+      ctx.strokeStyle = '#ffe7a3';
+      ctx.lineWidth = 2;
       for (let i = 0; i < 3; i++) {
         const p = (age / 1800 + i / 3) % 1;
-        ctx.globalAlpha = (1 - p) * .38;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath(); ctx.arc(x, y, R * (1.35 + p * 2.4), 0, TAU); ctx.stroke();
+        ctx.globalAlpha = (1 - p) * (1 - p) * .5;      // korter en sneller weg: niet door de tekst heen
+        ctx.beginPath(); ctx.arc(x, y, R * (1.4 + p * 1.7), 0, TAU); ctx.stroke();
       }
       ctx.globalAlpha = 1;
     }
     const pop = reduced ? 1 : easeOutBack(clamp(age / 420));
     const pulse = reduced ? 1 : 1 + .05 * Math.sin(age / 200);
     const sway = reduced ? 0 : .07 * Math.sin(age / 520);
-    clover(x, y, GOLD, (.9 + .25 * pop) * pulse, 1, winner.num, winner.rot + sway);
+    clover(x, y, GOLD, (.9 + .25 * pop) * pulse, 1, winner.num, winner.rot + sway, 1);
+  }
+
+  // ---------- Teams: zachte gebieden, duidelijke lijnen, gekleurde ringen ----------
+  // Kortste verbindingen tussen teamgenoten (minimale opspannende boom): geen kruisende lijnen binnen een team.
+  function mstEdges(g) {
+    const n = g.length, used = new Array(n).fill(false), edges = [];
+    used[0] = true;
+    for (let k = 1; k < n; k++) {
+      let best = Infinity, a = -1, b = -1;
+      for (let i = 0; i < n; i++) {
+        if (!used[i]) continue;
+        for (let j = 0; j < n; j++) {
+          if (used[j]) continue;
+          const d = Math.hypot(g[i].x - g[j].x, g[i].y - g[j].y);
+          if (d < best) { best = d; a = i; b = j; }
+        }
+      }
+      used[b] = true;
+      edges.push([g[a], g[b]]);
+    }
+    return edges;
+  }
+
+  // Verbinding om andermans klavertjes heen buigen: per verbinding één kwadratische boog, naar de kant die het
+  // minst hoeft uit te wijken. (Afwijking van de boog op fractie s: 2·s·(1−s)·push.)
+  function routeEdges(gr, others) {
+    const clear = R * 1.75;
+    return mstEdges(gr).map(([a, b]) => {
+      const dx = b.x - a.x, dy = b.y - a.y, L2 = dx * dx + dy * dy, L = Math.sqrt(L2) || 1;
+      const nx = -dy / L, ny = dx / L;
+      let needP = 0, needN = 0, any = false;
+      for (const m of others) {
+        const s = L2 ? ((m.x - a.x) * dx + (m.y - a.y) * dy) / L2 : 0;
+        if (s <= .02 || s >= .98) continue;
+        const sd = (m.x - a.x) * nx + (m.y - a.y) * ny;
+        if (Math.abs(sd) >= clear) continue;
+        any = true;
+        const f = Math.max(.09, 2 * s * (1 - s));
+        // naar +n: een klavertje aan de +kant moet voorbij (sd + clear), aan de −kant is clear − |sd| genoeg;
+        // beide komen neer op clear + sd. Naar −n spiegelbeeldig: clear − sd.
+        needP = Math.max(needP, (clear + sd) / f);
+        needN = Math.max(needN, (clear - sd) / f);
+      }
+      if (!any) return { a, b, c: null };
+      const dir = needP <= needN ? 1 : -1;
+      const push = Math.min(dir > 0 ? needP : needN, L * 1.2) * dir;
+      return { a, b, c: { x: (a.x + b.x) / 2 + nx * push, y: (a.y + b.y) / 2 + ny * push } };
+    });
+  }
+
+  // Pad van alle verbindingen, tot fractie k getekend (een boog wordt via de Casteljau precies tot k gesplitst).
+  function edgePath(g, edges, k) {
+    for (const e of edges) {
+      const { a, b, c } = e;
+      g.moveTo(a.x, a.y);
+      if (!c) { g.lineTo(a.x + (b.x - a.x) * k, a.y + (b.y - a.y) * k); continue; }
+      const q0x = a.x + (c.x - a.x) * k, q0y = a.y + (c.y - a.y) * k;
+      const q1x = c.x + (b.x - c.x) * k, q1y = c.y + (b.y - c.y) * k;
+      g.quadraticCurveTo(q0x, q0y, q0x + (q1x - q0x) * k, q0y + (q1y - q0y) * k);
+    }
+  }
+
+  // Teamgebied = capsules langs de verbindingen + schijf (1,7R) om elke speler, met heldere rand;
+  // klavertjes van andere teams worden uitgespaard. Alleen opnieuw tekenen als er iemand verschuift.
+  function buildTeamLayout() {
+    const groups = [], others = [], routes = [];
+    for (let t = 0; t < teamCount; t++) {
+      groups.push(split.members.filter(m => m.team === t));
+      others.push(split.members.filter(m => m.team !== t));
+      routes.push(groups[t].length > 1 ? routeEdges(groups[t], others[t]) : []);
+    }
+    split.others = others;
+    split.routes = routes;
+    hctx.setTransform(1, 0, 0, 1, 0, 0);
+    hctx.clearRect(0, 0, hullCv.width, hullCv.height);
+    const wIn = R * 3.4, cut = R * 1.55;
+    groups.forEach((gr, t) => {
+      if (!gr.length) return;
+      const g = htx, team = TEAMS[t];
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.globalCompositeOperation = 'source-over';
+      g.clearRect(0, 0, hullTmp.width, hullTmp.height);
+      g.setTransform(HS, 0, 0, HS, 0, 0);
+      g.lineCap = 'round';
+      g.lineJoin = 'round';
+      g.beginPath();
+      gr.forEach(m => { g.moveTo(m.x, m.y); g.lineTo(m.x + .01, m.y); });
+      edgePath(g, routes[t], 1);
+      g.lineWidth = wIn + 3;                         // rand: 1,5px in de lichte teamkleur
+      g.strokeStyle = team.rim;
+      g.stroke();
+      g.globalCompositeOperation = 'destination-out';
+      g.lineWidth = wIn;
+      g.strokeStyle = '#000';
+      g.stroke();
+      g.globalCompositeOperation = 'source-over';
+      g.strokeStyle = team.fill;                     // vulling (alfa zit al in de kleur)
+      g.stroke();
+      if (others[t].length) {
+        g.beginPath();
+        others[t].forEach(m => { g.moveTo(m.x + cut, m.y); g.arc(m.x, m.y, cut, 0, TAU); });
+        g.globalCompositeOperation = 'destination-out';
+        g.fillStyle = '#000';
+        g.fill();
+        g.globalCompositeOperation = 'source-over';
+      }
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      hctx.drawImage(hullTmp, 0, 0);                 // los per team: overlap mengt, overschrijft niet
+    });
+  }
+
+  function layoutKey(members) {
+    let k = W * 7 + H * 13;
+    for (const m of members) k = (k * 31 + (m.x | 0) * 7 + (m.y | 0)) % 1000000007;
+    return k;
+  }
+
+  function teamLines(edges, team, others, now, k) {
+    ctx.save();
+    // Veiligheidsnet: lijnen stoppen bij de ring van elk klavertje dat niet bij het team hoort.
+    if (others.length) {
+      ctx.beginPath();
+      ctx.rect(0, 0, W, H);
+      const cr = R * 1.5;
+      others.forEach(m => { ctx.moveTo(m.x + cr, m.y); ctx.arc(m.x, m.y, cr, 0, TAU, true); });
+      ctx.clip('evenodd');
+    }
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    edgePath(ctx, edges, k);
+    ctx.lineWidth = team.halo;
+    ctx.strokeStyle = team.haloC;                  // halo: ook wit blijft zichtbaar
+    ctx.stroke();
+    ctx.lineWidth = 6.5;
+    ctx.strokeStyle = team.hex;
+    ctx.stroke();
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = 'rgba(255,255,255,.55)';    // glanzende kern
+    ctx.stroke();
+    if (!reduced) {
+      ctx.setLineDash([.001, 20]);
+      ctx.lineDashOffset = -now * .045;           // lichtpareltjes die over de lijn lopen
+      ctx.lineWidth = 4.5;
+      ctx.strokeStyle = team.bead;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.restore();
   }
 
   function drawSplit(now) {
     const age = now - split.at;
-    const k = reduced ? 1 : easeInOutCubic(clamp(age / 500));
-    // Teamgenoten met een lijn verbinden.
-    for (let t = 0; t < teamCount; t++) {
-      const group = split.members.filter(m => m.team === t);
-      if (group.length < 2) continue;
-      const cx = group.reduce((sum, m) => sum + m.x, 0) / group.length;
-      const cy = group.reduce((sum, m) => sum + m.y, 0) / group.length;
-      group.sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
-      const [r, g, b] = TEAMS[t].rgb;
-      ctx.strokeStyle = `rgba(${r},${g},${b},${.45 * k})`;
-      ctx.lineWidth = 4;
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      group.forEach((m, i) => (i ? ctx.lineTo(m.x, m.y) : ctx.moveTo(m.x, m.y)));
-      if (group.length > 2) ctx.closePath();
-      ctx.stroke();
+    const k = reduced ? 1 : easeInOutCubic(clamp(age / 600));
+    const key = layoutKey(split.members);
+    if (key !== split.key) { split.key = key; buildTeamLayout(); }
+    if (k > 0) {
+      ctx.globalAlpha = k;
+      ctx.drawImage(hullCv, 0, 0, W, H);
+      ctx.globalAlpha = 1;
     }
+    split.routes.forEach((edges, t) => { if (edges.length) teamLines(edges, TEAMS[t], split.others[t], now, k); });
     split.members.forEach((m, i) => {
       const pop = reduced ? 1 : easeOutBack(clamp(age / 380));
       const pulse = reduced ? 1 : 1 + .04 * Math.sin(age / 190 + i);
-      clover(m.x, m.y, TEAMS[m.team], (.85 + .25 * pop) * pulse, 1, m.num, m.rot);
+      clover(m.x, m.y, TEAMS[m.team], (.85 + .25 * pop) * pulse, 1, m.num, m.rot, k);
     });
   }
 
   let lastFrame = performance.now();
+  let boardDirty = true;
   function frame() {
     const now = performance.now();
     const elapsed = (now - lastFrame) / 1000;
@@ -1241,18 +3092,20 @@
     if (phase === 'gather' && fingers.size >= need && now - lastChange >= wait) startShuffle(now);
     if (phase === 'shuffle') stepShuffle(now);
 
-    ctx.clearRect(0, 0, W, H);
-
     ghosts = ghosts.filter(g => now - g.t0 < 240);
+    // Niets te tekenen (wachtscherm)? Dan het bord ook niet elk frame leegmaken.
+    const busy = fingers.size > 0 || ghosts.length > 0 || !!winner || !!split;
+    if (busy || boardDirty) ctx.clearRect(0, 0, W, H);
+    boardDirty = busy;
+    relayout(now);
+
     ghosts.forEach(g => { const k = (now - g.t0) / 240; clover(g.x, g.y, g.paint, 1 - k * .5, 1 - k, g.label, g.rot - k); });
 
     if (winner) {
       const fade = reduced ? 0 : clamp(1 - (now - winner.at) / 300);
       if (fade > 0) fingers.forEach(f => { if (f.id !== winner.id) clover(f.x, f.y, SHAMROCK, .6 + .4 * fade, fade, f.num, f.rot); });
-      const lv = beerLevel(now);
-      drawBeer(lv);
-      runCoins(elapsed, lv);
-      drawCoins(now, lv);
+      if (pour) renderPour(now, elapsed);
+      drawShimmer(now);
       winnerClover(now);
     } else if (split) {
       drawSplit(now);
@@ -1290,9 +3143,11 @@
     }, 400);
   }
 
-  // Het cijferlettertype alvast laden, zodat het canvas het vanaf het eerste klavertje gebruikt.
-  try { if (document.fonts && document.fonts.load) document.fonts.load('800 32px Cinzel'); } catch (_) {}
+  // Lettertype voor de cijfers alvast laden (Android/desktop); op iPhone is het systeemfont er al.
+  try { if (document.fonts && document.fonts.load) document.fonts.load('700 32px Inter').then(() => seg.place(true)); } catch (_) {}
 
+  buildMarkerSprites();
+  buildSprites();           // vonkjes, druppels, belletjes: hangen niet van het schermformaat af
   resize();
   syncUI();
   requestAnimationFrame(frame);
