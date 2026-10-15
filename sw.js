@@ -1,5 +1,5 @@
 // Vat Nein: werkt offline na het eerste bezoek.
-const CACHE = 'vat-nein-v7';
+const CACHE = 'vat-nein-v8';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', event => {
@@ -21,6 +21,9 @@ self.addEventListener('fetch', event => {
   const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
 
   if (req.mode === 'navigate') {
+    // Alleen de app zelf offline bewaren; proefontwerpen in submappen gaan gewoon via het netwerk.
+    const root = new URL('./', self.registration.scope).pathname;
+    if (url.pathname !== root && url.pathname !== root + 'index.html') return;
     // Eerst het netwerk (voor updates), anders de opgeslagen versie.
     event.respondWith(
       fetch(req)
