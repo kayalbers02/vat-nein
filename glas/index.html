@@ -26,7 +26,6 @@
     --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-round: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
     --label: #fff;
-    --label-2: rgba(235, 245, 240, .66);
     --label-3: rgba(235, 245, 240, .42);
     --amber: #ffb340;
     --safe-t: env(safe-area-inset-top, 0px);
@@ -84,7 +83,7 @@
     cursor: crosshair;
   }
 
-  /* Lagen (onder → boven): licht, stout, schuim+munten, glasrand, tekst & teamlade, klavertjes, knoppen */
+  /* Lagen (onder → boven): licht, stout, schuimkraag, glasrand, tekst & teamlade, klavertjes, knoppen */
   .aurora { z-index: 0; }
   #liquid { z-index: 1; }
   #fx { z-index: 2; }
@@ -217,35 +216,13 @@
     transition: opacity .45s var(--ease-smooth), transform .6s var(--ease-smooth), visibility 0s;
   }
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 13px 6px 11px;
-    border: .5px solid rgba(255, 255, 255, .26);
-    border-radius: 999px;
-    font: 600 12px/16px var(--font);
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: var(--label-2);
-    background: rgba(255, 255, 255, .04);
-  }
-  .eyebrow::before {
-    content: "";
-    width: 11px;
-    height: 11px;
-    background: #34c759;
-    -webkit-mask: var(--clover) center / contain no-repeat;
-    mask: var(--clover) center / contain no-repeat;
-  }
-
   .mark {
     position: relative;
     isolation: isolate;
     font: 800 clamp(48px, 17vw, 128px)/.9 var(--font);
     letter-spacing: -.05em;
     margin-right: -.05em;
+    margin-bottom: 6px;      /* het woordmerk bovenaan het blok: iets meer lucht naar de status eronder */
     text-transform: uppercase;
     white-space: nowrap;
     color: #fff;
@@ -274,21 +251,24 @@
     transform: translateY(1px);
   }
   .mark-t { display: block; }
+  /* Glans in de letters: helder spiegelend verloop met een scherpe lichtrand bovenaan de kapitalen
+     (die staan bij regelhoogte .9 ongeveer van 9% tot 89% van het vak), een zachte horizon net onder
+     het midden en een lichtstreep die elke 6 s over het woord trekt (bij minder beweging: alleen het verloop). */
   @supports ((-webkit-background-clip: text) or (background-clip: text)) {
     .mark-t {
       background:
-        linear-gradient(105deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .95) 50%, rgba(255, 255, 255, 0) 62%) -150% 0 / 60% 100% no-repeat,
-        linear-gradient(180deg, #ffffff 0%, #f4fff8 48%, #b9e6cb 100%);
+        linear-gradient(105deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .55) 43%, #fff 50%, rgba(255, 255, 255, .55) 57%, rgba(255, 255, 255, 0) 70%) -150% 0 / 60% 100% no-repeat,
+        linear-gradient(180deg, #ffffff 0%, #ffffff 16%, #e2f4e9 20%, #c3e6d1 48%, #92cba9 57%, #b2dec4 66%, #dbf2e4 86%, #f4fdf8 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
-      animation: sheen-sweep 9s ease-in-out 1.2s infinite;
+      animation: sheen-sweep 6s cubic-bezier(.45, .05, .25, 1) .8s infinite;
     }
   }
   @keyframes sheen-sweep {
     0% { background-position: -150% 0, 0 0; }
-    28%, 100% { background-position: 250% 0, 0 0; }
+    30%, 100% { background-position: 250% 0, 0 0; }
   }
 
   .pips {
@@ -335,7 +315,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .intro.playing .eyebrow,
   .intro.playing .meta { opacity: 0; transform: translateY(-6px); }
   .intro.playing .mark { opacity: .07; transform: scale(.97); }
   .intro.playing .mark-t,
@@ -347,15 +326,19 @@
   }
 
   /* ---------- Bediening: modus + teams ---------- */
+  /* 16 px tikruimte rondom (zelfde plek als voorheen: 4 + 16 = 20 px van de onderrand), zo ruim als
+     iOS' eigen knopmarge; een tik daar wordt nooit een klavertje. Tijdens het spelen laat de strook alles door. */
   .controls {
     position: absolute;
     left: 50%;
-    bottom: calc(20px + var(--safe-b));
+    bottom: calc(4px + var(--safe-b));
     transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 16px;
   }
+  .controls.away { pointer-events: none; }
   .controls > * {
     transition: opacity .35s var(--ease-smooth), transform var(--dur-snappy) var(--ease-snappy);
   }
@@ -493,13 +476,17 @@
   .team-btn[data-n="4"] i { background: var(--dot); }
   .team-btn[data-n="2"] i:nth-child(n+3),
   .team-btn[data-n="3"] i:nth-child(4) { opacity: .28; scale: .6; }
+  /* Vaste breedte: een onzichtbaar "4 teams" (het breedste label) bepaalt het vak, de labels wisselen
+     gecentreerd in dezelfde cel. De knop groeit of krimpt dus nooit en de modusknop ernaast schuift niet. */
   .tb-label {
-    position: relative;
     display: inline-grid;
+    justify-items: center;
     font-variant-numeric: tabular-nums;
   }
-  .tb-label .n { grid-area: 1 / 1; white-space: nowrap; }
-  .tb-label .n.out { position: absolute; left: 0; top: 0; }
+  .tb-label > * { grid-area: 1 / 1; white-space: nowrap; }
+  .tb-sizer { visibility: hidden; }
+  .tb-text { display: grid; justify-items: center; }
+  .tb-text .n { grid-area: 1 / 1; }
 
   @media (max-width: 400px) {
     .seg-row > * { padding: 0 11px; font-size: 14px; }
@@ -536,12 +523,14 @@
     pointer-events: none;
     color: #fff;
   }
-  /* Bovenin ruimte voor de schuimkraag, onderin voor de munten (de bovenste helft staat ondersteboven). */
+  /* Elke tekst staat altijd gecentreerd in zijn helft (de bovenste helft staat ondersteboven).
+     Aan de buitenkant 21vh: de omgedraaide tekst blijft vrij van de schuimkraag (~17vh); de onderste spiegelt dat,
+     zodat de twee als paar rond de naad staan, met "Tik om opnieuw" precies op de naad. */
   .half {
     display: grid;
     place-items: center;
     padding-inline: 16px;
-    padding-block: 6vh 20vh;
+    padding-block: 5vh 21vh;
     overflow: hidden;
   }
   .half.flip { transform: rotate(180deg); }
@@ -550,7 +539,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: .16em;
+    gap: .2em;
     font-size: min(15vw, 12.5vh);
     opacity: 0;
   }
@@ -574,11 +563,7 @@
     font: 600 .26em/1 var(--font);
     letter-spacing: -.01em;
     color: #ffd77a;
-    padding: .36em .95em .4em;
-    border-radius: 999px;
-    border: .5px solid rgba(255, 215, 122, .5);
-    background: rgba(12, 7, 5, .42);
-    box-shadow: inset 0 1px 0 rgba(255, 240, 200, .22), 0 6px 18px rgba(0, 0, 0, .3);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .4), 0 2px 12px rgba(12, 5, 2, .75);
   }
 
   .again {
@@ -717,6 +702,8 @@
     .reveal { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
     .half { padding-block: 18vh; }
     .stamp { font-size: min(8vw, 22vh); }
+    /* twee kolommen: de naad is verticaal, dus de pil vast onderin het midden (niet over de woorden) */
+    .reveal .again { top: auto; bottom: calc(14px + var(--safe-b)); translate: -50% 0; }
     .intro { gap: 10px; padding-bottom: calc(76px + var(--safe-b)); }
     .mark { font-size: clamp(40px, 17vh, 96px); }
     .team-list { grid-template-columns: repeat(var(--tcount, 2), minmax(0, 1fr)); }
@@ -742,7 +729,6 @@
   <div class="sheen" aria-hidden="true"></div>
 
   <section class="intro" id="intro">
-    <p class="eyebrow">Dublin · 2026</p>
     <h1 class="mark" data-text="Vat Nein"><span class="mark-t">Vat Nein</span></h1>
     <ol class="pips" aria-hidden="true">
       <li></li><li></li><li></li><li></li><li></li>
@@ -785,7 +771,7 @@
     </div>
     <button type="button" id="teams-toggle" class="team-btn glass" aria-pressed="false">
       <span class="tb-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span class="tb-label" id="tb-label"></span>
+      <span class="tb-label"><span class="tb-sizer" aria-hidden="true">4 teams</span><span class="tb-text" id="tb-label"></span></span>
     </button>
   </div>
 </main>
@@ -839,14 +825,11 @@
   const hint = document.getElementById('hint');
   const pips = [...document.querySelectorAll('.pips li')];
   const reveal = document.getElementById('reveal');
-  const halves = [...reveal.querySelectorAll('.half')];   // [boven (omgedraaid), onder]
   const teamsEl = document.getElementById('teams');
   const teamWrap = document.getElementById('team-wrap');
   const teamList = document.getElementById('team-list');
   const teamCard = document.getElementById('team-card');
   const teamAgain = document.getElementById('team-again');
-  const stampEls = halves.map(h => h.querySelector('.stamp'));
-  const revealAgain = reveal.querySelector('.again');
   const againEls = [...document.querySelectorAll('.again')];
   const meta = document.getElementById('meta');
   const modesEl = document.getElementById('modes');
@@ -880,15 +863,12 @@
   let pour = null;             // de stout die het scherm vult rond de winnaar
 
   let W = 0, H = 0, R = 52, DPR = 1, LS = 1, FX = 1, safeTop = 0, safeBottom = 0;
-  // FX: resolutie van schuim, munten en effecten. Boven 2x zie je op tafelafstand geen verschil, wel in de framerate.
+  // FX: resolutie van schuimkraag en effecten. Boven 2x zie je op tafelafstand geen verschil, wel in de framerate.
   const HS = 1;                // resolutie van de teamgebieden (CSS-pixels, zodat de rand scherp blijft)
   const hullCv = document.createElement('canvas');
   const hctx = hullCv.getContext('2d');
   const hullTmp = document.createElement('canvas');
   const htx = hullTmp.getContext('2d');
-  const pileCv = document.createElement('canvas');
-  const pileCtx = pileCv.getContext('2d');
-  let pileY0 = 0;
 
   const safeProbe = document.createElement('div');
   safeProbe.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';
@@ -915,7 +895,7 @@
     });
     if (split) { split.key = -1; placeTeams(); }
     // Na het tappen alleen bouwen wat het stilstaande glas laat zien; de rest komt op de achtergrond.
-    if (winner) { ensureTex(true, true); pour = makePour(winner.at, true); placeStamps(); }
+    if (winner) { ensureTex(true, true); pour = makePour(winner.at, true); }
     else ensureTex(false);
     if (seg) seg.place(true);
   }
@@ -1006,15 +986,17 @@
     buzz(10);
   }
 
+  // Zodra de ring rond is en het kiezen begint, mag iedereen loslaten: wie er toen lag blijft meedoen.
+  // Het klavertje blijft op zijn laatste plek staan (lifted: een later hergebruikt pointerId verschuift het niet).
   function dropFinger(id, now) {
     const f = fingers.get(id);
     if (!f) return;
+    if (phase === 'shuffle') { f.lifted = true; return; }
     fingers.delete(id);
-    if (phase === 'gather' || phase === 'shuffle') {
+    if (phase === 'gather') {
       ghosts.push({ x: f.x, y: f.y, paint: paintFor(), label: f.num, rot: f.rot, t0: now });
       lastChange = now;
       if (fingers.size === 0) { phase = 'idle'; shuffle = null; }
-      else if (phase === 'shuffle' && fingers.size < needPlayers()) { phase = 'gather'; shuffle = null; }
     }
   }
 
@@ -1046,15 +1028,19 @@
   }
 
   // iPhone: bij de 6e vinger laat iOS alle vingers los. Leg uit wat er gebeurde.
+  // (Tijdens het kiezen niet: dan loopt de ronde gewoon door met wie er lag.)
   function flagTooMany(now) {
     if (notice && now - notice.at < 1000) return;
-    if (mode === 'hold' && fingers.size >= 5 && (phase === 'gather' || phase === 'shuffle')) {
+    if (mode === 'hold' && fingers.size >= 5 && phase === 'gather') {
       notice = { count: fingers.size, at: now };
     }
   }
 
+  // Modus en teams wisselen alleen als de bediening zichtbaar is (idle). Een druk die begon vóór de ronde
+  // en pas loslaat als iemand anders al speelt, mag die ronde niet wissen: knop veert terug naar de huidige stand.
   function setMode(next) {
     if (next === mode) return;
+    if (phase !== 'idle') { syncUI(); return; }
     mode = next;
     try { localStorage.setItem('vat-nein-mode', next); } catch (_) {}
     notice = null;
@@ -1063,6 +1049,7 @@
   }
 
   function cycleTeams() {
+    if (phase !== 'idle') { syncUI(); return; }
     teamCount = teamCount === 0 ? 2 : teamCount === 4 ? 0 : teamCount + 1;
     try { localStorage.setItem('vat-nein-teams', String(teamCount)); } catch (_) {}
     notice = null;
@@ -1162,6 +1149,7 @@
   const seg = initSeg(segEl, i => setMode(modeButtons[i].dataset.mode));
 
   // Label van de teamknop rolt als een iOS-cijfer (oud omhoog weg, nieuw van onder erin).
+  // Alleen de tekst beweegt, binnen het vaste vak: de knop zelf verandert niet van maat.
   function morphLabel(text, up) {
     const prev = tbLabel.dataset.v;
     if (prev === text) return;
@@ -1169,12 +1157,10 @@
     const make = s => Object.assign(document.createElement('span'), { className: 'n', textContent: s });
     if (prev == null || reduced) { tbLabel.replaceChildren(make(text)); return; }
     tbLabel.querySelectorAll('.n.out').forEach(n => n.remove());
-    const w0 = teamBtn.getBoundingClientRect().width;
     const old = tbLabel.querySelector('.n');
     const neu = make(text);
     if (old) old.classList.add('out');
     tbLabel.append(neu);
-    const w1 = teamBtn.getBoundingClientRect().width;
     const y = up ? .6 : -.6;
     if (old) {
       const a = anim(old, [
@@ -1187,21 +1173,60 @@
       { transform: `translateY(${y}em) scale(.84)`, opacity: 0, filter: 'blur(3px)' },
       { transform: 'none', opacity: 1, filter: 'blur(0)' },
     ], { duration: 600, easing: SPRING });
-    if (Math.abs(w1 - w0) > .5) anim(teamBtn, [{ width: w0 + 'px' }, { width: w1 + 'px' }], { duration: 600, easing: SPRING });
   }
 
-  // Knoppen handelen hun eigen tik af: die mag geen vinger of klavertje worden.
+  // Knoppen handelen hun eigen tik af: die mag geen vinger of klavertje worden. Dat geldt voor de hele
+  // bedieningsstrook (#modes, met 16 px tikruimte rondom): ook de ruimte tussen de knoppen en de ronde
+  // uiteinden van de pillen (de browser test daar op de afgeronde vorm, de tik viel dan door naar het speelveld).
   // De modusknoppen zitten in #seg: hun pointerdown moet doorbubbelen naar #seg (indrukken, gloed, slepen);
-  // #seg zelf houdt hem tegen voordat hij bij het speelveld komt.
-  [segEl, teamBtn].forEach(btn => {
-    btn.addEventListener('pointerdown', e => e.stopPropagation());
-    btn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
-  });
+  // #seg zelf houdt hem tegen. Tijdens het spelen laat de strook alles door (.controls.away).
+  modesEl.addEventListener('pointerdown', e => e.stopPropagation());
+  modesEl.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
   // Vangnet voor klikken zonder pointer-reeks (bv. hulptechnologie); toetsenbord gaat via initSeg.
   modeButtons.forEach(btn => btn.addEventListener('click', e => {
     if (e.detail !== 0 && !seg.recent()) setMode(btn.dataset.mode);
   }));
-  teamBtn.addEventListener('click', cycleTeams);
+  // Teamknop: een tik telt bij het loslaten (pointerup), niet via 'click'. Een click valt op iPhone weg als
+  // de vinger net naast de (ingedrukt iets kleinere) pil loslaat. Telt mee: de knop zelf en de strook eromheen
+  // (aan de kant van de modusknop alleen de halve tussenruimte); loslaten mag tot 16-24 px naast de knop, zoals bij iOS. Alleen in rust (idle): tijdens een ronde nooit.
+  // De click die erop volgt wordt altijd overgeslagen: pointerup heeft al beslist (geen dubbele stap).
+  // Toetsenbord (Enter/Spatie) en hulptechnologie komen zonder pointer-reeks binnen en gaan via click.
+  const nearTeamBtn = (e, m, mLeft) => {
+    const r = teamBtn.getBoundingClientRect();
+    return e.clientX >= r.left - mLeft && e.clientX <= r.right + m && e.clientY >= r.top - m && e.clientY <= r.bottom + m;
+  };
+  let tbDown = null, tbUp = -1e9;
+  modesEl.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.pointerType === 'mouse') tbDown = null;     // muis loslaten buiten #modes: oude druk vergeten
+    if (phase !== 'idle') return;
+    const onStrip = e.target === modesEl;
+    if (!teamBtn.contains(e.target) && !(onStrip && nearTeamBtn(e, 16, 4))) return;
+    tbDown = e.pointerId;
+    if (onStrip) {                                   // naast de pil: zelfde indrukgevoel als erop
+      try { modesEl.setPointerCapture(e.pointerId); } catch (_) {}
+      const r = teamBtn.getBoundingClientRect();
+      teamBtn.style.setProperty('--px', (e.clientX - r.left) + 'px');
+      teamBtn.style.setProperty('--py', (e.clientY - r.top) + 'px');
+      teamBtn.classList.add('is-pressed');
+    }
+  });
+  modesEl.addEventListener('pointerup', e => {
+    if (tbDown !== e.pointerId) return;
+    tbDown = null;
+    tbUp = performance.now();
+    teamBtn.classList.remove('is-pressed');
+    if (phase === 'idle' && nearTeamBtn(e, 24, 16)) cycleTeams();   // ronde al begonnen: niets wisselen
+  });
+  modesEl.addEventListener('pointercancel', e => {
+    if (tbDown !== e.pointerId) return;
+    tbDown = null;
+    teamBtn.classList.remove('is-pressed');
+  });
+  teamBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || performance.now() - tbUp < 800) return;   // al afgehandeld bij het loslaten
+    cycleTeams();
+  });
   pressable(teamBtn);
   pressable(segEl);
 
@@ -1274,77 +1299,11 @@
       pour = makePour(now, reduced);
       stage.classList.add('pouring');
       reveal.hidden = false;
-      placeStamps();
       buzz([50, 40, 160]);
     }
     shuffle = null;
     phase = mode === 'tap' || down.size === 0 ? 'done' : 'result';
     syncUI();
-  }
-
-  // Zet "Vat Nein" zo ver mogelijk van het klavertje van de gekozen speler, zodat het nummer leesbaar blijft.
-  // Werkt met echte rechthoeken: het klavertje (met ring) als blok, de tekst zoals hij werkelijk staat.
-  // Volgorde: midden → verticaal opzij → horizontaal opzij → kleiner (tot 0,65×) → die helft weglaten.
-  const overlapArea = (a, b) => {
-    const w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
-    return w > 0 && h > 0 ? w * h : 0;
-  };
-  function placeStamps() {
-    if (!winner || reveal.hidden) return;
-    const cr = R * 1.7;
-    const box = { x0: winner.x - cr, y0: winner.y - cr, x1: winner.x + cr, y1: winner.y + cr };
-    const placed = [];
-    halves.forEach((half, i) => {
-      const st = stampEls[i];
-      half.style.alignItems = '';
-      half.style.justifyItems = '';
-      st.style.fontSize = '';
-      st.style.visibility = '';
-      const flipped = half.classList.contains('flip');       // 180° gedraaid: padding en uitlijning omgekeerd
-      const cs = getComputedStyle(half);
-      const pt = parseFloat(cs.paddingTop) || 0, pb = parseFloat(cs.paddingBottom) || 0;
-      const pl = parseFloat(cs.paddingLeft) || 0, pr = parseFloat(cs.paddingRight) || 0;
-      const hx = half.offsetLeft, hy = half.offsetTop, hw = half.offsetWidth, hh = half.offsetHeight;
-      const cx0 = hx + (flipped ? pr : pl), cx1 = hx + hw - (flipped ? pl : pr);
-      const cy0 = hy + (flipped ? pb : pt), cy1 = hy + hh - (flipped ? pt : pb);
-      const sw0 = st.offsetWidth, sh0 = st.offsetHeight;
-      const base = parseFloat(getComputedStyle(st).fontSize) || 0;
-      const farV = winner.y < (cy0 + cy1) / 2 ? 'b' : 't', nearV = farV === 'b' ? 't' : 'b';
-      const farH = winner.x < (cx0 + cx1) / 2 ? 'r' : 'l', nearH = farH === 'r' ? 'l' : 'r';
-      let pick = null;
-      for (const s of [1, .85, .75, .65]) {
-        const sw = sw0 * s, sh = sh0 * s;
-        for (const h of ['c', farH, nearH]) {
-          for (const v of ['c', farV, nearV]) {
-            const x0 = h === 'c' ? (cx0 + cx1 - sw) / 2 : h === 'l' ? cx0 : cx1 - sw;
-            const y0 = v === 'c' ? (cy0 + cy1 - sh) / 2 : v === 't' ? cy0 : cy1 - sh;
-            const r = { x0, y0, x1: x0 + sw, y1: y0 + sh };
-            if (!overlapArea(r, box)) { pick = { s, h, v, r }; break; }
-          }
-          if (pick) break;
-        }
-        if (pick) break;
-      }
-      if (!pick) { st.style.visibility = 'hidden'; return; }   // nergens plek: alleen de andere helft
-      placed.push(pick.r);
-      if (pick.v !== 'c') half.style.alignItems = (pick.v === 't') !== flipped ? 'start' : 'end';
-      if (pick.h !== 'c') half.style.justifyItems = (pick.h === 'l') !== flipped ? 'start' : 'end';
-      if (pick.s < 1 && base) st.style.fontSize = (base * pick.s).toFixed(2) + 'px';
-    });
-    // "Tik om opnieuw": in het midden, boven de munten, of links/rechts; nooit onder het klavertje of de tekst.
-    const pw = revealAgain.offsetWidth, ph = revealAgain.offsetHeight;
-    let pick = null, far = null;
-    [[W / 2, H / 2], [W / 2, H * .79], [W * .25, H / 2], [W * .75, H / 2]].forEach(([sx, sy]) => {
-      const x = Math.max(16 + pw / 2, Math.min(W - 16 - pw / 2, sx));
-      const r = { x0: x - pw / 2, y0: sy - ph / 2, x1: x + pw / 2, y1: sy + ph / 2 };
-      const dx = Math.max(r.x0 - winner.x, 0, winner.x - r.x1), dy = Math.max(r.y0 - winner.y, 0, winner.y - r.y1);
-      const d = Math.hypot(dx, dy);
-      if (!pick && !overlapArea(r, box) && !placed.some(q => overlapArea(r, q))) pick = { x, y: sy };
-      if (!far || d > far.d) far = { d, x, y: sy };
-    });
-    const at = pick || far;
-    revealAgain.style.left = at.x + 'px';
-    revealAgain.style.top = at.y + 'px';
   }
 
   // Teamlade: kleurstip + teamnaam + nummers, onderin (of bovenin als daar minder klavertjes liggen).
@@ -1413,13 +1372,13 @@
     teamAgain.style.bottom = 'auto';
   }
 
-  // Lade/tekst opnieuw plaatsen als een vinger nog over het scherm schuift (hooguit ~7× per seconde).
+  // Teamlade opnieuw plaatsen als een vinger nog over het scherm schuift (hooguit ~7× per seconde).
   let layoutDirty = false, lastLayout = 0;
   function relayout(now) {
     if (!layoutDirty || now - lastLayout < 150) return;
     layoutDirty = false;
     lastLayout = now;
-    if (winner) placeStamps(); else if (split) placeTeams();
+    if (split) placeTeams();
   }
 
   let lastHint = '';
@@ -1432,6 +1391,7 @@
     intro.classList.toggle('gone', shown);
     stage.classList.toggle('still', shown);           // achtergrondlicht pauzeren tijdens de uitslag
     modesEl.classList.toggle('away', phase !== 'idle');
+    if (phase !== 'idle' && tbDown !== null) { tbDown = null; teamBtn.classList.remove('is-pressed'); }   // druk vervalt zodra de bediening wegschuift
 
     const lit = new Set();
     fingers.forEach(f => { if (f.slot >= 0) lit.add(f.slot); });
@@ -1450,7 +1410,7 @@
         text = tap ? n + ' spelers · tik je klavertje om eruit te gaan' : n + ' vingers · niet loslaten';
       }
     } else if (phase === 'shuffle') {
-      text = teamCount ? 'Teams maken…' : 'Wie wordt het…';
+      text = (teamCount ? 'Teams maken…' : 'Wie wordt het…') + (tap ? '' : ' je mag loslaten');
     }
     const showNotice = !!notice && phase === 'idle';
     if (showNotice) text = 'Deze telefoon herkent maximaal ' + notice.count + ' vingers tegelijk. Kies Tikken voor meer spelers.';
@@ -1499,10 +1459,10 @@
 
   stage.addEventListener('pointermove', e => {
     const f = fingers.get(e.pointerId);
-    if (!f) return;
+    if (!f || f.lifted) return;   // losgelaten tijdens het kiezen: klavertje blijft staan
     f.x = e.clientX;
     f.y = e.clientY;
-    if (winner && winner.id === e.pointerId) { winner.x = f.x; winner.y = f.y; layoutDirty = true; }
+    if (winner && winner.id === e.pointerId) { winner.x = f.x; winner.y = f.y; }
     if (split) {
       const m = split.members.find(member => member.id === e.pointerId);
       if (m) { m.x = f.x; m.y = f.y; layoutDirty = true; }
@@ -1565,7 +1525,7 @@
 
   // ---------- Texturen (één keer, per schermformaat) ----------
   const tex = { noise: null, light: null, dark: null, peak: null, band: null, core: null, coreH: 640, ruby: null, foam: null,
-    coins: null, coinCell: 0, coinR: 18, coinT: 3.6, rest: [], sparkle: null, dot: null, bub: null, coinShadow: null, cloverShadow: null };
+    bub: null, cloverShadow: null };
   function makeCanvas(w, h) {
     const c = document.createElement('canvas');
     c.width = Math.max(1, Math.round(w));
@@ -1783,146 +1743,8 @@
     tex.foam = c;
   }
 
-  // Eén gouden munt onder hoek phi (normaal t.o.v. de kijker): gezicht, rand met kartels, gebakken glans.
-  function coinFrame(g, r, T, phi) {
-    const cs = Math.cos(phi), sn = Math.sin(phi);
-    const k = Math.max(.035, Math.abs(cs)), ry = r * k, d = T * Math.abs(sn);
-    g.save();
-    g.translate(0, -d / 2);
-    if (d > .15) {
-      const side = g.createLinearGradient(-r, 0, r, 0);
-      side.addColorStop(0, '#5e3f0b');
-      side.addColorStop(.325, '#e8c25a');
-      side.addColorStop(.65, '#c8952b');
-      side.addColorStop(1, '#5e3f0b');
-      g.beginPath();
-      g.moveTo(-r, 0);
-      g.lineTo(-r, d);
-      g.ellipse(0, d, r, ry, 0, Math.PI, 0, true);
-      g.lineTo(r, 0);
-      g.closePath();
-      g.fillStyle = side;
-      g.fill();
-      g.save();
-      g.clip();
-      g.lineWidth = .45;
-      for (let i = 0; i < 28; i++) {
-        const th = -Math.PI / 2 + (i + .5) * Math.PI / 28, x = r * Math.sin(th);
-        g.strokeStyle = i % 2 ? 'rgba(110,74,14,.4)' : 'rgba(168,118,28,.4)';
-        g.beginPath();
-        g.moveTo(x, 0);
-        g.lineTo(x, d + ry * Math.sqrt(Math.max(0, 1 - (x / r) * (x / r))));
-        g.stroke();
-      }
-      g.restore();
-    }
-    g.save();
-    g.scale(1, k);
-    const sh = .45 * r * sn;
-    const stops = [[0, '#fff1b8'], [.18, '#f2c94c'], [.45, '#c8952b'], [.62, '#8c6114'], [.8, '#d9a93a'], [1, '#f5d46e']];
-    const fg = g.createLinearGradient(-r + sh, -r + sh, r + sh, r + sh);
-    stops.forEach(s => fg.addColorStop(s[0], s[1]));
-    g.fillStyle = fg;
-    g.beginPath();
-    g.arc(0, 0, r, 0, TAU);
-    g.fill();
-    g.lineWidth = .7;
-    g.strokeStyle = 'rgba(94,63,11,.85)';
-    g.stroke();
-    const rg = g.createLinearGradient(r + sh, r + sh, -r + sh, -r + sh);
-    stops.forEach(s => rg.addColorStop(s[0], s[1]));
-    g.lineWidth = .1 * r;
-    g.strokeStyle = rg;
-    g.beginPath();
-    g.arc(0, 0, .86 * r, 0, TAU);
-    g.stroke();
-    g.lineWidth = .04 * r;
-    g.strokeStyle = 'rgba(94,63,11,.35)';
-    g.beginPath();
-    g.arc(0, 0, .79 * r, 0, TAU);
-    g.stroke();
-    const e = .36 * r;
-    const emb = (dx, dy, col, a) => {
-      g.save();
-      g.globalAlpha = a;
-      g.fillStyle = col;
-      g.translate(dx, dy);
-      for (let i = 0; i < 4; i++) {
-        g.save();
-        g.rotate(Math.PI / 4 + i * Math.PI / 2);
-        g.scale(e, e);
-        g.fill(LEAF);
-        g.restore();
-      }
-      g.restore();
-    };
-    emb(.9, .9, '#5e3f0b', .45);
-    emb(-.7, -.7, '#fff3c4', .55);
-    emb(0, 0, '#c8952b', 1);
-    g.restore();
-    g.restore();
-  }
-
-  const REST_DEG = [64, 68, 72, 76, 80, 44, 52, 60];   // liggend (0–4) en schuin tegen de hoop (5–7)
-  function buildCoins() {
-    const r = Math.max(14, Math.min(23, Math.min(W, H) * .05));
-    const T = r * .2;
-    const cell = Math.ceil((r + T + 3) * 2 * FX);
-    const c = makeCanvas(cell * 24, cell * 3), g = c.getContext('2d');
-    for (let f = 0; f < 24; f++) {
-      for (let row = 0; row < 2; row++) {
-        g.setTransform(FX, 0, 0, FX, (f + .5) * cell, (row + .5) * cell);
-        coinFrame(g, r, T, f / 24 * TAU);
-      }
-    }
-    REST_DEG.forEach((deg, f) => {
-      g.setTransform(FX, 0, 0, FX, (f + .5) * cell, 2.5 * cell);
-      coinFrame(g, r, T, deg * Math.PI / 180);
-    });
-    g.setTransform(1, 0, 0, 1, 0, 0);
-    g.globalCompositeOperation = 'source-atop';
-    g.fillStyle = 'rgba(52,18,9,.45)';           // ondergedompeld: donkerder, roder
-    g.fillRect(0, cell, c.width, cell);
-    g.fillStyle = 'rgba(52,18,9,.2)';            // op de bodem: een tikje
-    g.fillRect(0, cell * 2, c.width, cell);
-    g.globalCompositeOperation = 'source-over';
-    freeCanvas(tex.coins);
-    tex.coins = c;
-    tex.coinCell = cell;
-    tex.coinR = r;
-    tex.coinT = T;
-  }
-
+  // Stikstofbelletje voor de surge (hangt niet van het schermformaat af).
   function buildSprites() {
-    const s = makeCanvas(48, 48), g = s.getContext('2d');
-    const lin = horiz => {
-      const gr = horiz ? g.createLinearGradient(0, 24, 48, 24) : g.createLinearGradient(24, 0, 24, 48);
-      gr.addColorStop(0, 'rgba(255,247,214,0)');
-      gr.addColorStop(.5, 'rgba(255,255,255,1)');
-      gr.addColorStop(1, 'rgba(255,247,214,0)');
-      g.fillStyle = gr;
-      if (horiz) g.fillRect(0, 22.6, 48, 2.8); else g.fillRect(22.6, 0, 2.8, 48);
-    };
-    lin(true);
-    lin(false);
-    const core = g.createRadialGradient(24, 24, 0, 24, 24, 11);
-    core.addColorStop(0, 'rgba(255,255,255,1)');
-    core.addColorStop(.35, 'rgba(255,247,214,.8)');
-    core.addColorStop(1, 'rgba(255,247,214,0)');
-    g.fillStyle = core;
-    g.fillRect(0, 0, 48, 48);
-    tex.sparkle = s;
-
-    const d = makeCanvas(16, 16), dg = d.getContext('2d');
-    const dr = dg.createRadialGradient(6.5, 6, 0, 8, 8, 8);
-    dr.addColorStop(0, '#fffdf6');
-    dr.addColorStop(.55, '#efe4cf');
-    dr.addColorStop(.85, 'rgba(201,181,148,.9)');
-    dr.addColorStop(1, 'rgba(201,181,148,0)');
-    dg.fillStyle = dr;
-    dg.fillRect(0, 0, 16, 16);
-    tex.dot = d;
-
     const b = makeCanvas(12, 12), bg = b.getContext('2d');
     bg.strokeStyle = 'rgba(214,190,150,.75)';
     bg.lineWidth = 1.4;
@@ -1930,15 +1752,6 @@
     bg.fillStyle = 'rgba(255,250,235,.9)';
     bg.fillRect(4, 3.2, 1.6, 1.6);
     tex.bub = b;
-
-    const cs = makeCanvas(64, 24), cg = cs.getContext('2d');
-    cg.scale(1, 24 / 64);
-    const sg = cg.createRadialGradient(32, 32, 0, 32, 32, 32);
-    sg.addColorStop(0, 'rgba(0,0,0,.55)');
-    sg.addColorStop(1, 'rgba(0,0,0,0)');
-    cg.fillStyle = sg;
-    cg.fillRect(0, 0, 64, 64);
-    tex.coinShadow = cs;
   }
 
   function buildMarkerSprites() {
@@ -1981,9 +1794,9 @@
     } catch (_) {}
   }
 
-  // Volgorde telt: de eerste vier zijn genoeg voor een stilstaand, getapt glas (na draaien).
-  const TEX_STEPS = [buildNoise, buildRuby, buildFoam, buildCoins, buildBand, buildCore];
-  const TEX_STATIC = 4;
+  // Volgorde telt: de eerste drie zijn genoeg voor een stilstaand, getapt glas (na draaien).
+  const TEX_STEPS = [buildNoise, buildRuby, buildFoam, buildBand, buildCore];
+  const TEX_STATIC = 3;
   let texKey = '', texStep = 0, texTimer = 0;
   function ensureTex(sync, staticOnly) {
     const key = W + 'x' + H + '@' + DPR;
@@ -2002,14 +1815,12 @@
     texTimer = setTimeout(run, sync ? 80 : 250);
   }
 
-  // ---------- De stout: surge, cascade, opklaren van onderaf, schuimkraag, munten ----------
+  // ---------- De stout: surge, cascade, opklaren van onderaf, schuimkraag ----------
   // De echte ~2 minuten zijn samengeperst tot ~6 s; de bewegingen in het bier zelf houden (bijna) echte snelheid.
   const K = 1.1;                         // tijdschaal
   const T_FILL = .9 * K;
   const T_STREAM = .75 * K;
-  const T_END = 5.4 * K;                 // daarna staat het bier stil (alleen nog munten)
-  const T_COINS = 3.2 * K;
-  const COIN_SPAN = 3.4;
+  const T_END = 5.4 * K;                 // daarna staat het bier stil
   const G = 2400;                        // zwaartekracht, px/s²
   const NP = 420;                        // korrels en belletjes in de surge
   const PX = new Float32Array(NP), PY = new Float32Array(NP), PJ = new Float32Array(NP);
@@ -2028,14 +1839,10 @@
       liqCv.height = Math.round(H * LS);
       fxCv.width = Math.round(W * FX);
       fxCv.height = Math.round(H * FX);
-      // De hoop is nooit hoger dan 19% van het scherm (+ één munt): de pile-laag hoeft alleen dat stuk te beslaan.
-      pileY0 = Math.max(0, Math.floor(H * .81 - 2.4 * (tex.coinR + tex.coinT + 3) - 8));
-      pileCv.width = Math.round(W * FX);
-      pileCv.height = Math.max(1, Math.round((H - pileY0) * FX));
       lctx.setTransform(liqCv.width / W, 0, 0, liqCv.height / H, 0, 0);
       fctx.setTransform(FX, 0, 0, FX, 0, 0);
     } else {
-      [liqCv, fxCv, pileCv].forEach(c => { c.width = 1; c.height = 1; });
+      [liqCv, fxCv].forEach(c => { c.width = 1; c.height = 1; });
     }
     liqCv.hidden = fxCv.hidden = !on;
   }
@@ -2043,23 +1850,6 @@
   function makePour(at, instant) {
     sizePourCanvases(true);
     stage.classList.toggle('poured', !!instant);
-    const r = tex.coinR;
-    const n = Math.max(45, Math.min(80, Math.round(W * H / 5000)));
-    const coins = [];
-    for (let i = 0; i < n; i++) {
-      coins.push({
-        t0: T_COINS + (i / n) * COIN_SPAN + Math.random() * .2,
-        x: W * (.08 + .84 * Math.random()),
-        y: -r * 1.6 - Math.random() * 24,
-        vy: Math.random() * 200,
-        phi: Math.random() * TAU,
-        w: (6 + 4 * Math.random()) * (Math.random() < .5 ? -1 : 1),
-        rot: (Math.random() - .5) * .8,
-        wr: (Math.random() - .5) * 6,
-        wob: Math.random() * TAU,
-        st: 0, bounced: false, wetY: 0, trail: 0, spark: -1,
-      });
-    }
     for (let i = 0; i < NP; i++) {
       const k = Math.random();
       PT[i] = k < .85 ? 0 : k < .97 ? 1 : 2;
@@ -2073,8 +1863,6 @@
       QY[i] = -1;
       QV[i] = 25 + 35 * Math.random();
     }
-    pileCtx.setTransform(1, 0, 0, 1, 0, 0);
-    pileCtx.clearRect(0, 0, pileCv.width, pileCv.height);
     // het heldere bier: niet plat zwart, maar diepte van net onder de kraag naar de bodem
     const hb0 = headTopY() + headH();
     const body = lctx.createLinearGradient(0, hb0, 0, H);
@@ -2082,13 +1870,11 @@
     body.addColorStop(.35, '#0b0605');
     body.addColorStop(1, '#050302');
     const p = {
-      at, instant: !!instant, coins, heights: new Float32Array(Math.ceil(W / 3) + 2),
-      drops: [], dents: [], trails: [], sparks: [], tops: [], shim: [], nextShimmer: 0,
-      acc: 0, o1: 0, o2: 0, o3: 0, o4: 0, ob: 0, ob2: 0, oc: 0, og1: 0, og2: 0,
+      at, instant: !!instant,
+      o1: 0, o2: 0, o3: 0, o4: 0, ob: 0, ob2: 0, oc: 0, og1: 0, og2: 0,
       liquidDone: false, fxStatic: false, poured: !!instant, shown: false, ready: false, body,
       q: { n: 0, sum: 0, done: false, low: false },
     };
-    if (instant) coins.forEach(c => { c.st = 3; restCoin(p, c); });
     return p;
   }
 
@@ -2419,7 +2205,7 @@
   // De schuimkraag: dicht, romig, fijne belletjes; eerst zandkleurig, dan roomwit; licht bolletje op het eind.
   function drawHead(g, t) {
     // Zodra het glas vol is loopt het schuim door tot boven de schermrand (ook achter statusbalk en Dynamic Island):
-    // geen groene streep meer bovenin. De kromme HT blijft het oppervlak (meniscus, waar munten inslaan).
+    // geen groene streep meer bovenin. De kromme HT blijft het oppervlak (meniscus).
     const ext = smooth(T_FILL * .8, T_FILL + .25, t);
     const yA = head.minTop - ext * (head.minTop + 20) - 6, hgt = head.maxBot - yA + 6;
     g.save();
@@ -2497,172 +2283,14 @@
     g.stroke();
   }
 
-  const frameOf = phi => ((Math.round(phi / TAU * 24) % 24) + 24) % 24;
-
-  function drawCoin(g, c, a, wet) {
-    const f = frameOf(c.phi), cell = tex.coinCell, cs = cell / FX;
-    const co = Math.cos(c.rot) * FX, si = Math.sin(c.rot) * FX;
-    g.setTransform(co, si, -si, co, c.x * FX, c.y * FX);
-    if (wet > 0) {
-      g.globalAlpha = a;
-      g.drawImage(tex.coins, f * cell, cell, cell, cell, -cs / 2, -cs / 2, cs, cs);
-    }
-    if (wet < 1) {
-      g.globalAlpha = a * (1 - wet);
-      g.drawImage(tex.coins, f * cell, 0, cell, cell, -cs / 2, -cs / 2, cs, cs);
-    }
-    g.globalAlpha = 1;
-    g.setTransform(FX, 0, 0, FX, 0, 0);
-  }
-
-  function footprint(p, x, half) {
-    const b0 = Math.max(0, Math.floor((x - half) / 3)), b1 = Math.min(p.heights.length - 1, Math.ceil((x + half) / 3));
-    const mid = Math.floor(x / 3);
-    let mx = 0, hl = 0, nl = 0, hr = 0, nr = 0;
-    for (let b = b0; b <= b1; b++) {
-      const h = p.heights[b];
-      if (h > mx) mx = h;
-      if (b <= mid) { hl += h; nl++; } else { hr += h; nr++; }
-    }
-    return [nl ? hl / nl : 0, nr ? hr / nr : 0, mx, b0, b1];
-  }
-
-  // Munt komt tot rust op de hoop: liggend of schuin, helling volgt de hoop, wordt in de stapel 'gestempeld'.
-  function restCoin(p, c) {
-    const r = tex.coinR, T = tex.coinT, half = .9 * r;
-    const ri = Math.random() < .7 ? randFast(5) : 5 + randFast(3);
-    const phi = REST_DEG[ri] * Math.PI / 180;
-    let x = Math.max(r, Math.min(W - r, c.x));
-    let fp = footprint(p, x, half);
-    let slope = (fp[0] - fp[1]) / (1.8 * r);
-    if (Math.abs(slope) > .35) {
-      x = Math.max(r, Math.min(W - r, x + Math.sign(slope) * .5 * r));   // glijdt een stukje naar beneden
-      fp = footprint(p, x, half);
-      slope = (fp[0] - fp[1]) / (1.8 * r);
-    }
-    const ang = Math.max(-.35, Math.min(.35, Math.atan(slope)));
-    const ry = r * Math.cos(phi), d = T * Math.sin(phi);
-    const base = fp[2];
-    const cy = H - base - ry - d / 2 + 1.5;
-    // stempelen: schaduw, dan de munt
-    const g = pileCtx, cell = tex.coinCell, cs = cell / FX;
-    g.setTransform(FX, 0, 0, FX, 0, -pileY0 * FX);
-    g.globalAlpha = .6;
-    g.drawImage(tex.coinShadow, x - 1.15 * r, cy + ry + d / 2 - .3 * r, 2.3 * r, .7 * r);
-    g.globalAlpha = 1;
-    const co = Math.cos(ang) * FX, si = Math.sin(ang) * FX;
-    g.setTransform(co, si, -si, co, x * FX, (cy - pileY0) * FX);
-    g.drawImage(tex.coins, ri * cell, cell * 2, cell, cell, -cs / 2, -cs / 2, cs, cs);
-    g.setTransform(1, 0, 0, 1, 0, 0);
-    const add = (2 * ry + d) * .5;
-    const cap = H * .19;
-    for (let b = fp[3]; b <= fp[4]; b++) {
-      const dx = (b * 3 + 1.5 - x) / half;
-      const prof = Math.sqrt(Math.max(0, 1 - dx * dx));
-      p.heights[b] = Math.min(cap, Math.max(p.heights[b], base + add * (.3 + .7 * prof)));
-    }
-    p.tops.push({ x: x - .3 * r, y: cy - ry * .6 });
-    if (p.tops.length > 60) p.tops.shift();
-    c.st = 4;
-  }
-  const randFast = n => Math.floor(Math.random() * n);   // alleen voor decor, niet voor de uitslag
-
-  function splash(p, x, y, t) {
-    for (let i = 0; i < 8 && p.drops.length < 120; i++) {
-      const a = -Math.PI / 2 + (Math.random() * 2 - 1) * 55 * Math.PI / 180;
-      const s = 220 + 260 * Math.random();
-      p.drops.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 1.5 + 2 * Math.random(), t0: t });
-    }
-    if (p.dents.length < 30) p.dents.push({ x, y, t0: t });
-  }
-
-  function stepCoins(p, t, h) {
-    const r = tex.coinR, T = tex.coinT;
-    for (let i = 0; i < p.coins.length; i++) {
-      const c = p.coins[i];
-      if (c.st === 0) { if (t >= c.t0) c.st = 1; else continue; }
-      if (c.st >= 4) continue;
-      if (c.st === 1) {                                   // lucht
-        c.vy += G * h;
-        c.y += c.vy * h;
-        c.phi += c.w * h;
-        c.rot += c.wr * h;
-        const top = headTopAt(c.x, t);
-        if (c.y + r * .3 >= top) { c.st = 2; c.vy *= .35; splash(p, c.x, top, t); }
-      } else if (c.st === 2) {                            // door het schuim
-        c.vy = c.vy * Math.exp(-7 * h) + G * h;
-        c.y += c.vy * h;
-        c.phi += c.w * .5 * h;
-        c.rot += c.wr * .3 * h;
-        if (c.y >= headBotAt(c.x, t)) { c.st = 3; c.wetY = c.y; }
-      } else {                                            // zakt door de stout, dwarrelt als een blaadje
-        c.vy += (420 - c.vy) * (1 - Math.exp(-4 * h));
-        c.y += c.vy * h;
-        c.w += ((c.w < 0 ? -2 : 2) - c.w) * (1 - Math.exp(-2 * h));
-        c.phi += c.w * h;
-        c.rot *= Math.exp(-1.5 * h);
-        c.wob += 7 * h;
-        c.x = Math.max(r, Math.min(W - r, c.x + 70 * Math.cos(c.wob) * h));
-        c.trail += h;
-        if (c.trail > .05) {
-          c.trail = 0;
-          if (p.trails.length < 90) p.trails.push({ x: c.x + (Math.random() - .5) * r, y: c.y - r * .3, t0: t });
-        }
-        if (Math.cos(c.phi - .5) > .97 && t - c.spark > .3 && p.sparks.length < 40) {
-          c.spark = t;
-          p.sparks.push({ x: c.x - .45 * r, y: c.y - .3 * r * Math.abs(Math.cos(c.phi)), t0: t, s: .6 + .4 * Math.random() });
-        }
-        const fp = footprint(p, c.x, .9 * r);
-        const ground = H - fp[2];
-        const bottom = c.y + r * Math.abs(Math.cos(c.phi)) * .9 + T * .5;
-        if (bottom >= ground) {
-          if (!c.bounced) { c.bounced = true; c.vy = -.25 * c.vy; c.y -= bottom - ground; }
-          else restCoin(p, c);
-        }
-      }
-    }
-  }
-
-  function stepPour(p, t, dt) {
-    p.acc += dt;
-    const h = 1 / 120;
-    let n = 0;
-    while (p.acc >= h && n < 30) { stepCoins(p, t, h); p.acc -= h; n++; }
-    if (n >= 30) p.acc = 0;
-    for (let i = 0; i < p.drops.length; i++) {
-      const d = p.drops[i];
-      d.vy += G * dt;
-      d.x += d.vx * dt;
-      d.y += d.vy * dt;
-    }
-    p.drops = p.drops.filter(d => t - d.t0 < .45);
-    p.dents = p.dents.filter(d => t - d.t0 < .7);
-    p.trails = p.trails.filter(d => t - d.t0 < .6);
-    p.sparks = p.sparks.filter(d => t - d.t0 < .25);
-  }
-
   function drawFx(p, t) {
-    const g = fctx, th = Math.min(t, T_END), r = tex.coinR;
+    const g = fctx, th = Math.min(t, T_END);
     g.setTransform(1, 0, 0, 1, 0, 0);
     g.globalAlpha = 1;
     g.globalCompositeOperation = 'source-over';
     g.clearRect(0, 0, fxCv.width, fxCv.height);
-    if (p.tops.length) g.drawImage(pileCv, 0, Math.round(pileY0 * FX));   // lege hoop niet elk frame kopiëren
     g.setTransform(FX, 0, 0, FX, 0, 0);
     computeHead(th);
-    // munten in het bier (onder de kraag)
-    for (let i = 0; i < p.coins.length; i++) {
-      const c = p.coins[i];
-      if (c.st === 3) drawCoin(g, c, 1, clamp((c.y - c.wetY) / 60));
-    }
-    if (p.trails.length && tex.dot) {
-      for (let i = 0; i < p.trails.length; i++) {
-        const d = p.trails[i], k = (t - d.t0) / .6;
-        g.globalAlpha = .55 * (1 - k);
-        g.drawImage(tex.dot, d.x - 1.2, d.y - 60 * (t - d.t0) - 1.2, 2.4, 2.4);
-      }
-      g.globalAlpha = 1;
-    }
     drawHead(g, th);
     // waar de straal de kraag in gaat: een donker kuiltje en een roomkringetje
     const sa = 1 - smooth(T_STREAM, T_STREAM + .2, t);
@@ -2682,58 +2310,7 @@
       g.stroke();
       g.globalAlpha = 1;
     }
-    // deukjes en rimpels in het schuim waar een munt erin plonst
-    for (let i = 0; i < p.dents.length; i++) {
-      const d = p.dents[i], k = (t - d.t0) / .7;
-      g.globalAlpha = .35 * (1 - k);
-      g.fillStyle = 'rgb(110,85,62)';
-      g.beginPath();
-      g.ellipse(d.x, d.y + 3, 1.6 * r * (1 - .5 * k) / 2 + .1, .5 * r * (1 - k) / 2 + .1, 0, 0, TAU);
-      g.fill();
-      const k4 = (t - d.t0) / .4;
-      if (k4 < 1) {
-        g.globalAlpha = .4 * (1 - k4);
-        g.strokeStyle = 'rgba(255,252,242,1)';
-        g.lineWidth = 1.2;
-        g.beginPath();
-        g.ellipse(d.x, d.y + 3, 3 * r * k4 + .1, r * k4 * .7 + .1, 0, 0, TAU);
-        g.stroke();
-      }
-    }
     g.globalAlpha = 1;
-    // munten in de lucht en in het schuim (zakken zichtbaar weg in de room)
-    for (let i = 0; i < p.coins.length; i++) {
-      const c = p.coins[i];
-      if (c.st === 1) drawCoin(g, c, 1, 0);
-      else if (c.st === 2) {
-        const tp = headTopAt(c.x, th), bt = headBotAt(c.x, th);
-        drawCoin(g, c, 1 - .7 * clamp((c.y - tp) / Math.max(1, bt - tp)), 0);
-      }
-    }
-    if (tex.dot) {
-      for (let i = 0; i < p.drops.length; i++) {
-        const d = p.drops[i], k = (t - d.t0) / .45;
-        g.globalAlpha = 1 - k;
-        g.drawImage(tex.dot, d.x - d.r, d.y - d.r, 2 * d.r, 2 * d.r);
-      }
-    }
-    if (p.sparks.length && tex.sparkle) {
-      g.globalCompositeOperation = 'lighter';
-      for (let i = 0; i < p.sparks.length; i++) {
-        const s = p.sparks[i], k = (t - s.t0) / .25;
-        const sz = 22 * s.s * Math.sin(Math.PI * k);
-        g.globalAlpha = .9 * (1 - k * k);
-        g.drawImage(tex.sparkle, s.x - sz / 2, s.y - sz / 2, sz, sz);
-      }
-      g.globalCompositeOperation = 'source-over';
-    }
-    g.globalAlpha = 1;
-  }
-
-  function pourSettled(p) {
-    if (p.drops.length || p.dents.length || p.trails.length || p.sparks.length) return false;
-    for (let i = 0; i < p.coins.length; i++) if (p.coins[i].st < 4) return false;
-    return true;
   }
 
   function renderPour(now, elapsed) {
@@ -2752,34 +2329,10 @@
       drawLiquid(p, Math.min(t, T_END), dt);
       if (t >= T_END) p.liquidDone = true;   // daarna blijft het laatste beeld gewoon staan
     }
-    if (!p.instant) stepPour(p, t, dt);
     if (!p.fxStatic) {
       drawFx(p, t);
-      if (t >= T_END && pourSettled(p)) p.fxStatic = true;
+      if (t >= T_END) p.fxStatic = true;     // kraag staat stil: laatste beeld blijft staan
     }
-  }
-
-  // Na het tappen: af en toe een fonkeling op de muntenhoop.
-  function drawShimmer(now) {
-    const p = pour;
-    if (!p || reduced || !p.tops.length || !tex.sparkle) return;
-    if (!p.instant && (now - p.at) / 1000 < T_END) return;
-    if (now >= p.nextShimmer) {
-      p.nextShimmer = now + 280 + Math.random() * 380;
-      const tp = p.tops[randFast(p.tops.length)];
-      p.shim.push({ x: tp.x, y: tp.y, t0: now });
-    }
-    p.shim = p.shim.filter(s => now - s.t0 < 350);
-    if (!p.shim.length) return;
-    ctx.globalCompositeOperation = 'lighter';
-    p.shim.forEach(s => {
-      const k = (now - s.t0) / 350;
-      const sz = 20 * easeOutBack(Math.min(1, k * 2)) * (1 - k * .5);
-      ctx.globalAlpha = .9 * (1 - k * k);
-      ctx.drawImage(tex.sparkle, s.x - sz / 2, s.y - sz / 2, sz, sz);
-    });
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1;
   }
 
   // ---------- Markers: glanzend klavertje met glazen nummerschijfje ----------
@@ -3104,7 +2657,6 @@
       const fade = reduced ? 0 : clamp(1 - (now - winner.at) / 300);
       if (fade > 0) fingers.forEach(f => { if (f.id !== winner.id) clover(f.x, f.y, SHAMROCK, .6 + .4 * fade, fade, f.num, f.rot); });
       if (pour) renderPour(now, elapsed);
-      drawShimmer(now);
       winnerClover(now);
     } else if (split) {
       drawSplit(now);
@@ -3146,7 +2698,7 @@
   try { if (document.fonts && document.fonts.load) document.fonts.load('700 32px Inter').then(() => seg.place(true)); } catch (_) {}
 
   buildMarkerSprites();
-  buildSprites();           // vonkjes, druppels, belletjes: hangen niet van het schermformaat af
+  buildSprites();           // belletjes: hangen niet van het schermformaat af
   resize();
   syncUI();
   requestAnimationFrame(frame);
